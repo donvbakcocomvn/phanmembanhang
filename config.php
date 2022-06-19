@@ -17,16 +17,14 @@ $_SESSION['TenHienThi'] = 0;
 global $INI;
 
 $INI['host'] = "localhost";
-$INI['username'] = "oetkpjhosting_bachhoagiadinh";
-$INI['password'] = "zaq@123Abc456";
+$INI['username'] = "root";
+$INI['password'] = "";
 $INI['DBname'] = "oetkpjhosting_bachhoagiadinh";
 
-spl_autoload_register(function($class) {
+spl_autoload_register(function ($class) {
     $class = str_replace("\\", "_", $class);
     $class = str_replace("_", "/", $class) . ".php";
     if (file_exists($class)) {
         include_once $class;
     }
 });
-?>
-

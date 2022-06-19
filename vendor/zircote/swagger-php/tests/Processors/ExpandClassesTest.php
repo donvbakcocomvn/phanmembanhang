@@ -17,18 +17,18 @@ use OpenApi\Processors\AugmentSchemas;
 use OpenApi\Processors\BuildPaths;
 use OpenApi\Processors\CleanUnmerged;
 use OpenApi\Processors\ExpandInterfaces;
+use OpenApi\Processors\ExpandTraits;
 use OpenApi\Processors\InheritProperties;
-use OpenApi\Processors\InheritTraits;
 use OpenApi\Processors\MergeIntoComponents;
 use OpenApi\Processors\MergeIntoOpenApi;
 use OpenApi\Tests\OpenApiTestCase;
 
-class InheritPropertiesTest extends OpenApiTestCase
+class ExpandClassesTest extends OpenApiTestCase
 {
     protected function validate(Analysis $analysis)
     {
-        $analysis->openapi->info = new Info(['title' => 'test', 'version' => '1.0.0']);
-        $analysis->openapi->paths = [new PathItem(['path' => '/test'])];
+        $analysis->openapi->info = new Info(['title' => 'test', 'version' => '1.0.0', '_context' => $this->getContext()]);
+        $analysis->openapi->paths = [new PathItem(['path' => '/test', '_context' => $this->getContext()])];
         $analysis->validate();
     }
 
@@ -45,7 +45,7 @@ class InheritPropertiesTest extends OpenApiTestCase
             new MergeIntoOpenApi(),
             new MergeIntoComponents(),
             new ExpandInterfaces(),
-            new InheritTraits(),
+            new ExpandTraits(),
             new AugmentSchemas(),
             new AugmentProperties(),
             new BuildPaths(),
@@ -82,7 +82,7 @@ class InheritPropertiesTest extends OpenApiTestCase
             new MergeIntoOpenApi(),
             new MergeIntoComponents(),
             new ExpandInterfaces(),
-            new InheritTraits(),
+            new ExpandTraits(),
             new AugmentSchemas(),
             new AugmentProperties(),
             new BuildPaths(),
@@ -115,7 +115,7 @@ class InheritPropertiesTest extends OpenApiTestCase
             new MergeIntoOpenApi(),
             new MergeIntoComponents(),
             new ExpandInterfaces(),
-            new InheritTraits(),
+            new ExpandTraits(),
             new AugmentSchemas(),
             new AugmentProperties(),
             new BuildPaths(),
@@ -132,8 +132,8 @@ class InheritPropertiesTest extends OpenApiTestCase
         $this->assertSame('ExtendedModel', $extendedSchema->schema);
         $this->assertSame(Generator::UNDEFINED, $extendedSchema->properties);
 
-        $this->assertArrayHasKey(1, $extendedSchema->allOf);
-        $this->assertEquals($extendedSchema->allOf[1]->properties[0]->property, 'extendedProperty');
+        $this->assertArrayHasKey(0, $extendedSchema->allOf);
+        $this->assertEquals($extendedSchema->allOf[0]->properties[0]->property, 'extendedProperty');
 
         /* @var $includeSchemaWithRef Schema */
         $includeSchemaWithRef = $schemas[1];
@@ -154,7 +154,7 @@ class InheritPropertiesTest extends OpenApiTestCase
             new MergeIntoOpenApi(),
             new MergeIntoComponents(),
             new ExpandInterfaces(),
-            new InheritTraits(),
+            new ExpandTraits(),
             new AugmentSchemas(),
             new AugmentProperties(),
             new BuildPaths(),
@@ -191,7 +191,7 @@ class InheritPropertiesTest extends OpenApiTestCase
             new MergeIntoOpenApi(),
             new MergeIntoComponents(),
             new ExpandInterfaces(),
-            new InheritTraits(),
+            new ExpandTraits(),
             new AugmentSchemas(),
             new AugmentProperties(),
             new BuildPaths(),
@@ -235,7 +235,7 @@ class InheritPropertiesTest extends OpenApiTestCase
             new MergeIntoOpenApi(),
             new MergeIntoComponents(),
             new ExpandInterfaces(),
-            new InheritTraits(),
+            new ExpandTraits(),
             new AugmentSchemas(),
             new AugmentProperties(),
             new BuildPaths(),
@@ -244,8 +244,8 @@ class InheritPropertiesTest extends OpenApiTestCase
         ]);
         $this->validate($analysis);
 
-        $analysis->openapi->info = new Info(['title' => 'test', 'version' => '1.0.0']);
-        $analysis->openapi->paths = [new PathItem(['path' => '/test'])];
+        $analysis->openapi->info = new Info(['title' => 'test', 'version' => '1.0.0', '_context' => $this->getContext()]);
+        $analysis->openapi->paths = [new PathItem(['path' => '/test', '_context' => $this->getContext()])];
         $analysis->validate();
 
         /* @var Schema[] $schemas */

@@ -1,9 +1,9 @@
 {
-    "require": {
-        "zendframework/zend-db": "^2.11",
-        "phpmailer/phpmailer": "^6.4",
-        "zircote/swagger-php": "^3.2",
-        "namdongvando/rpfbc": "^3.22",
-        "namdongvando/imagesoptimizer": "^1.0"
-    }
+  "require": {
+    "zendframework/zend-db": "^2.11",
+    "phpmailer/phpmailer": "^6.4",
+    "zircote/swagger-php": "^3.2",
+    "namdongvando/rpfbc": "^3.22",
+    "namdongvando/imagesoptimizer": "^1.0"
+  }
 }

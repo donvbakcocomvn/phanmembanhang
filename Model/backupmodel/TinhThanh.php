@@ -1,6 +1,7 @@
 <?php
 
-class Model_TinhThanh extends Model_Adapter {
+class Model_TinhThanh extends Model_Adapter
+{
 
     public $MaDiaChi;
     public $TenDiaChi;
@@ -18,7 +19,8 @@ class Model_TinhThanh extends Model_Adapter {
     public $TenKhongDau;
     public $Link;
 
-    function __construct($TinhThanh = NULL) {
+    function __construct($TinhThanh = NULL)
+    {
         self::$LinkQuanTri = BASE_DIR . "quantritinhthanh/listtinh/";
         self::$LinkFormSuaQuanTri = BASE_DIR . "quantritinhthanh/tinhsua/";
         self::$LinkFormThemQuanTri = BASE_DIR . "quantritinhthanh/tinhthem/";
@@ -39,55 +41,64 @@ class Model_TinhThanh extends Model_Adapter {
         parent::__construct();
     }
 
-    function getLinkThemTinhThanh() {
+    function getLinkThemTinhThanh()
+    {
         return self::$LinkThemTinhThanh;
     }
 
-    function getLinkQuanTri() {
+    function getLinkQuanTri()
+    {
         return self::$LinkQuanTri;
     }
 
-    function getLinkFormSuaQuanTri() {
+    function getLinkFormSuaQuanTri()
+    {
         return self::$LinkFormSuaQuanTri;
     }
 
-    function getLinkFormThemQuanTri() {
+    function getLinkFormThemQuanTri()
+    {
         return self::$LinkFormThemQuanTri;
     }
 
-    function TenDiaChiCha($MaTinh) {
+    function TenDiaChiCha($MaTinh)
+    {
         $Tinh = $this->TimTinhHuyen($MaTinh);
         return $Tinh['TenDiaChi'];
     }
 
-    function ThemTinhThanh($TinhThanh) {
+    function ThemTinhThanh($TinhThanh)
+    {
         $sql = "INSERT INTO `" . table_prefix . "tinhthanh` SET "
-                . "`TenDiaChi` = '{$TinhThanh['TenDiaChi']}', "
-                . "`MaDiaChiCha` = '{$TinhThanh['MaDiaChiCha']}', "
-                . "`AnHien` = '1', "
-                . "`GhiChu` = '{$TinhThanh['GhiChu']}'";
+            . "`TenDiaChi` = '{$TinhThanh['TenDiaChi']}', "
+            . "`MaDiaChiCha` = '{$TinhThanh['MaDiaChiCha']}', "
+            . "`AnHien` = '1', "
+            . "`GhiChu` = '{$TinhThanh['GhiChu']}'";
         $this->Query($sql);
         $this->Luu();
     }
 
-    function SuaTinhThanh($TinhThanh) {
+    function SuaTinhThanh($TinhThanh)
+    {
         $sql = "UPDATE `" . table_prefix . "tinhthanh` SET "
-                . "`TenDiaChi` = '{$TinhThanh['TenDiaChi']}', "
-                . "`MaDiaChiCha` = '{$TinhThanh['MaDiaChiCha']}', "
-                . "`AnHien` = '1', "
-                . "`GhiChu` = '{$TinhThanh['GhiChu']}' where "
-                . "`MaDiaChi` = '{$TinhThanh['MaDiaChi']}'";
+            . "`TenDiaChi` = '{$TinhThanh['TenDiaChi']}', "
+            . "`MaDiaChiCha` = '{$TinhThanh['MaDiaChiCha']}', "
+            . "`AnHien` = '1', "
+            . "`GhiChu` = '{$TinhThanh['GhiChu']}' where "
+            . "`MaDiaChi` = '{$TinhThanh['MaDiaChi']}'";
         $this->Query($sql);
         $this->Luu();
     }
 
-    function XoaTinhThanh($TinhThanh) {
+    function XoaTinhThanh($TinhThanh)
+    {
         $sql = "DELETE FROM `" . table_prefix . "tinhthanh` WHERE `MaDiaChi` = '$TinhThanh'";
         $this->Query($sql);
         $this->Luu();
     }
 
-    function DSTinh() {
+    function DSTinh()
+    {
         $sql = "select * from `" . table_prefix . "tinhthanh` where `MaDiaChiCha` = 0 ";
         $this->Query($sql);
         $kq = $this->Tim();
@@ -99,13 +110,15 @@ class Model_TinhThanh extends Model_Adapter {
         }
     }
 
-    function DSTinhOption() {
+    function DSTinhOption()
+    {
         $sql = "select * from `" . table_prefix . "tinhthanh` where `MaDiaChiCha` = 0 ";
         $this->Query($sql);
         return $this->fetch2Option("MaDiaChi", "TenDiaChi");
     }
 
-    function DSAllTinhAndHuyen() {
+    function DSAllTinhAndHuyen()
+    {
         $sql = "select * from `" . table_prefix . "tinhthanh`";
         $this->Query($sql);
         $kq = $this->Tim();
@@ -117,7 +130,8 @@ class Model_TinhThanh extends Model_Adapter {
         }
     }
 
-    function DanhTinh() {
+    function DanhTinh()
+    {
         $sql = "select * from `" . table_prefix . "tinhthanh` ";
         $this->Query($sql);
         $kq = $this->Tim();
@@ -129,7 +143,8 @@ class Model_TinhThanh extends Model_Adapter {
         }
     }
 
-    function TimTinhHuyen($MaDiaChi) {
+    function TimTinhHuyen($MaDiaChi)
+    {
         $sql = "select * from `" . table_prefix . "tinhthanh` where `MaDiaChi` = '$MaDiaChi'";
         $this->Query($sql);
         $kq = $this->Tim();
@@ -140,10 +155,11 @@ class Model_TinhThanh extends Model_Adapter {
         }
     }
 
-    function DSHuyenTheoTinh($TinhThanh) {
+    function DSHuyenTheoTinh($TinhThanh)
+    {
         $sql = "select * from `" . table_prefix . "tinhthanh` where `MaDiaChiCha` = '{$TinhThanh}'";
-        if($TinhThanh==0){
-        $sql = "select * from `" . table_prefix . "tinhthanh` where `MaDiaChiCha` = '0'";
+        if ($TinhThanh == 0) {
+            $sql = "select * from `" . table_prefix . "tinhthanh` where `MaDiaChiCha` = '0'";
         }
         $this->Query($sql);
         $kq = $this->Tim();
@@ -155,11 +171,13 @@ class Model_TinhThanh extends Model_Adapter {
         }
     }
 
-    function ListTinhNoiBat() {
+    function ListTinhNoiBat()
+    {
         return "57,32,1,189,146,249,338,394,78";
     }
 
-    function DSTinhNoiBat() {
+    function DSTinhNoiBat()
+    {
         $lisTinh = $this->ListTinhNoiBat();
         $sql = "select * from `" . table_prefix . "tinhthanh` where `MaDiaChi` in ($lisTinh)";
         $this->Query($sql);
@@ -172,7 +190,8 @@ class Model_TinhThanh extends Model_Adapter {
         }
     }
 
-    function DSTinh0NoiBat() {
+    function DSTinh0NoiBat()
+    {
         $lisTinh = $this->ListTinhNoiBat();
         $sql = "select * from `" . table_prefix . "tinhthanh` where `MaDiaChi` not in ($lisTinh) and `MaDiaChiCha` = 0";
         $this->Query($sql);
@@ -185,13 +204,15 @@ class Model_TinhThanh extends Model_Adapter {
         }
     }
 
-    function DSSanPham4TinhThanh($ThuocTinh, $ThuocTinh1) {
+    function DSSanPham4TinhThanh($ThuocTinh, $ThuocTinh1)
+    {
         $sql = "SELECT * FROM `" . table_prefix . "sanpham` where `AnHien` = '1' AND (`GhiChu` LIKE '%{$ThuocTinh}%' OR `GhiChu` LIKE '%{$ThuocTinh1}%') order by `DoQuanTrong` DESC ";
         $this->Query($sql);
         return $this->fetchAll();
     }
 
-    function DSSanPham4TinhThanh2DanhMuc($MaDanhMuc, $ThuocTinh, $ThuocTinh1) {
+    function DSSanPham4TinhThanh2DanhMuc($MaDanhMuc, $ThuocTinh, $ThuocTinh1)
+    {
         $DK = "";
         if ($MaDanhMuc != "") {
             $DK = "`MaDanhMuc` = {$MaDanhMuc} and ";
@@ -203,7 +224,4 @@ class Model_TinhThanh extends Model_Adapter {
         $this->Query($sql);
         return $this->fetchAll();
     }
-
 }
-
-?>
