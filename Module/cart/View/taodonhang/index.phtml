@@ -1,0 +1,121 @@
+<div class="columns-container OpenSans"  ng-controller="addressController" ng-init="_GetTinhThanh()"  >
+    <div class="container" id="columns">
+        <form action="/cart/save/" id="Order" enctype="multipart/form-data" method="POST"  >
+            <div class="page-content checkout-page">
+                <div class="box-border mb-2">
+                    <h2 class="page-heading">
+                        <span class="page-heading-title2">Đặt Hàng</span>
+                    </h2>
+                    <p class="checkout-sep">Thông Tin Giao Hàng</p>
+                    <div class="row" ng-show="_User" >
+                        <div class="col-sm-4">
+                            <label for="first_name_1" class="required">Họ Tên <span style="color: red;" >(*)</span></label>
+                            <input class="input form-control" required="required" type="text" ng-model="Name" name="Name" id="NameInput">
+                        </div><!--/ [col] -->
+                        <div class="col-sm-4">
+                            <label for="email_address_1" >Email</label>
+                            <input class="input form-control"  ng-model="Email" type="email" name="Email"  id="EmailInput">
+                        </div><!--/ [col] -->
+                        <div class="col-sm-4">
+                            <label for="email_address_1" class="required">SĐT <span style="color: red;" >(*)</span></label>
+                            <input class="input form-control" required="required" type="number" ng-model="Phone" name="SDT" id="SDTInput">
+                        </div><!--/ [col] -->
+                        <div>
+                            <div class="col-sm-6">
+                                <label  class="required">Tỉnh/Thành Phố</label>
+                                <select class="form-control"  ng-model="Tinh" ng-change="setHuyen(Tinh)" name="Tinh" >
+                                    <option ng-repeat="item in _TinhThanh" value="{{item.Id}}" >{{item.Name}}</option>
+                                </select>
+                            </div><!--/ [col] -->
+                            <div class="col-sm-6">
+                                <label class="required">Quận/Huyện</label>
+                                <select class="form-control" ng-model="Huyen" name="Huyen" >  ;
+                                    <option ng-repeat="item in _QuanHuyen" value="{{item.Id}}" >{{item.Name}}</option>
+                                </select>
+                            </div><!--/ [col] -->
+                            <div class="col-xs-12">
+                                <label for="address_1" class="required">Số Nhà, Đường</label>
+                                <input class="input form-control" type="text" ng-model="Duong" name="Duong" id="address_1">
+                            </div>
+                            <textarea style="display: none;" name="Address"  >{{Duong + "," + getLocationsById(Huyen).TenDiaChi + "," + getLocationsById(Tinh).TenDiaChi}}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-border">
+                    <div class="columns-container">
+                        <div class="page-content page-order">
+                            <div class="order-detail-content">
+                                <table class="table table-bordered table-responsive cart_summary " ng-controller="addressController" >
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <label style="cursor: pointer;" class="pull-right" >
+                                                    <input style="display: none" ng-model="ShowEdit" type="checkbox"  >
+                                                    <i class="fa fa-2x fa-edit" ></i>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="items  in _Cart.Product" >
+                                            <td class="cart_description">
+                                                <div class="d-flex giohang" >
+                                                    <div class="imagesSp">
+                                                        <a href="#"><img style="width: 70px;margin-right: 10px" src="{{items.UrlHinh}}" alt="{{items.nameProduct}}"></a>
+                                                    </div>
+                                                    <div class="" style="width: 100%;padding-right: 10px;">
+                                                        <a ng-show="ShowEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeProductCart(items.ID)" >Xóa</a>
+                                                        <small class="cart_ref">Id : #{{items.ID}}</small><br>
+                                                        <h2 class="product-name">
+                                                            <a href="{{items.linkProduct}}">
+                                                                {{items.nameProduct}}
+                                                            </a>
+                                                        </h2>
+                                                        <p >
+                                                            <span ng-bind-html="items.priceVnd" ></span>
+                                                            X<span ng-bind-html="items.Number" ></span>
+                                                        </p>
+                                                    </div>
+                                                    <div class="qty" ng-show="ShowEdit" style="min-width: 76px;" >
+                                                        <input style="" class="inputcartnumber form-control input-sm" type="text" ng-value="items.Number">
+                                                        <div class=" btn-group-xs">
+                                                            <a ng-click="minuNumberProduct(items.ID)" class="btn-block btn-cart btn-primary" >
+                                                                <i class="fa fa-minus"></i>
+                                                            </a>
+                                                            <a ng-click="plusNumberProduct(items.ID)" class="btn-block btn-cart btn-primary" >
+                                                                <i class="fa fa-plus"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hidden-sm hidden-xs" style="width: 120px;padding-left: 10px;">
+                                                        <strong ng-bind-html="ToHtml(items.ThanhTienVND)" ></strong>
+                                                    </div>
+
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p class="text-right" >Tổng Tiền: <b ng-bind-html="_Cart.TotalPriceVND" ></b></p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="cart_navigation"  >
+                                    <?php
+                                    if (Module\cart\Model\Cart::TongSanPham() > 0) {
+                                        ?>
+                                        <button type="submit" id="button" class="btn-cart btn btn-primary pull-right">Đặt Hàng</button>
+                                        <?php
+                                    }
+                                    ?>
+                                    <a class="btn-cart btn-primary " href="/">Tiếp Tục Mua Hàng</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

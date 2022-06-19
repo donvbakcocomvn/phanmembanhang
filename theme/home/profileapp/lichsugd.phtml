@@ -1,0 +1,12 @@
+<back-to-home title="Lịch Sử Giao Dịch" ></back-to-home>
+<div class="LichSuGiaoDich">
+    <ul class="list-group" ng-init="LichSuGiaoDich()" >
+        <li class="list-group-item" ng-repeat="item in _LichSuGiaoDich.data" >
+            <a href="#">{{item.Name}}
+                <br>
+                <label ng-class="item.Type == 1 ? 'badge-success' : ''" class="pull-right badge " ng-bind-html="item.PriceVND" ></label>
+            </a>
+        </li>
+    </ul>
+</div>
+<footer-mobie></footer-mobie>

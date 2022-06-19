@@ -1,0 +1,77 @@
+<?php
+$functionLayout = new theme\home\functionLayout();
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <?php
+        $functionLayout->head();
+        ?>
+    </head>
+    <body class="option5" ng-cloak="TRUE" ng-app="rootApp" ng-controller="menuController" >
+        <?php
+        $functionLayout->header();
+        ?>
+        <div class="columns-container"  >
+            <div class="container" id="columns">
+                <?php
+                $bre = new Model\Breadcrumb();
+                $bre->showBreadcrumb();
+                ?>
+                <div class="row">
+                    <div class="column hidden-sm hidden-xs col-xs-12 col-sm-3" id="left_column">
+                        <div class="block left-module">
+                            <p class="title_block">Danh Mục Sản Phẩm</p>
+                            <div class="block_content">
+                                <!-- layered -->
+                                <div class="layered layered-category">
+                                    <div class="layered-content " >
+                                        <ul class="tree-menu">
+                                            <li  ng-repeat="mainmenu in _Menu.LeftMenu" >
+                                                <span></span> <a href="{{mainmenu.Link}}"> {{mainmenu.catName}}</a>
+                                                <ul >
+                                                    <li ng-repeat="submainmenu in mainmenu.DSDanhMucCon" ><span></span>
+                                                        <a href="{{submainmenu.Link}}" >
+                                                            {{submainmenu.catName}}
+                                                        </a>
+                                                        <ul>
+                                                            <li ng-repeat="submainmenu1 in submainmenu.DSDanhMucCon" ><span></span>
+                                                                <a href="{{submainmenu1.Link}}">
+                                                                    {{submainmenu1.catName}}
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                                <!-- ./layered -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="center_column col-xs-12 col-sm-9" id="center_column">
+                        <?php
+                        include $Content;
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <?php
+        $functionLayout->footer();
+        ?>
+        <a href="#" class="scroll_top" title="Scroll to Top" style="display: inline;">Scroll</a>
+        <?php
+        $functionLayout->js();
+        ?>
+        <script type="text/javascript" src="/public/home/assets/lib/jquery.elevatezoom.js"></script>
+        <script type="text/javascript" src="/public/home/assets/lib/fancyBox/jquery.fancybox.js"></script>
+    </body>
+</html>
+<?php
+$functionLayout->DeCodeHTML();
+?>

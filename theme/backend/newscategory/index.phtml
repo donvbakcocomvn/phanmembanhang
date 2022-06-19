@@ -1,0 +1,61 @@
+<?php
+$Mode_newscategory = new Model\news\newsCategory();
+$total = 0;
+$name = !empty($_GET["name"]) ? $_GET["name"] : "";
+$indexPage = !empty($_GET["index"]) ? $_GET["index"] : 1;
+$pageNumber = !empty($_GET["number"]) ? $_GET["number"] : 10;
+$brands = $Mode_newscategory->GetAllPT($name, $total, $indexPage, $pageNumber);
+?>
+<div class="box box-primary">
+    <div class="box-header">
+        <h3 class="box-title">Danh sách thương hiệu</h3>
+        <div class="box-tools">
+            <a href="/newscategory/post" class="btn btn-primary" >Thêm Mới <i class="fa fa-plus" ></i></a>
+        </div>
+    </div>
+    <div class="box-body">
+        <table class="table table-bordered" >
+            <thead>
+                <tr>
+                    <th style="max-width: 50px" class="text-center" >#</th>
+                    <th>Danh Mục</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                foreach ($brands as $k => $value) {
+                    $_newsCategory = new Model\news\newsCategory($value);
+                    ?>
+                    <tr>
+                        <td><?php echo \lib\Common::PhanTrangIndex($k, $pageNumber, $indexPage) ?></td>
+                        <td   >
+                            <div class="d-flex" > 
+                                <div>
+                                    <h3 style="margin: 0px;font-size: 16px;font-weight: bold;" ><?php echo $_newsCategory->Name ?></h3>
+                                    <p>
+                                        <a href="<?php echo $_newsCategory->linkPut() ?>"   >Sửa</a> |
+                                        <a href="<?php echo $_newsCategory->linkDelete() ?>" title="Bạn Muốn Xóa Thương Hiệu Này" class="btn-xoa" >Xóa</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>#</th>
+                    <th>Danh Mục</th>
+                </tr>
+            </tfoot>
+
+        </table>
+        <?php
+        $DuongDan = "/brand/index/?index=[i]&number={$pageNumber}&name={$name}";
+        $TongTrang = ceil($total / $pageNumber);
+        echo \lib\Common::PhanTrang($TongTrang, $indexPage, $DuongDan);
+        ?>
+    </div>
+</div>

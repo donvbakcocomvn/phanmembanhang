@@ -1,0 +1,84 @@
+<?php
+$_Product = new Model\Products($data["p"]);
+$a = new Model\Products();
+?>
+<div id="product">
+    <div class="primary-box row">
+        <div class="pb-left-column col-xs-12 col-sm-6">
+            <!-- product-imge-->
+            <div class="product-image">
+                <div class="product-full text-center">
+                    <img onerror="this.src='/public/no-image.jpg'" id="product-zoom" src='<?php echo $_Product->UrlHinh(); ?>' data-zoom-image="<?php echo $Img[0] ?>"/>
+                </div>
+            </div>
+        </div>
+        <div class="pb-right-column col-xs-12 col-sm-6">
+            <h1 class="product-name"><?php echo $_Product->nameProduct ?></h1>
+            <div class="product-comments">
+                <div class="product-star">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+
+                </div>
+                <?php
+                if (isset($_SESSION[QuanTri])) {
+                    ?>
+                    <div class="comments-advices">
+                        <a href="/mproduct/editproduct/<?php echo $_Product->ID; ?>" ><i class="fa fa-pencil"></i> Sửa</a>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+            <div class="product-price-group">
+                <span class="price"><?php echo $_Product->Price() ?></span>
+            </div>
+            <div class="info-orther">
+                <p>Mã Sản Phẩm: <?php echo $_Product->ID ?></p>
+                <p>Tình Trạng: <span class="in-stock"><?php echo $_Product->Number <= 0 ? "Hết Hàng" : "Còn Hàng"; ?> </span></p>
+                <p>Số Lượng Còn: <span class="in-stock"><?php echo $_Product->Number; ?> </span></p>
+            </div>
+            <div class="product-desc">
+                <?php echo $_Product->Summary;
+                ?>
+            </div>
+            <div class="form-option">
+                <div class="attributes">
+                    <div class="attribute-label" style="width: auto;" >Số Lượng:</div>
+                    <div class="attribute-list product-qty">
+                        <div class="">
+                            <input id="option-product-qty" min='1' type="number"  value="1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-action">
+                <div class="button-group">
+                    <a class="btn-warning btn" href="#">Thên Giỏ Hàng</a>
+                </div>
+            </div>
+            <div class="form-share">
+            </div>
+        </div>
+    </div>
+    <!-- tab product -->
+    <div class="product-tab">
+        <ul class="nav-tab">
+            <li class="active">
+                <a target="_self" aria-expanded="false" data-toggle="tab" href="#product-detail">Chi Tiết Sản Phẩm</a>
+            </li>
+        </ul>
+        <div class="tab-container">
+            <div id="product-detail" class="tab-panel active">
+                <?php echo $_Product->Content ?>
+            </div>
+            <div id="information" class="tab-panel">
+            </div>
+        </div>
+    </div>
+    <!-- ./tab product -->
+</div>
+<!-- Product -->

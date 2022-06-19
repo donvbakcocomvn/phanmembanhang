@@ -1,0 +1,68 @@
+<?php
+$functionLayout = new theme\home\functionLayout();
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <?php
+        $functionLayout->head();
+        ?>
+    </head>
+    <body class="option3" ng-cloak="TRUE" ng-app="rootApp" ng-controller="menuController"  >
+        <?php
+        $functionLayout->header();
+        ?>
+        <div class="columns-container"  >
+            <div class="container" id="columns">
+                <!-- breadcrumb -->
+                <?php
+                $bre = new Model\Breadcrumb();
+                $bre->showBreadcrumb();
+                ?>
+                <!-- ./breadcrumb -->
+                <!-- row -->
+                <div class="row">
+                    <!-- Left colunm -->
+                    <div class="column col-xs-12 col-sm-3" id="left_column">
+                        <!-- block category -->
+                        <div class="block left-module">
+                            <p class="title_block">Danh Mục Bài Viết</p>
+                            <div class="block_content">
+                                <!-- layered -->
+                                <div class="layered layered-category">
+                                    <div class="layered-content " ng-controller="leftmenunewsController" >
+                                        <ul class="tree-menu">
+                                            <li  ng-repeat="itemMenu in _leftMenuNews" >
+                                                <span></span> <a href="/page-{{itemMenu.Alias}}/"> {{itemMenu.Name}}</a>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                                <!-- ./layered -->
+                            </div>
+                        </div>
+                        <!-- ./block category  -->
+                    </div>
+                    <!-- ./left colunm -->
+                    <!-- Center colunm-->
+                    <div class="center_column col-xs-12 col-sm-9" id="center_column">
+                        <?php
+                        include $Content;
+                        ?>
+                    </div>
+                    <!-- ./ Center colunm -->
+                </div>
+                <!-- ./row-->
+            </div>
+        </div>
+
+        <?php
+        $functionLayout->footer();
+        ?>
+        <a href="#" class="scroll_top" title="Scroll to Top" style="display: inline;">Scroll</a>
+        <?php
+        $functionLayout->js();
+        ?>
+    </body>
+</html>

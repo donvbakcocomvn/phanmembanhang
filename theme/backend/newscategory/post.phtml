@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-md-12">
+        <form action="" enctype="multipart/form-data" method="POST" >
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Thêm</h3>
+                </div>
+                <div class="box-body">
+                    <div class="col-md-4">
+                        <?php
+                        \Model\news\newsCategoryForm::Name()->renderHTML();
+                        ?>
+                        <?php
+                        \Model\news\newsCategoryForm::Parents()->renderHTML();
+                        ?>
+                        <?php
+                        \Model\news\newsCategoryForm::Title()->renderHTML();
+                        ?>
+                        <?php
+                        \Model\news\newsCategoryForm::Des()->renderHTML();
+                        ?>
+                        <?php
+                        \Model\news\newsCategoryForm::Keyword()->renderHTML();
+                        \Model\news\newsCategoryForm::isActive()->renderHTML();
+                        ?>
+                    </div>
+                    <div class="col-md-4">
+                        <fieldset>
+                            <legend>Hình Ảnh</legend>
+                            <div class="form-group">
+                                <img src="" id="HinhDaiDien" class="img img-responsive" style="height: 70px;"  >
+                                <div class="d-flex">
+                                    <?php
+                                    \Model\news\newsCategoryForm::Images()->render();
+                                    \Model\news\newsCategoryForm::SelectImages("Images", null, "#HinhDaiDien")->render();
+                                    ?>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <?php
+                        \Model\news\newsCategoryForm::Content()->renderHTML();
+                        ?>
+                    </div>
+                </div>
+                <div class="box-footer text-right">
+                    <button type="submit" name="Save" class=" btn btn-primary" >Thêm</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

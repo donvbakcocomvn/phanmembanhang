@@ -1,0 +1,75 @@
+<?php
+
+use Module\mail\Model\MailConfig;
+use \Module\mail\Model\MailContent;
+
+new \Module\mail\Model\MailConfig($data["config"]);
+$mailContent = MailContent::getMailContent($_Param[0]);
+?>
+<form action="" enctype="multipart/form-data" method="POST" >
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Cấu Hình Mail Gửi Mail </h3>
+        </div>
+        <div class="box-body">
+            <div class="form-group col-md-3">
+                <label for="">Tên Mail - Công ty abc...</label>
+                <input type="text" value="<?php echo MailConfig::$Title ?>" class="form-control" name="Mail[Title]" >
+            </div>
+            <div class="form-group col-md-3">
+                <label for="">Tài Khoản Mail Gửi</label>
+                <input type="email" value="<?php echo MailConfig::$UserName ?>" class="form-control" name="Mail[Username]" >
+            </div>
+            <div class="form-group col-md-3">
+                <label for="">Mật khẩu - có thể dùng mật khẩu ứng dụng</label>
+                <input type="password" class="form-control" value="<?php echo MailConfig::$Password ?>" name="Mail[Password]" >
+            </div>
+            <div class="form-group col-md-3">
+                <label for="">Host - google mail : smtp.google.com</label>
+                <input type="text" class="form-control" name="Mail[Host]" value="<?php echo MailConfig::$Host ?>" >
+            </div>
+            <div class="form-group col-md-3">
+                <label for="">Posrt - Mặc Định : 465</label>
+                <input type="text" value="587" class="form-control" value="<?php echo MailConfig::$Port ?>" name="Mail[Port]" >
+            </div>
+            <div class="form-group col-md-3">
+                <label for="">Mail Admin Nhận Thông Tin </label>
+                <input type="text" class="form-control" value="<?php echo MailConfig::$MailNhan ?>" name="Mail[MailNhan]" >
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="pull-right btn btn-success btn-sm" name="OK" >OK</button>
+        </div>
+    </div>
+</form>
+<form action="" enctype="multipart/form-data" method="POST" >
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Danh Sách Mail</h3>
+            <div class="box-tools">
+                <a href="#" class="btn btn-primary" ><i class="fa fa-plus" ></i></a>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="col-md-3">
+                <div class="list-group">
+                    <a href="/mail/index/index/MaiThongBaoDonHang" class="list-group-item active">Thông Báo Có Đặt Hàng</a>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="form-group">
+                    <label for="">Tiêu Đề</label>
+                    <input type="text" class="form-control" value="<?php echo $mailContent->sub ?>" name="MailContent[sub]" >
+                    <input type="hidden" class="form-control" value="<?php echo $_Param[0]; ?>" name="MailContent[code]" >
+                </div>
+                <div class="form-group">
+                    <label for="">Nội Dung Chính</label>
+                    <textarea type="text" class="editor" id="Editer" name="MailContent[body]" ><?php echo $mailContent->body ?></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="pull-right btn btn-success btn-sm" name="OK" >OK</button>
+        </div>
+    </div>
+</form>

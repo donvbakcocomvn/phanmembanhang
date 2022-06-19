@@ -1,0 +1,54 @@
+<div class="row   "  ng-controller="mpageController">
+    <section class="col-md-12" >
+        <div class="box box-primary ">
+            <div class="box-header ">
+                <h3 class="box-title">Quản Lý Bài Viết</h3>
+                <div class="box-tools">
+                    <a href="/mpage/addpage/" class="btn btn-sm btn-success"  >Thêm Trang</a>
+                </div>
+            </div>
+            <div class="box-body ">
+                <div class="table-responsive" >
+                    <table class="table table-bordered" >
+                        <thead>
+                            <tr>
+                                <th>Action</th>
+                                <th>#</th>
+                                <th>Tên Trang</th>
+                                <th>Hiển Thị</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="itemPage in _Pages" >
+                                <td style="width: 100px;" >
+                                    <div class="form-group-md">
+                                        <a class="btn btn-sm btn-primary" href="/mpage/editpage/{{itemPage.idPa}}" >Sửa</a>
+                                        <bakco-modaldelete  ng-init="modaldeleteInit('Xóa', 'Thông Báo', 'Bạn có muốn xóa trang này', '/mpage/deletepage/' + itemPage.idPa, itemPage.idPa)" ></bakco-modaldelete>
+                                    </div>
+                                </td>
+                                <td style="width: 50px;"  >{{$index + 1}}</td>
+                                <td>
+                                    <a ng-show="itemPage.Type == 1" href="/mnews/newsbypages/{{itemPage.idPa}}" >{{itemPage.Name}}</a>
+                                    <a ng-show="itemPage.Type != 1" href="/mpage/editpage/{{itemPage.idPa}}" >{{itemPage.Name}}</a>
+                                </td>
+                                <td>
+                                    {{itemPage.isShow==0?"Ẩn":"Hiện"}}
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Action</th>
+                                <th>#</th>
+                                <th>Tên Trang</th>
+                                <th>Hiển Thị</th>
+                            </tr>
+                        </tfoot>
+
+                    </table>
+
+                </div>
+            </div><!-- /.box-body -->
+        </div>
+    </section>
+</div>

@@ -1,0 +1,30 @@
+
+<script type="text/javascript" >
+    function toiuuhinhanh() {
+        $(".btn-isLoading .fa").addClass('fa-cog fa-spin');
+        $.ajax({
+            url: "/backend/toiuuhinhanh",
+        }).done(function(res) {
+            console.log("dome");
+            $(".btn-isLoading .fa").removeClass('fa-cog fa-spin');
+        });
+    }
+</script>
+<button  onclick="toiuuhinhanh()" class="btn-isLoading  btn btn-primary" > Tối Ưu Hình Ảnh <i class="fa" ></i></button>
+<div class="CKFinderFrameWindow" >
+    <div id="ckfinder"></div>
+</div>
+<script type="text/javascript" >
+    try {
+        var height = $(window).height();
+        console.log(height);
+        var config = {};
+        config.width = '100%';
+        config.height = height - 170;
+        config.language = "vi";
+        var ckfinder = new CKFinder(config);
+        ckfinder.replace('ckfinder');
+    } catch (e) {
+        console.log(e.message);
+    }
+</script>

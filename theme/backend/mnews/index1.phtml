@@ -1,0 +1,128 @@
+<?php
+$new = new \Model\news();
+$indexpage = !empty($_Param[0]) ? $_Param[0] : 1;
+$pageNumber = !empty($_Param[1]) ? $_Param[1] : 10;
+$name = !empty($_Param[2]) ? $_Param[2] : "";
+$total = 0;
+$News = $new->GetAllPT($name, $indexpage, $pageNumber, $total);
+?>
+<div class="row " ng-controller="mnewsController" >
+    <section class="col-md-12" >
+        <div class="box box-solid ">
+            <div class="box-header bg-green-gradient">
+                <i class="fa fa-book"></i>
+                <h3 class="box-title">Bài Viết</h3>
+                <!-- tools box -->
+                <div class="pull-right box-tools">
+                    <!-- button with a dropdown -->
+                    <div class="btn-group bakco-categorymenu">
+                    </div>
+                    <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <!--<button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>-->
+                </div><!-- /. tools -->
+            </div><!-- /.box-header -->
+            <div class="box-body no-padding ">
+                <div class="row" >
+                    <div class="col-md-12 " >
+                        <div class="clearfix" ></div>
+                        <div class="  table-responsive"   >
+                            <table class="table table-bordered table-hover"  >
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tiêu Đề</th>
+                                        <th>Danh Mục</th>
+                                        <th>Số Thứ Tự</th>
+                                        <th>Ẩn Hiển</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="itemnews in newsByPage" >
+                                        <th>{{$index + 1}}</th>
+                                        <th>{{itemnews.Name}}</th>
+                                        <th>{{itemnews.PageID}}</th>
+                                        <th>{{itemnews.Stt}}</th>
+                                        <th>{{itemnews.AnHien}}</th>
+                                        <th>
+                                            <div class="btn-group" >
+                                                <a href="/mnews/editnews/{{itemnews.ID}}" class="btn-sm btn btn-success"  >Sửa</a>
+                                                <div style="display: inline-table;" class=" bakco-modaldelete" ng-init="modaldeleteInit('Xóa', 'Thông Báo', 'Bạn có muốn xóa trang này', '/mnews/deletenews/' + itemnews.ID, itemnews.ID)" ></div>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    <tr ng-show="_pagesID != ''" >
+                                        <td colspan="6" >
+                                            <a class="btn btn-primary pull-right" href="/mnews/addnews/{{_pagesID}}"  >Thêm Bài Viết</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                                <tfoot>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tiêu Đề</th>
+                                        <th>Danh Mục</th>
+                                        <th>Số Thứ Tự</th>
+                                        <th>Ẩn Hiển</th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div>
+        <h3>Bài viết nổi bật</h3>
+        <?php
+        $new = new \Model\news();
+        $News = $new->NewsHot();
+        ?>
+        <div class="panel panel-primary ">
+            <div class="panel-body no-padding">
+                <table class="table table-bordered" id="datatable" >
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Ẩn Hiện</th>
+                            <th>Tin Nổi Bật</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach ($News as $_news) {
+                            $_newsb = new \Model\news($_news);
+                            ?>
+                            <tr>
+                                <td>#</td>
+                                <td><?php echo $_newsb->Name ?></td>
+                                <td><?php echo $_newsb->AnHien ?></td>
+                                <td><?php echo $_newsb->TinNoiBat ?></td>
+                                <td>
+                                    <a href="/mnews/editnews/<?php echo $_newsb->ID ?>" class="btn-sm btn btn-success"  >Sửa</a>
+                                    <a onclick="return confirm('ban có muốn xóa không?')" href="/mnews/deletenews/<?php echo $_newsb->ID ?>" class="btn-sm btn btn-danger"  >Xóa</a>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Danh mục</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+    </section>
+</div>

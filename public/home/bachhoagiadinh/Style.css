@@ -1,0 +1,348 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : Sep 11, 2021, 4:03:53 PM
+    Author     : MSI
+*/
+.columns-container{
+    min-height: 580px;
+}
+.bg-blue{
+    background-color: #0061A8;
+    color: #fff;
+}
+.boxs .boxs-name{
+    color: #fff;
+    font-size: 14px;
+}
+.boxs .boxs-number{
+    color: #fff;
+    font-weight: bold;
+    font-size: 2em;
+}
+.boxs{
+    padding: 15px;
+}
+
+.d-flex{
+    display: flex;
+}
+.nav-top-menu {
+    background: #f96d10;
+    border-top: 1px solid #f96d10;
+}
+.cart-block .cart-block-content .product-info .p-right{
+    line-height: 17px;
+}
+.cart-block .p-rice{
+    font-weight: bold;
+}
+.product-list li .left-block img{
+    max-height: 220px;
+    width: auto;
+}
+.option5 #main-menu li.dropdown>a:after{
+    top: 35px;
+}
+#main-menu .dropdown-menu{
+    min-width: 300px;
+}
+img{
+    -webkit-user-select: none;
+    margin: auto;
+    background-color: hsl(100%, 100%, 100%);
+    transition: background-color 100ms;
+}
+.alert-success{
+    border: 2px solid green;
+    background-color: #0f04;
+    color: #000;
+    font-size: 14px;
+    text-transform: capitalize;
+}
+.alert{
+    padding: 15px;
+    min-width: 280px;
+    font-size: 20px;
+}
+#AlertContent{
+    position: fixed;
+    bottom: 10%;
+    right: 0px;
+    max-height: 80%;
+    overflow: hidden;
+    z-index: 9999999;
+}
+a{
+    cursor: pointer;
+}
+.product-list.list .add-to-cart{
+    width: 150px;
+    background-color: #aaa;
+}
+.sortPagiBar .bottom-pagination .pagination .active a{
+    background-color: #f96d10;
+}
+.product-list.list .add-to-cart a{
+    margin-left: 5px;
+    margin-left: 5px;
+    padding-left: 15px;
+    width: 150px;
+}
+.hotroTime{
+    font-size: 0.9em;
+    text-align: center;
+    font-weight: bold;
+}
+.d-flex.giohang .imagesSp{
+    width: 80px;
+}
+.d-flex.giohang .qty{
+    width: 50px;
+}
+.d-flex.giohang{
+    display: flex;
+    justify-content: space-evenly;
+    align-content: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: center;
+}
+sup{
+    line-height: 1.5em;
+}
+.display-product-option li.selected span, .display-product-option li:hover span{
+    background-color: #f96d10;
+}
+h2.product-name a{
+    color: #000;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: capitalize !important;
+}
+.product-list li .right-block{
+    padding: 0 5px;
+}
+.service{
+    margin-top: 0px;
+}
+.product-carosel .img-product{
+    min-height: 220px;
+    width: 100%;
+}
+.left-block.product-carosel{
+    padding: 0px !important;
+}
+.main-header{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: gold;
+}
+.main-header .header-search-box .form-inline{
+    background-color: #fff;
+}
+.option5 .top-header {
+    background: #f96d10;
+    font-size: 14px;
+    color: #fff;
+}
+.option5 .top-header .dropdown-menu{
+    border-top: 2px solid #fff;
+}
+.option5 .top-header .user-info .current-open,
+.option5 .top-header .support-link a{
+    color: #fff;
+}
+.logo img{
+    height:70px;
+}
+.d-flex{
+    display: flex;
+}
+.HotLine .content h2{
+    font-weight: bold;
+    color: #e80000;
+}
+.d-flex.HotLine{
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+.owl-controls .owl-prev .fa, .owl-controls .owl-next .fa{
+    font-size: 25px;
+    line-height: 35px;
+}
+.owl-controls .owl-prev, .owl-controls .owl-next{
+    background: #eaeaea;
+    width: 35px;
+    height: 35px;
+    color: #ccc;
+    text-align: center;
+    padding-top: 0px;
+}
+.DanhMuc-panel .panel-heading h2{
+    margin-bottom: 20px;
+}
+.option5 .product-list li .product-price{
+    font-weight: bold;
+}
+.DanhMuc-panel .panel-heading h2 span{
+    border-bottom: 2px solid #f96d10;padding-bottom: 5px;padding-left: 15px;padding-right: 15px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+.option5 #main-menu{
+    padding-left: 15px;
+}
+.mainmenu{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.mainmenu > li > a{
+    white-space: nowrap;
+}
+.mainmenu > li{
+    width: 100%;
+    text-align: center;
+}
+.mainmenu .dropdown-menu{
+    padding: 0px;
+}
+.mainmenu ul li a:hover{
+    color: #f96d10;
+}
+.mainmenu ul li a{
+    padding: 5px;
+    display: block;
+}
+#main-menu .navbar .navbar-nav>li>a{
+    margin: 0px;
+    padding: 15px 15px;
+}
+.Product-mobie .right-block .product-star .fa-star{
+    color: goldenrod;
+}
+.Product-mobie .product-price {
+    color: #e80000;
+    font-size: 16px;
+    font-weight: bold;
+}
+.border-radius-none{
+    border-radius: 0px;
+}
+.Product-mobie .btn.add-to-cart {
+    color: #000;
+    border: 1px solid #000;
+}
+.Product-mobie .add-to-cart {
+    border-radius: 0px;
+}
+.Product-mobie .add-to-cart a{
+    color: #000;
+    font-weight: bold;
+}
+.Product-mobie li{
+    padding-bottom: 5px;
+    margin-bottom:  5px;
+    border-bottom: 1px dashed #aaa;
+}
+.Product-mobie .left-block .img-product{
+    max-height: 100px;
+    max-width: 100px;
+    margin-right: 10px;
+}
+
+.navbar-mobie .navbar-toggle{
+    border: 0px solid #000;
+    margin-right: 8px;
+}
+.navbar-mobie .MainMenu ul{
+    list-style-type: none;
+}
+.navbar-mobie .MainMenu ul li a{
+    display: block;
+    padding: 10px;
+    color: #000;
+    font-weight: 400;
+    border-bottom: 1px dashed #fff;
+    font-size: 18px;
+
+}
+.navbar-mobie .MainMenu ul li ul li a{
+    text-indent: 15px;
+}
+.navbar-mobie .MainMenu{
+    transition: visibility 0s, opacity 0.5s linear;
+    position: fixed;
+    top: 0px;left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+    color: #000;
+    z-index: 99999;
+}
+.btn-mobie {
+    position: relative;
+}
+.btn-mobie label{
+    position: absolute;
+    right: 0px;
+    top: -11px;
+    color: #000;
+    background-color: red;
+    color: #fff;
+    padding: 1px;
+    width: 16px;
+    line-height: 14px;
+    font-size: 12px;
+    display: block;
+    border-radius: 100px;
+}
+.navbar-mobie{
+    background-color: gold;
+}
+@media (max-width: 480px) {
+    .option5 #main-menu{
+        padding-left: 0px;
+    }
+    #product .pb-right-column .product-name{
+        font-size: 20px;
+        line-height: 24px;
+        font-weight: bold;
+    }
+    .DanhMuc-panel .panel-heading h2 span{
+        font-size: 16px;
+        font-weight: bold;
+    }
+}
+@media (max-width: 480px){
+    #home-slider .header-top-right {
+        padding: 0px;
+    }
+    .header-top-right .homeslider img{
+        height: auto !important;
+    }
+    .mainmenu{
+        display: block;
+    }
+    .cartPage #columns{
+        padding: 0px;
+        margin: 0px;
+    }
+    .page-content{
+        margin-top: 10px;
+    }
+    .cartPage footer{
+        display: none;
+    }
+}

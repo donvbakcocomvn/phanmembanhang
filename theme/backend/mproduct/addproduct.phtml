@@ -1,0 +1,122 @@
+<div class="box box-solid " ng-controller="addproductController" >
+    <div class="box-header ">
+        <a class="btn btn-primary" href="/mproduct/index/"><i class="fa fa-angle-left" ></i></a>
+        <h3 class="box-title">Danh Mục Sản Phẩm</h3>
+        <!-- tools box -->
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <form action="" method="POST" enctype="multipart/form-data" >
+            <div class="col-md-9" >
+                <div class="form-group">
+                    <label >Tên Sản Phẩm</label>
+                    <input ng-model="Name" type="text" value="" required="required" class="form-control" name="nameProduct" >
+                    <input type="hidden" value="vi" class="form-control" name="lang" >
+                </div>
+                <div class="row" >
+                    <div class="col-md-6" >
+                        <div class="form-group">
+                            <label >Giá Bán: {{_Product.Price|number:0}}</label>
+                            <input required="required" type="number" ng-model="_Product.Price" class="form-control"  >
+                            <input type="hidden" value="{{_Product.Price}}" class="form-control" name="Price" >
+
+                        </div>
+                    </div>
+                    <div class="col-md-6" >
+                        <div class="form-group">
+                            <label >Giá Cũ: {{_Product.oldPrice|number:0}}</label>
+                            <input required="required" type="number" ng-model="_Product.oldPrice" class="form-control"  >
+                            <input type="hidden" value="{{_Product.oldPrice}}" class="form-control" name="oldPrice" >
+                        </div>
+                    </div>
+                </div>
+
+                <div role="tabpanel">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a target="_sefl" href="#home" aria-controls="home" role="tab" data-toggle="tab">Mô Tả Sản Phẩm</a>
+                        </li>
+                        <li role="presentation">
+                            <a target="_sefl" href="#tab" aria-controls="tab" role="tab" data-toggle="tab">Thông Tin Sản Phẩm</a>
+                        </li>
+                        <li role="presentation">
+                            <a target="_sefl" href="#GhiChu" aria-controls="GhiChu" role="tab" data-toggle="tab">Ghi Chú</a>
+                        </li>
+                        <li role="presentation">
+                            <a target="_sefl" href="#HinhAnh" aria-controls="GhiChu" role="tab" data-toggle="tab">Hình Ảnh</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="home">
+                            <div class="form-group">
+                                <label >Mô Tả Ngắn</label>
+                                <textarea name="Summary" class="editor" id="Summary" >{{_Product.Summary}}</textarea>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="tab">
+                            <div class="form-group">
+                                <label >Thông tin Chính</label>
+                                <textarea name="Content" class="editor" id="Content" >{{_Product.Content}}</textarea>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="GhiChu">
+                            <div class="form-group">
+                                <label >Ghi Chú</label>
+                                <textarea name="Note" class="form-control" id="Note" >{{_Product.Note}}</textarea>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="HinhAnh">
+                            <div>
+                                Hình Ảnh
+                                <label style="border: 1px solid #000;background-color: rgba(0, 0, 0, 0.34);color: #fff;text-align: center;position: relative;height: 105px;display: block;z-index: 2" >
+                                    Chọn Hình
+                                    <input style="display: none" onclick="BrowseServer('Images:/sanpham/', 'UrlHinh')"  type="button" name="btnChonFile" id="btnChonFile" value="Chọn File" >
+                                    <div class="HinhChon" style="position: absolute;top: 0px;z-index: 1" >
+                                        <img id="HinhQuanCao" src="" style="height: 100px;max-width: 200px"  >
+                                    </div>
+                                    <input style="display: none;" readonly="" type="text"   class="form-control" id="UrlHinh" name="UrlHinh" >
+                                </label>
+                                <div style="clear: both"></div>
+
+                            </div>
+                            <label >Hình Sản Phẩm</label>
+                            <div class="form-group hidden">
+                                <label >Hình Sản Phẩm</label>
+                                <div class="form-group">
+                                    <input type="file" name="fileImages[]" multiple="multiple" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-3" >
+                <div class="form-group">
+                    <label></label>
+                    <button name="ThemSanPham" class="btn btn-block btn-primary" type="submit" >Thêm Sản Phẩm</button>
+                </div>
+                <div class="form-group">
+                    <label >Danh Mục : </label>
+                    <select class="form-control "  name="catID" >
+                        <option  ng-repeat="cat in _ListCategory" ng-selected="cat.catID == '<?php echo $_Param[0] ?>'" value="{{cat.catID}}" >
+                            {{cat.catName}}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label >Mã Sản Phẩm</label>
+                    <input type="text" class="form-control" required="required" value="{{Name}}"  name="ID" >
+                </div>
+                <div class="form-group">
+                    <label >Ẩn Hiện
+                        <input type="checkbox"  value="1" ng-checked="_Product.isShow == 1" name="isShow" >
+                    </label>
+                </div>
+
+
+
+            </div>
+
+        </form>
+    </div>
+</div>

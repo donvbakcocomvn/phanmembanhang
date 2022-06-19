@@ -1,0 +1,23 @@
+{
+    "short_name": "BachHoaGiaDinh",
+    "name": "BachHoaGiaDinh.VN -  Bách Hóa Gia Đình",
+    "description": "Mang bách hóa đến gia đình bạn",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "https://bachhoagiadinh.vn/public/logo_mini.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "https://bachhoagiadinh.vn/public/logo_mini.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "/",
+    "background_color": "#ffd700",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#f96d10"
+}

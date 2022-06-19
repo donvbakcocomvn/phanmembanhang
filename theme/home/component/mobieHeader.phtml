@@ -1,0 +1,77 @@
+<nav class="navbar navbar-mobie" style="margin-bottom: 0px" role="navigation">
+    <div class="">
+        <div class="">
+            <div class="d-flex menu-body">
+                <a  style="width: 100%;" href="/">
+                    <img class="img img-responsive"  style="height: 60px;" src="__Logo___">
+                </a>
+                <a href="/cart/" style="position: relative;" class="navbar-toggle" >
+                    <i style="color: #000;" class="fa fa-shopping-cart fa-2x" ></i>
+                    <label style="position: absolute; top: 0px;right: 0px;" class="pull-right badge badge-success" >{{_Cart.SumProduct}}</label>
+                </a>
+                <a href="/profile/index/" class="navbar-toggle" >
+                    <i style="color: #000;" class="fa fa-user fa-2x" ></i>
+
+                </a>
+                <label type="button" class="navbar-toggle" >
+                    <i style="color: #000;" class="fa fa-bars fa-2x" ></i>
+                    <input  ng-model="MainMenu" type="checkbox" style="display: none;" >
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="MainMenu" ng-show="MainMenu" >
+        <label class="btn  pull-right" >
+            <i class="fa fa-times fa-2x " ></i>
+            <input  ng-model="MainMenu" type="checkbox" style="display: none;" >
+        </label>
+        <ul class="" >
+            <?php
+            if (isset($_SESSION[UserLogin])) {
+                $us = \Model\UsersService::CurentUsers();
+                ?>
+                <li>
+                    <a href="/profile/index/" >
+                        Xin chào: <?php echo $us->Name; ?>
+                    </a>
+                </li>
+                <?php
+            } else {
+                ?>
+                <li>
+                    <a href="/dang-nhap.html" >
+                        Đăng Nhập
+                    </a>
+                </li>
+                <?php
+            }
+            ?>
+            <li ng-repeat="item in _Menu.TopMainMenu" >
+                <a href="{{item.Link}}">
+                    {{item.Name}}
+                </a>
+                <ul ng-show="item.SubMenu" >
+                    <li ng-repeat="itemsub in item.SubMenu" >
+                        <a href="{{itemsub.Link}}">
+                            <i class="fa fa-angle-double-right" ></i> {{itemsub.Name}}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+<div  ng-show="showTimKiem" >
+    <form action="/timkiem/index/" method="get" class="form-inline">
+        <div   style="padding: 5px;">
+            <div class="d-flex " style="border: 1px solid gold;" >
+                <input style="width: 100%;padding-left: 10px;" value="<?php echo isset($_GET["keyword"]) ? $_GET["keyword"] : '' ?>"  name="keyword" type="text"  placeholder="Từ khóa">
+                <button type="submit" class="border-radius-none btn btn-warning">
+                    <i class="fa fa-search" ></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

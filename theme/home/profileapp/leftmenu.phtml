@@ -1,0 +1,33 @@
+<div class="d-none d-md-block d-lg-block">
+    <div class="d-flex" >
+        <img  style="width: 60px;" src="/public/user_no_photo.png" alt="" class="img-thumbnail img-circle">
+        <p class=" XinChao" >
+            Xin Chào: <b ng-bind-html="_User.Name" ></b>  <br>
+            Tài Khoản: <b ng-bind-html="_User.Username" ></b>
+        </p>
+    </div>
+</div>
+
+<ul class="list-group mt-4 d-none d-md-block d-lg-block">
+    <li class="list-group-item">
+        <a href="/profile/index/#/"  ><i class="fa fa-dashboard" ></i> bảng điều khiển</a>
+    </li>
+    <li class="list-group-item">
+        <a href="/profile/index/#/thongtin"  ><i class="fa fa-user" ></i> Thông Tin Tài Khoản</a>
+    </li>
+    <li class="list-group-item">
+        <a href="/profile/index/#/thongbao"  ><i class="fa fa-bell" ></i> Thông Báo Của Tôi</a>
+    </li>
+    <li class="list-group-item">
+        <a href="/profile/index/#/don-hang"  ><i class="fa fa-shopping-cart" ></i> Quản Lý Đơn Hàng</a>
+    </li>
+    <li class="list-group-item">
+        <a href="/profile/index/#/qrcode"  ><i class="fa fa-link" ></i> Link Giới Thiệu</a>
+    </li>
+    <li class="list-group-item">
+        <a href="/profile/logout/"  >
+            <i  class="fa fa-sign-out"></i>
+            Đăng Xuất
+        </a>
+    </li>
+</ul>

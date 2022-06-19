@@ -1,0 +1,220 @@
+<div class="row ">
+    <section class="col-md-12 " ng-controller="madvController"  >
+        <div class="box box-primary ">
+            <div class="box-header ">
+                <i class="fa fa-book"></i>
+                <h3 class="box-title">Quảng Cáo Trên Trang  </h3>
+                <!-- tools box -->
+                <div class="pull-right box-tools">
+                    <a class="btn btn-primary" data-toggle="modal" target="_self" href='#Groups'>Thêm Nhóm</a>
+                    <button class="btn btn-primary" ng-click="ToiUuHinhQuangCao('#loadingicon')" >
+                        Tối Ưu Hình Ảnh
+                        <i class="fa " id="loadingicon" ></i>
+                    </button>
+                    <div class="modal fade" id="Groups">
+                        <div class="modal-dialog">
+                            <div class="modal-content ">
+                                <form-them-groups></form-them-groups>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body "  >
+                <div class="col-md-3 "  >
+                    <div class="box box-solid ">
+                        <div class="box-header">
+                            <h3 class="box-title">Nhóm Quảng Cáo</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body ">
+                            <div class="row">
+                                <list-groups></list-groups>
+                            </div>
+                            <form ng-show="false" action="/madv/addadv/" method="POST" enctype="multipart/form-data" >
+                                <div class="form-group">
+                                    <label for="">Tên Quảng Cáo</label>
+                                    <input type="text" class="form-control" name="Name"  placeholder="...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Đường Dẫn</label>
+                                    <input type="text" class="form-control" name="Link"  placeholder="...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Nhóm</label>
+                                    <select class="form-control" name="Group"  >
+                                        <option ng-repeat="item in _GroupsAdv" value="{{item.Group}}" >{{item.Group}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Hình Ảnh</label>
+                                    <input class="" name="UrlImage" type="file"  >
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Nội Dung</label>
+                                    <textarea class="form-control" name="Content"  placeholder="Nội Dung Quảng Cáo"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <table class="table table-bordered" >
+                                        {{_Attribute}}
+                                        <caption>Tùy Chọn</caption>
+                                        <thead>
+                                            <tr>
+                                                <th>key</th>
+                                                <th>value</th>
+                                                <th><button class="pull-right" ng-click="clickAddAtt()" type="button" >
+                                                        <i class="fa fa-plus" ></i>
+                                                    </button>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="itematt in  _Attribute" >
+                                                <td>
+                                                    <input type="text" ng-model="itematt.key" class="form-control"  placeholder="key">
+                                                    <input type="hidden" value="{{itematt.key}}" name="DataAttribute[{{$index}}][key]" >
+                                                    <input type="hidden" value="{{itematt.value}}" name="DataAttribute[{{$index}}][value]" >
+                                                </td>
+                                                <td><input type="text" ng-model="itematt.value"  class="form-control" name="Attribute[{{itematt.key}}]"   placeholder="value">
+                                                </td>
+                                                <td>
+                                                    <button ng-click="clickRemoveAtt($index)" type="button" >
+                                                        <i class="fa fa-minus" ></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="2" ></td>
+                                                <td  >
+                                                    <button class="pull-right" ng-click="clickAddAtt()" type="button" >
+                                                        <i class="fa fa-plus" ></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+
+                                    </table>
+                                </div>
+                                <button type="submit" class="btn btn-success" name="AddAdv" >Thêm Quảng Cáo</button>
+                            </form>
+
+
+
+                        </div><!-- /.box-body -->
+                    </div>
+
+
+                </div>
+                <div class="col-md-9 "  >
+
+                    <div class="modal fade" id="ThemQuangCao">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title">Thêm Quảng Cáo</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form-them-quang-cao></form-them-quang-cao>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="SuaQuangCao">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title">Sửa Quảng Cáo</h4>
+                                </div>
+                                <form action="/madv/editadv/" ng-submit="SuaQuangCao(_editDetailAdvs)" method="POST" enctype="multipart/form-data" >
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="">Tên Quảng Cáo</label>
+                                            <input type="text" class="form-control" ng-model="_editDetailAdvs.Name" name="Name"  placeholder="Tên Quản Cáo">
+                                            <input type="hidden" class="form-control" value="{{_editDetailAdvs.ID}}" name="ID"  >
+                                            <input type="hidden" class="form-control" value="{{_editDetailAdvs.Group}}" name="Group"  >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Đường Dẫn</label>
+                                            <input type="text" class="form-control" ng-model="_editDetailAdvs.Link" name="Link"  placeholder="...">
+                                        </div>
+                                        <div class="form-group">
+                                            <p for=""><b>Hình Ảnh</b></p>
+                                            <img style="background-color: #fff;height: 100px;" src="{{_editDetailAdvs.Urlimages}}"  >
+                                            <div class="d-flex "  >
+                                                <input class="form-control" readonly="" id="UrlHinhQuangCao" style="width: 100%;" name="UrlImage" ng-model="_editDetailAdvs.Urlimages" type="text"  >
+                                                <!--<button onclick="BrowseServer('Images:/quangcao/', 'UrlHinhQuangCao')" class="btn btn-success" type="button" ><i class="fa fa-image" ></i> </button>-->
+                                                <button ng-click="NgBrowseServer('Images:/quangcao/', 'UrlHinhQuangCao', 'setImagesAdv')" class="btn btn-success" type="button" ><i class="fa fa-image" ></i> </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="">Nội Dung</label>
+                                            <textarea ng-model="_editDetailAdvs.Content" class="form-control" name="Content"  placeholder="Nội Dung Quảng Cáo"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <p for=""><b>Ẩn Hiện</b>
+                                            </p>
+                                            <input ng-model="_editDetailAdvs.isShow" type="checkbox"  >
+                                        </div>
+                                        <div class="form-group">
+                                            <table class="table table-bordered" >
+                                                <caption>Tùy Chọn</caption>
+                                                <tbody>
+                                                    <tr ng-repeat="itematt in  _Attribute"  >
+                                                        <td  >
+                                                            {{itematt.key}}
+                                                            <input type="hidden" value="{{itematt.key}}" name="DataAttribute[{{$index}}][key]" >
+                                                            <input type="hidden" value="{{itematt.value}}"  name="DataAttribute[{{$index}}][value]" >
+                                                        </td>
+                                                        <td style="background-color: {{itematt.value}}" ><input type="text" ng-model="itematt.value"  class="form-control" name="Attribute[{{itematt.key}}]"   placeholder="value"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success" name="EditAdv" >Sửa Quảng Cáo</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box box-solid ">
+                        <div class="box-header ">
+                            <h3 class="box-title">Tất Cả Quảng Cáo</h3>
+                            <!-- tools box -->
+                            <div class="pull-right box-tools">
+                                <a class="btn btn-sm btn-primary" data-toggle="modal" target="_self" href='#ThemQuangCao'>Thêm Quảng Cáo</a>
+                            </div>
+                        </div><!-- /.box-header -->
+                        <div class="box-body no-padding ">
+                            <table class="table table-bordered" >
+                                <tbody>
+                                    <tr ng-repeat="itemAdv in _Advs| filter:seachAdv" >
+                                        <td colspan="2" >
+                                            <div class="d-flex">
+                                                <img ng-src="{{itemAdv.Urlimages}}" style="height: 100px" class="img img-responsive" alt="name" title="name" >
+                                                <div class="btn-group col-md-9"  >
+                                                    <p>
+                                                        <b>{{itemAdv.Name}}</b>
+                                                        <b>{{itemAdv.Group.Name}}</b>
+                                                    </p>
+                                                    <a class="btn btn-sm btn-primary" data-toggle="modal" ng-click="clickSuaQuangCao(itemAdv.ID)" target="_self" href='#SuaQuangCao'>Sửa</a>
+                                                    <span class="bakco-modaldelete" ng-init="modaldeleteInit('Xóa', 'Thông Báo', 'Bạn có muốn xóa quảng cáo này', '/madv/delete/' + itemAdv.ID, itemAdv.ID)" ></span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div><!-- /.box-body -->
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div>
+    </section>
+</div>

@@ -1,0 +1,6 @@
+<phan-trang1 pages-index="_DanhSachDonHang.indexPage"
+                     pages-number="_DanhSachDonHang.pageNumber"
+                     pages-total="_DanhSachDonHang.totalPage"
+                     pages-link=""
+                     pages-params='_DanhSachDonHang.Params'
+                     on-click="DanhSachAllDonHang(Params, pagesIndex, pagesNumber)"></phan-trang1>

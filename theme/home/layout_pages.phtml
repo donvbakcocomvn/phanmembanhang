@@ -1,0 +1,45 @@
+<?php
+$functionLayout = new theme\home\functionLayout();
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <?php
+        $functionLayout->head();
+        ?>
+
+
+    </head>
+    <body class="option5" ng-cloak="TRUE" ng-app="rootApp" ng-controller="menuController" >
+        <?php
+        $functionLayout->header();
+        ?>
+        <div class="columns-container"  >
+            <div class="container" id="columns">
+                <!-- breadcrumb -->
+                <?php
+                $bre = new Model\Breadcrumb();
+                $bre->showBreadcrumb();
+                ?>
+                <!-- ./breadcrumb -->
+                <!-- row -->
+            </div>
+        </div>
+        <?php
+        include $Content;
+        ?>
+        <?php
+        $functionLayout->footer();
+        ?>
+        <a href="#" class="scroll_top" title="Scroll to Top" style="display: inline;">Scroll</a>
+        <?php
+        $functionLayout->js();
+        ?>
+        <script type="text/javascript" src="/public/home/assets/lib/jquery.elevatezoom.js"></script>
+        <script type="text/javascript" src="/public/home/assets/lib/fancyBox/jquery.fancybox.js"></script>
+    </body>
+</html>
+<?php
+$functionLayout->DeCodeHTML();
+?>

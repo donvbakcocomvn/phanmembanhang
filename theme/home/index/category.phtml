@@ -1,0 +1,74 @@
+<?php
+$view_theme = new theme\home\functionLayout();
+$Category = $data["Category"];
+$cat = new \Model\Category();
+$listCatID = [$Category->catID];
+$cat->AllCategoryByParentID([$Category->catID], $listCatID);
+$product = new \Model\Products();
+//var_dump($Category);
+//var_dump($data["Pages"]);
+$Pages = intval($data["Pages"]);
+$Number = 32;
+$DSProduct = $product->ProductsByCatID($listCatID, $Pages, $Number, $sum);
+?>
+<?php
+$view_theme->categorySlider();
+?>
+<!-- view-product-list-->
+<div id="view-product-list" class="view-product-list">
+    <h2 class="page-heading">
+        <span class="page-heading-title"><?php echo $Category->catName; ?></span>
+    </h2>
+    <ul class="display-product-option">
+        <li class="view-as-grid selected">
+            <span>grid</span>
+        </li>
+        <li class="view-as-list">
+            <span>list</span>
+        </li>
+    </ul>
+    <!-- PRODUCT LIST -->
+    <ul class="row product-list grid">
+        <?php
+        if ($DSProduct)
+            foreach ($DSProduct as $_Poroduct) {
+                ?>
+                <li class="col-sx-12 col-sm-3">
+                    <?php
+                    $view_theme->product($_Poroduct);
+                    ?>
+                </li>
+                <?php
+            }
+        ?>
+    </ul>
+</div>
+<!-- ./view-product-list-->
+<div class="sortPagiBar  pull-left">
+    <div class="bottom-pagination">
+
+        <nav>
+            <?php
+            $DuongDan = $Category->linkCurentCategory() . '/[i]';
+            echo lib\Common::PhanTrangTheoSL($sum, $Number, $Pages, $DuongDan);
+            ?>
+        </nav>
+    </div>
+    <div class="show-product-item hidden">
+        <select name="">
+            <option value="">Show 18</option>
+            <option value="">Show 20</option>
+            <option value="">Show 50</option>
+            <option value="">Show 100</option>
+        </select>
+    </div>
+    <div class="sort-product hidden">
+        <select>
+            <option value="">Product Name</option>
+            <option value="">Price</option>
+        </select>
+        <div class="sort-product-icon">
+            <i class="fa fa-sort-alpha-asc"></i>
+        </div>
+    </div>
+</div>

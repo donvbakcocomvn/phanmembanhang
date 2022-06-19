@@ -1,0 +1,53 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Sửa Nhanh</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="">Mã Sản Phẩm</label>
+                <div class="d-flex">
+                    <input ng-model="_Product.Code" class="form-control" name="Code" placeholder="Mã Sản Phẩm">
+                    <button ng-click="TaoMaSanPham(_Product)" class="btn btn-success" >Tạo Lại</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="">Tên Sản Phẩm</label>
+                <input  ng-model="_Product.nameProduct" class="form-control" name="nameProduct" placeholder="Tên Sản Phẩm">
+            </div>
+            <div class="form-group">
+                <label for="">Giá Liêm Yết: {{_Product.Price| number:0}}</label>
+                <input type="number" ng-model="_Product.Price" class="form-control" name="Number" placeholder="Giá Liên Yết">
+            </div>
+            <div class="form-group">
+                <label for="">Giá Nhập: {{_Product.GiaNhap| number:0}}</label>
+                <input type="number" ng-model="_Product.GiaNhap" class="form-control" name="GiaNhap" placeholder="Giá Nhập">
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6" >
+                    <label for="">Số Lượng</label>
+                    <input type="number" ng-model="_Product.Number" class="form-control" name="Number" placeholder="Số Lượng">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="">Ẩn/Hiện Sản Phẩm</label>
+                    <select type="number" ng-model="_Product.isShow" class="form-control" name="isShow" placeholder="Ẩn Hiện Sản Phẩm">
+                        <option value="0" >Ẩn</option>
+                        <option value="1" >Hiện</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label for="">Danh Mục Sản Phẩm</label>
+                <select type="number" ng-model="_Product.catID" class="form-control"  name="catID" >
+                    <option  ng-repeat="item in _ProductCat" ng-selected="item.catID == _Product.catID" value="{{item.catID}}" >{{item.catName}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" onclick="window.location.reload();" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            <button type="button" ng-click="SaveProduct()" class="btn btn-primary">Lưu</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    padding: 3px;
+}
+.d-flex{
+    display: flex;
+}
+fieldset{
+    display: block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    border: 2px solid #aaa;
+    margin-bottom: 10px;
+}
+legend{
+    margin-bottom: 0px;
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+    padding-left: 2px;
+    padding-right: 2px;
+    border: none;
+    width: auto;
+}
+body.dark-mode .content-wrapper{
+    background: #333;
+}
+.dark-mode .box-header .box-title,.dark-mode .panel-body{
+    color: #fff;
+}
+.dark-mode .box-footer,.dark-mode .panel-body,.dark-mode .box-body,.dark-mode .box-header{
+    background-color: #222d32;
+}
+.dark-mode .box-body *{
+    color: #b8c7ce;
+}
+.dark-mode textarea,.dark-mode input,.dark-mode select,.dark-mode select option{
+    background-color: #ddd;
+    border: 2px solid #157ada;
+    color: #000 !important;
+
+}
+.dark-mode .table-hover>tbody>tr:hover *{
+    color: #fff;
+}
+.dark-mode .table-hover>tbody>tr:hover{
+    background-color: #001a35;
+}
+.pagination{
+    padding-top: 10px;
+}
+.dark-mode .pagination>li.active>a{
+    background-color: #157ada;
+}
+.dark-mode .pagination>li>a{
+    background-color: #666;
+    color: #000;
+}
+.dark-mode .content-header>h1{
+    color: #fff;
+}
+.dark-mode .btn-default{
+    border: 2px solid #aaa;
+    background-color: #0000;
+}
+.dark-mode .btn-primary{
+    color: #000;
+    border: 2px solid #3c8dbc;
+    border-radius: 0px;
+    color: #000;
+    box-sizing: border-box;
+    font-weight: bold;
+    background-color: #157ada;
+}

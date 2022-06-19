@@ -1,0 +1,119 @@
+<?php
+$functionLayout->homeslider();
+$DanhSacDanhMuc = $functionLayout->GetConfigByKey(theme\gocvoi\functionLayout::DanMucSanPham);
+$SanPham = new \Model\Products();
+$DS = $SanPham->ProductsAllPT(1, 12, $tong);
+?>
+<div class="products-best-selling module">
+    <div class="container-fluid">
+        <h2 class="module-title wow fadeInDown">Sản phẩm bán chạy nhất</h2>
+        <div class="module-content products-promotion-list product-list">
+            <div class="row ">
+                <?php
+                if ($DS) {
+                    foreach ($DS as $pro) {
+                        $_pro = new \Model\Products($pro);
+                        ?>
+                        <div class="col-xs-6 col-md-3 col-lg-2 product-item wow fadeInUp">
+                            <div class="product-item-image">
+                                <figure>
+                                    <a href="<?php echo $_pro->linkProduct() ?>">
+                                        <img src="<?php echo $_pro->UrlHinh() ?>" alt="<?php echo $_pro->nameProduct ?>">
+                                    </a>
+                                </figure>
+                                <?php
+                                if ($_pro->oldPrice > 0) {
+                                    ?>
+                                    <span class="product-item-label"><?php echo $_pro->GiamGia(); ?>%</span>
+                                    <?php
+                                }
+                                ?>
+                            </div>
+                            <h3 class="product-item-title">
+                                <a href="<?php echo $_pro->linkProduct() ?>"><?php echo $_pro->nameProduct ?></a>
+                            </h3>
+                            <div class="product-item-price">
+                                <?php
+                                if ($_pro->oldPrice > 0) {
+                                    ?>
+                                    <del><?php echo $_pro->oldPrice() ?></del>
+                                    <?php
+                                }
+                                ?>
+                                <ins><?php echo $_pro->Price(); ?></ins>
+                            </div>
+                            <div class="product-item-view readmore">
+                                <a href="<?php echo $_pro->linkGioHang(); ?>">Giỏ Hàng</a>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                }
+                ?>
+
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+if ($DanhSacDanhMuc) {
+    foreach ($DanhSacDanhMuc as $k => $danhmuc) {
+        $cat = new \Model\Category($danhmuc["DanhMuc"]);
+        $DanhSachSanPham = $cat->GetProducts();
+        ?>
+        <div class="products-best-selling module">
+            <div class="container-fluid">
+                <h2 class="module-title wow fadeInDown"><?php echo $cat->catName; ?></h2>
+                <div class="module-content products-promotion-list product-list">
+                    <div class="row">
+                        <?php
+                        if ($DanhSachSanPham) {
+                            foreach ($DanhSachSanPham as $pro) {
+                                $_pro = new \Model\Products($pro);
+                                ?>
+                                <div class="col-sm-6 col-md-3 col-lg-2 product-item wow fadeInUp">
+                                    <div class="product-item-image">
+                                        <figure>
+                                            <a href="<?php echo $_pro->linkProduct() ?>">
+                                                <img src="<?php echo $_pro->UrlHinh() ?>" alt="<?php echo $_pro->nameProduct ?>">
+                                            </a>
+                                        </figure>
+                                        <?php
+                                        if ($_pro->oldPrice > 0) {
+                                            ?>
+                                            <span class="product-item-label"><?php echo $_pro->GiamGia(); ?>%</span>
+                                            <?php
+                                        }
+                                        ?>
+                                    </div>
+                                    <h3 class="product-item-title">
+                                        <a href="<?php echo $_pro->linkProduct() ?>"><?php echo $_pro->nameProduct ?></a>
+                                    </h3>
+                                    <div class="product-item-price">
+                                        <?php
+                                        if ($_pro->oldPrice > 0) {
+                                            ?>
+                                            <del><?php echo $_pro->oldPrice ?></del>
+                                            <?php
+                                        }
+                                        ?>
+                                        <ins><?php echo $_pro->Price(); ?></ins>
+                                    </div>
+                                    <div class="product-item-view readmore">
+                                        <a href="<?php echo $_pro->linkGioHang(); ?>">Giỏ Hàng</a>
+                                    </div>
+                                </div>
+                                <?php
+                            }
+                        }
+                        ?>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+}
+?>
+

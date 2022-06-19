@@ -1,0 +1,73 @@
+<div ng-controller="giohangCotroller" ng-init='DanhSachDonHangNhanVien({"Status": "all", "Keyword":""}, 1, 10)' class="box box-primary">
+    <div class="box-header">
+        <h3 class="box-title">Danh Sách Đơn Hàng Của Tôi</h3>
+        <div class="box-tools">
+        </div>
+    </div>
+    <div class="box-body" ng-init="OrderStatus()" >
+        <div class="d-flex" >
+            <input class="form-control" ng-model="keyword" placeholder="Mã,Email,Phone" >
+            <button ng-click='DanhSachDonHangNhanVien({"Status": "all", "Keyword":keyword}, 1, 10)' class="btn btn-primary">Tìm Kiếm</button>
+        </div>
+        <button ng-class="_DanhSachDonHang.Params.Status == 'all'?'btn-primary':'btn-default'" class="btn btn-sm " ng-click='DanhSachDonHangNhanVien({"Status": "all", "Keyword":keyword}, 1, 10)' >Tất Cả</button>
+        <button ng-class="_DanhSachDonHang.Params.Status == item.Id?'btn-primary':'btn-default'" ng-repeat="item in _OrderStatus" ng-click='DanhSachDonHangNhanVien({"Status": item.Id, "Keyword":keyword}, 1, 10)'
+                class="btn btn-sm ">{{item.Name}}</button>
+        <table class="table table-bordered table-hover" >
+            <tr class="bg-blue" >
+                <td>Ngày Đặt</td>
+                <td>Mã</td>
+                <td>Khách Hàng</td>
+                <td>SĐT</td>
+                <td>Email</td>
+                <td>Tình Trạng</td>
+                <td>Tổng Tiền</td>
+                <td>Action</td>
+            </tr>
+            <tr ng-repeat="item in _DanhSachDonHang.data" >
+                <td>{{item.NgayTao}}</td>
+                <td>{{item.CodeOrder}}</td>
+                <td>{{item.Name}}</td>
+                <td>{{item.Phone}}</td>
+                <td>{{item.Email}}</td>
+                <td>{{item.statusName}}</td>
+                <td>{{item.TotalPriceVND}}</td>
+                <td>
+                    <button class="btn btn-primary" ng-click="GetOrderDetail(item.CodeOrder)" data-toggle="modal" data-target='#DonHangChiTiet'>Xem</button>
+                </td>
+            </tr>
+        </table>
+        <phan-trang1 pages-index="_DanhSachDonHang.indexPage"
+                     pages-number="_DanhSachDonHang.pageNumber"
+                     pages-total="_DanhSachDonHang.totalPage"
+                     pages-link=""
+                     pages-params='_DanhSachDonHang.Params'
+                     on-click="DanhSachDonHangNhanVien(Params, pagesIndex, pagesNumber)"></phan-trang1>
+        <div class="modal fade" id="DonHangChiTiet">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="donhang-chitiet"></div>
+                    <div class="modal-footer">
+                        <div class="form-group pull-left">
+                            <button type="button"  class="btn btn-success" ng-click="DaNopTienVeCongTy(_OrderDetail.CodeOrder)" >Đã Nộp Tiền Về Công Ty <i class="fa  fa-check" ></i></button>
+                            <button type="button" class="btn btn-success" ng-click="DataThuTienDonHang(_OrderDetail.CodeOrder)" >Đã Thu Tiền <i class="fa  fa-check" ></i></button>
+                            <button type="button" class="btn btn-success" ng-click="XacNhanDonHang(_OrderDetail.CodeOrder)" >Đã Xác Minh <i class="fa  fa-check" ></i></button>
+                            <button type="button" ng-show="_OrderDetail.Status != StatusCode.Huy" class="btn btn-danger" ng-click="ShowLyDoAction()" >Hủy Đơn Hàng <i class="fa  fa-times" ></i></button>
+                            <button type="button" ng-show="_OrderDetail.Status == StatusCode.Huy" class="btn btn-danger" ng-click="ShowLyDoAction()" >Xóa Đơn Hàng <i class="fa  fa-times" ></i></button>
+                        </div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+                    </div>
+                    <div class="col-md-12" ng-show="ShowLyDo" style="margin-bottom: 15px;" >
+                        <div class="form-group">
+                            <label for="">Lý Do</label>
+                            <textarea type="text" class="form-control" ng-model="LyDo" name="name" placeholder="Lý Do"></textarea>
+                        </div>
+                        <button type="button" class="btn pull-right btn-sm btn-success" ng-click="HuyDonHang(LyDo, _OrderDetail.CodeOrder)" >Xác Nhận</button>
+
+                    </div>
+                    <div class="clearfix">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

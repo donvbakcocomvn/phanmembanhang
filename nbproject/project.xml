@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.php.project</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/php-project/1">
+            <name>bachhoagiadinh.vn</name>
+        </data>
+        <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>dvi</word>
+            <word>formg</word>
+            <word>formh</word>
+            <word>fpr</word>
+            <word>fprmg</word>
+            <word>img</word>
+            <word>php</word>
+        </spellchecker-wordlist>
+    </configuration>
+</project>

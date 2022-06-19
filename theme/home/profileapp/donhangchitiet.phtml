@@ -1,0 +1,76 @@
+<back-to-link class="hidden-md hidden-lg" title="Cho Tiết Đơn Hàng" tolink="#/don-hang" ></back-to-link>
+<div class="body-content DonhangChiTiet" ng-init="DonHangChiTiet()" >
+    <div class="clearfix"></div>
+    <div class="panel panel-warning">
+        <h3 class="panel-heading">
+            <div class="hidden-md hidden-lg btn-mobie-top-right pull-right dropdown"  style="margin-top: -7px;">
+                <button  style="line-height: 20px" class="btn dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-2x fa fa-ellipsis-v" ></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <li><a href="#/don-hang/qrcode/{{_OrderDetail.data.CodeOrder}}">QRCode</a></li>
+                </ul>
+            </div>
+            <i class=" fa fa-info-circle" ></i>
+            Thông Tin Đơn Hàng
+        </h3>
+        <div class="panel-body">
+            <div class="col-md-6">
+                <h5>Mã Đơn Hang: {{_OrderDetail.data.CodeOrder}}</h5>
+                <p>Khách Hàng: <b ng-bind-html="_OrderDetail.data.Name" ></b></p>
+                <p>Ngày Tạo: <b ng-bind-html="_OrderDetail.data.NgayTao" ></b></p>
+                <p>SĐT: <b ng-bind-html="_OrderDetail.data.Phone" ></b></p>
+                <p>Email: <b ng-bind-html="_OrderDetail.data.Email" ></b></p>
+                <p>Địa Chỉ: <b ng-bind-html="_OrderDetail.data.Address" ></b></p>
+                <p>Ngày Tạo: <b ng-bind-html="_OrderDetail.data.NgayTao" ></b></p>
+                <p>Tổng Tiền: <b ng-bind-html="_OrderDetail.data.TotalPriceVND" ></b></p>
+                <p>Tình Trạng: <b ng-bind-html="_OrderDetail.data.statusName" ></b>
+                    <label style="line-height: 24px;" class="pull-right">
+                        <i class="fa-2x fa fa-edit" ></i>
+                        <input style="display: none;"  type="checkbox" ng-model="_editOrder" >
+                    </label>
+                </p>
+
+            </div>
+            <div class="col-md-6" ng-init="GetLinkQRCode()" >
+                <img ng-src="{{_LinkQRCode}}" class="img img-responsive" alt="donhang" title="donhang" >
+            </div>
+        </div>
+        <div class="" ng-show="_editOrder" >
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="">Tình Trạng</label>
+                    <select class="form-control" ng-model="_OrderDetail.data.Status" >
+                        <option ng-repeat="itemStatus in _OrderStatus" ng-value="itemStatus.Id" >{{itemStatus.Name}}</option>
+                    </select>
+                </div>
+                <div class="form-group text-right">
+                    <button class="btn btn-success" >Xác Nhận</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="" ng-repeat="itemProduct in _OrderDetail.data.OrderDetail" >
+        <hr style="" >
+        <div class=""  >
+            <div class="col-xs-3 col-sm-3">
+                <img src="{{itemProduct.Product.Images}}" class="img img-responsive" alt="alt" title="alt" >
+            </div>
+            <div class="col-xs-8 col-sm-8">
+                <div class="row">
+                    <p style="text-transform: capitalize;font-weight: bold;" >{{itemProduct.Product.nameProduct}}</p>
+                    <p ng-bind-html="'Code: <b>' +itemProduct.Product.Code+'</b>'" ></p>
+                    <p>Giá Bán: <b ng-bind-html="itemProduct.Product.PriceVND" ></b>
+                        X <b ng-bind-html="itemProduct.Number" ></b>
+                        <br>
+                        Thành Tiền: <b ng-bind-html="itemProduct.ThanhTienVND" ></b>
+                    </p>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<footer-mobie></footer-mobie>

@@ -1,0 +1,13 @@
+<back-to-home class="hidden-sm hidden-xs" title="Mã QR Code Nhân Viên" ></back-to-home>
+<div  class="content-qrcode text-center bg-gray"  >
+    <?php
+    $profile = new Model\Profile();
+    $a = BASE_URL . 'dangky/' . $profile->GetCurentUser()["Username"];
+    $contentQrCode = $a;
+    ?>
+    <img style="margin-top: 80px;" class="img img-responsive" src="<?php echo \Common\Common::LinkQrcode($contentQrCode); ?>" class="img img-responsive" >
+    <a href="<?php echo $contentQrCode ?>"  >
+        <?php echo $contentQrCode; ?>
+    </a>
+</div>
+<footer-mobie></footer-mobie>

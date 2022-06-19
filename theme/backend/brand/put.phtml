@@ -1,0 +1,40 @@
+<?php
+$BrandModel = new Model\Brand\BrandService();
+$BrandDetial = new Model\Brand\BrandService($BrandModel->GetById($_Param[0]));
+//var_dump($BrandDetial);
+?>
+<div class="row">
+    <div class="col-md-6">
+        <form action="" enctype="multipart/form-data" method="POST" >
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Thêm</h3>
+                </div>
+                <div class="box-body ">
+                    <?php
+                    Model\Brand\BrandForm::Id($BrandDetial->Id)->render();
+                    Model\Brand\BrandForm::Name($BrandDetial->Name)->renderHTML();
+                    Model\Brand\BrandForm::Title($BrandDetial->Title)->renderHTML();
+                    Model\Brand\BrandForm::Keyword($BrandDetial->Keyword)->renderHTML();
+                    Model\Brand\BrandForm::Desc($BrandDetial->Desc)->renderHTML();
+                    Model\Brand\BrandForm::isDelete($BrandDetial->isDelete)->renderHTML();
+                    ?>
+                    <div class="form-group">
+                        <label for="">Hình Ảnh</label>
+                        <img src="<?php echo $BrandDetial->Images; ?>" class="img img-responsive" style="height: 100px;" salt="alt" title="alt" >
+                        <div class="d-flex">
+                            <?php
+                            Model\Brand\BrandForm::Images($BrandDetial->Images, "HinhBrand")->render();
+                            ?>
+                            <button  onclick="BrowseServer('Images:/Brand/', 'HinhBrand')" type="button" class="btn btn-primary" >Chọn Hình</button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="box-footer text-right">
+                    <button type="submit" name="Save" class=" btn btn-primary" >Lưu</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

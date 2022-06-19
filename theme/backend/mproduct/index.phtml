@@ -1,0 +1,221 @@
+<?php
+$Tong = 0;
+$indexPage = isset($_GET["indexPage"]) ? intval($_GET["indexPage"]) : 1;
+$indexPage = max($indexPage, 1);
+$Number = isset($_GET["Number"]) ? intval($_GET["Number"]) : 10;
+$Name = isset($_GET["Name"]) ? $_GET["Name"] : "";
+$opTimKiem["Name"] = $Name;
+
+$DanhMuc = isset($_GET["DanhMuc"]) ? $_GET["DanhMuc"] : 0;
+$TinhTrang = isset($_GET["TinhTrang"]) ? intval($_GET["TinhTrang"]) : 1;
+$Brand = isset($_GET["Brand"]) ? $_GET["Brand"] : 0;
+$opTimKiem["DanhMuc"] = $DanhMuc;
+$opTimKiem["TinhTrang"] = $TinhTrang;
+$opTimKiem["Brand"] = $Brand;
+$ProductService = new Model\Product\ProductService();
+//Model\DB::$Debug = true;
+$dataNews = $ProductService->GetAllPT($opTimKiem, $Tong, $indexPage, $Number);
+?>
+<div class=""  ng-controller="pagesindexController"  >
+    <div class="row ">
+        <section class="col-md-12" >
+            <div class="box box-solid ">
+                <div class="box-header ">
+                    <h3 class="box-title" >Danh Sách Sản Phẩm(<?php echo $Tong; ?>)</h3>
+                    <div class="box-tools">
+                        <a class="btn btn-primary" href='/mproduct/addproduct/'>Thêm Sản Phẩm</a>
+                    </div>
+                </div>
+                <div class="box-body ">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <?php
+                            \Model\PhanTrangForm::IndexPage($indexPage, ["id" => "indexPages", "onchange" => "FuncTimKiem()"])->render();
+                            \Model\PhanTrangForm::TuKhoa($Name, ["id" => "TimKiemTuKhoa", "placeholder" => "Từ Khoá", "onchange" => "FuncTimKiem()"])->renderHTML();
+                            ?>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="row">
+                                <?php
+                                \Model\PhanTrangForm::HienThi($Number, ["id" => "Number", "onchange" => "FuncTimKiem()"])->renderHTML();
+                                ?>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <?php
+                            $Categoryservice = new Model\Category\Categoryservice();
+                            $dataPages = $Categoryservice->GetAllCategory2Select();
+                            $dataPages = ["0" => "Tất Cả"] + $dataPages;
+                            \Model\PhanTrangForm::Select($DanhMuc, $dataPages, ["label" => "Danh Mục", "id" => "DanhMuc", "onchange" => "FuncTimKiem()"])->renderHTML();
+                            ?>
+                        </div>
+                        <div class="col-md-1">
+                            <?php
+                            $BrandService = new Model\Brand\BrandService();
+                            $dataPages = $Categoryservice->ToSelect();
+                            $dataPages = [-1 => "Tất Cả", 1 => "Còn Hàng", 0 => "Hết Hàng"];
+
+                            \Model\PhanTrangForm::Select($TinhTrang, $dataPages, ["label" => "Tình Trạng", "id" => "TinhTrang", "onchange" => "FuncTimKiem()"])->renderHTML();
+                            ?>
+                        </div>
+                        <div class="col-md-2">
+                            <?php
+                            $BrandService = new Model\Brand\BrandService();
+                            $BrandServices = $BrandService->ToSelect();
+                            $BrandServices = ["" => "Tất Cả"] + $BrandServices;
+                            \Model\PhanTrangForm::Select($Brand, $BrandServices, ["label" => "Thương Hiệu", "id" => "Brand", "onchange" => "FuncTimKiem()"])->renderHTML();
+                            ?>
+                        </div>
+                    </div>
+                    <form action="" enctype="multipart/form-data" method="POST" >
+                        <table class="table table-bordered"  >
+                            <thead>
+                                <tr class="bg-blue" >
+                                    <th  style="width: 30px; ">
+                                        <input type="checkbox" ng-model="ChechAll"  class="checkall chonhet" >
+                                    </th>
+                                    <th style="width: 30px;
+                                        ">Stt</th>
+                                    <th style="width: 100px;
+                                        ">Hinh</th>
+                                    <th  >Thông Tin Sản Phẩm</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                foreach ($dataNews as $key => $value) {
+                                    $_product = new \Model\Products($value);
+                                    ?>
+                                    <tr  class=""  >
+                                        <th ><input class="itemselect" ng-checked="ChechAll" type="checkbox" value="<?php echo $_product->ID;
+                                    ?>" name="Xoa[<?php echo $_product->ID; ?>]" ></th>
+                                        <th  ><?php echo \lib\Common::PhanTrangIndex($key, $Number, $indexPage) ?></th>
+                                        <th  >
+                                            <a href="/mproduct/detailproduct/<?php echo $_product->ID; ?>" >
+                                                <div style="background-image: url('<?php echo $_product->UrlHinh(); ?>');height: 60px;width: 70px;background-size: 100% auto;background-repeat: no-repeat;" class="img-bg img-7070"  ></div>
+                                            </a>
+                                        </th>
+                                        <th>
+                                            <div class="col-md-4">
+                                                <a href="/mproduct/detailproduct/<?php echo $_product->ID; ?>" ><?php echo $_product->nameProduct; ?></a>
+                                                <p style="margin-bottom: 0px" >
+                                                    Giá Niêm Yết: <strong ><?php echo $_product->Price(); ?></strong> |
+                                                    Giá Nhập: <strong ><?php echo $_product->GiaNhap(); ?></strong>
+                                                    | <span style="text-decoration: line-through; "  ><?php echo $_product->oldPrice(); ?></span>
+                                                    <label  class="label-warning" ><i class="fa fa-eye" ></i> <?php echo $_product->Views; ?></label>
+                                                </p>
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="col-md-6" >
+                                                    <div class="row" style="white-space: nowrap" >
+                                                        <a  class="" target="_self" ng-click="GetProductById('<?php echo sha1($_product->ID); ?>')" data-toggle="modal" href='#modalSuaNhanh'>Sửa Nhanh</a>
+                                                        |<a data-toggle="tooltip" data-placement="top" title="Sửa Sản Phẩm" class="" href="/mproduct/editproduct/<?php echo $_product->ID; ?>">Sửa</a>
+                                                        |<a  class="" target="_self" data-toggle="modal" href='#xoasanpham<?php echo $_product->ID; ?>'>Xóa</a>
+                                                        |<a class="" target="_blank" href='<?php echo $_product->linkProduct(); ?>'>Xem</a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" >
+                                                    Tình Trạng: <label class="label-<?php echo $_product->Number > 0 ? 'success' : 'danger' ?>" ><?php echo $_product->TinhTrang(); ?></label>
+                                                    <br>Số Lượng: <label class="label-<?php echo $_product->Number > 0 ? 'success' : 'danger' ?>" ><?php echo $_product->Number; ?></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="col-md-6" >
+                                                    <p style="margin-bottom: 0px;" >Ẩn Hiện:
+                                                        <?php
+                                                        if ($_product->isShow == 1) {
+                                                            ?>
+                                                            <label class="label-success" ><?php echo $_product->isShow(); ?></label>
+                                                            <?php
+                                                        } else {
+                                                            ?>
+                                                            <label class="label-danger" ><?php echo $_product->isShow(); ?></label>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                        <br>   Ngày Đăng: <?php echo $_product->DateCreate(); ?>
+
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-6" >
+                                                    <p>
+                                                        Danh Mục: <label class="label-success" ><?php echo $_product->Category()->catName; ?></label>
+                                                        <br>  Thương Hiệu: <label class="label-success" ><?php echo $_product->brand()->Name; ?></label>
+                                                    </p>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="modal fade" id="xoasanpham<?php echo $_product->ID; ?>">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-red">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            <h4 class="modal-title">Thông báo!</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <center>Bạn có muốn xóa sản phẩm này không?</center>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+                                                            <a href="/mproduct/deleteproduct/<?php echo $_product->ID; ?>" class="btn btn-primary" >Đồng Ý</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    <?php
+                                }
+                                ?>
+
+                            </tbody>
+                            <tfoot>
+                                <tr class="bg-blue" >
+                                    <th >
+                                        <input ng-model="ChechAll"  type="checkbox"  class="checkall chonhet"  >
+                                    </th>
+                                    <th colspan="3" >
+                                        <button type="submit" title="Xóa Chọn" class="btn btn-xs btn-danger btn-xoa" name="XoaHet" >Xóa Chọn</button>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </form>
+                    <?php
+                    $DuongDan = "/mproduct/index/?indexPage=[i]&Brand={$Brand}&TinhTrang={$TinhTrang}&Name={$Name}&Number={$Number}&DanhMuc={$DanhMuc}";
+                    $TongTrang = ceil($Tong / $Number);
+                    echo \lib\Common::PhanTrang($TongTrang, $indexPage, $DuongDan);
+                    ?>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="modal fade " form-sua-nhanh id="modalSuaNhanh">
+    </div>
+</div>
+
+
+
+<script type="text/javascript" >
+    var FuncTimKiem = function() {
+        var DuongDan = "/mproduct/index/?indexPage={i}&Brand={$Brand}&TinhTrang={$TinhTrang}&Name={$Name}&Number={$Number}&DanhMuc={$DanhMuc}";
+        var TuKhoa = $("#TimKiemTuKhoa").val();
+        var Number = $("#Number").val();
+        var DanhMuc = $("#DanhMuc").val();
+        var TinhTrang = $("#TinhTrang").val();
+        var Brand = $("#Brand").val();
+        DuongDan = DuongDan.replace("{i}", 1);
+        DuongDan = DuongDan.replace("{$Name}", TuKhoa);
+        DuongDan = DuongDan.replace("{$Number}", Number);
+        DuongDan = DuongDan.replace("{$DanhMuc}", DanhMuc);
+        DuongDan = DuongDan.replace("{$TinhTrang}", TinhTrang);
+        DuongDan = DuongDan.replace("{$Brand}", Brand);
+        window.location.href = DuongDan;
+    }
+
+    $(function() {
+        $("body").addClass("sidebar-collapse");
+    })
+</script>

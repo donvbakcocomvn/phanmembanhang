@@ -1,0 +1,75 @@
+<?php
+$view_theme = new \theme\home\functionLayout();
+$_Pages = new \Model\pages($data["pages"]);
+$Model_News = new \Model\news();
+$newsByPage = $Model_News->NewsByPagesLimitNumber($_Pages->idPa, 9, FALSE);
+?>
+<!-- view-product-list-->
+<div class="" >
+    <div  >
+        <h2  style="padding: 10px;font-weight: bold;font-size: 20px;margin-bottom: 20px;" >
+            <span style="padding: 10px;border-bottom: 1px solid #0088CC;" >
+                <?php echo $_Pages->Name ?>
+            </span>
+        </h2>
+        <?php
+        if($newsByPage)
+        foreach ($newsByPage as $_news) {
+            $news = new \Model\news($_news);
+            ?> 
+            <div class="col-md-3 item" style="margin-bottom: 30px;"  >
+                <div class="post" >
+                    <div class="post-thumb image-hover2 " style="margin: auto;" >
+                        <a href="<?php echo $news->linkNewsCurent(); ?>">
+                            <img  style="height: 200px;" onerror="this.src='/public/home/assets/data/option3/blog1.jpg'" class="img img-responsive" src="<?php echo $_news["UrlHinh"] ?>" alt="<?php echo $_news["Name"] ?>">
+                        </a>
+                    </div>
+                    <div class="post-desc">
+                        <h3 class="post-title text-center">
+                            <a href="<?php echo $news->linkNewsCurent(); ?>" style="padding: 10px;" ><?php echo $_news["Name"] ?></a>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <?php
+        }
+        ?>
+        <div class="clearfix" ></div>
+        <div class="sortPagiBar hidden">
+            <div class="bottom-pagination">
+                <nav>
+                    <ul class="pagination">
+                        <li class="active"><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li>
+                            <a href="#" aria-label="Next">
+                                <span aria-hidden="true">Next &raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="show-product-item">
+                <select name="">
+                    <option value="">Show 18</option>
+                    <option value="">Show 20</option>
+                    <option value="">Show 50</option>
+                    <option value="">Show 100</option>
+                </select>
+            </div>
+            <div class="sort-product">
+                <select>
+                    <option value="">Product Name</option>
+                    <option value="">Price</option>
+                </select>
+                <div class="sort-product-icon">
+                    <i class="fa fa-sort-alpha-asc"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./view-product-list-->

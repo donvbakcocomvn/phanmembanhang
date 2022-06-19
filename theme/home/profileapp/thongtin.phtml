@@ -1,0 +1,77 @@
+<?php
+
+use Module\duser\Model\Duser;
+?>
+<h3 class="d-none hidden-sm hidden-xs"  >Thông Tin Khách Hàng</h3>
+<div class="Mobie">
+    <back-to-home class="hidden-lg hidden-md" title="Thông Tin Khách Hàng" ></back-to-home>
+    <form  class="col-lg-8" ng-submit="SaveProfile()" enctype="multipart/form-data" method="POST" >
+        <div class="MobieContentForm" >
+            <div class="form-group ">
+                <label  for="">Tài khoản</label>
+                <input readonly="readonly" type="text" ng-model="_User.Username" class="form-control" name="Username" >
+            </div>
+            <div class="form-group">
+                <label for="">Họ & Tên</label>
+                <input type="text" ng-model="_User.Name" class="form-control" name="Name" >
+            </div>
+            <div class="form-group">
+                <label for="">SĐT</label>
+                <input type="text" ng-model="_User.Phone" class="form-control" name="Phone" >
+            </div>
+            <div class="form-group">
+                <label for="">Email</label>
+                <input readonly="" type="text" ng-model="_User.Email" class="form-control" name="Email" >
+            </div>
+
+            <div class="row">
+                <fieldset>
+                    <legend style="font-size: 18px;" >Ngày Sinh</legend>
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label for="">Năm</label>
+                            <select type="date" ng-model="_User.Nam" class="form-control"  >
+                                <option ng-show="$index > 15" ng-repeat="item in IntToArray(80) track by $index" ng-value="{{2021 - $index}}" >{{2021 - $index}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label for="">Tháng</label>
+                            <select type="date" ng-model="_User.Thang" class="form-control"  >
+                                <option ng-repeat="item in IntToArray(12) track by $index" ng-value="{{$index + 1}}" >{{$index + 1}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label for="">Ngày</label>
+                            <select type="date" ng-model="_User.Ngay" class="form-control"  >
+                                <option ng-repeat="item in IntToArray(31) track by $index" ng-value="{{$index + 1}}" >{{$index + 1}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend  style="font-size: 18px;">Giới Tính</legend>
+                    <div class="col-md-12 d-flex">
+                        <label style="margin-right: 20px;" class="text-right" >
+                            <input ng-model="_User.GioiTinh" value="1" type="radio"  name="GioiTinh" >
+                            Nam
+                        </label>
+                        <label style="width:50%"  >
+                            <input ng-model="_User.GioiTinh" value="0" type="radio"  name="GioiTinh" >
+                            Nữ
+                        </label>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="text-center" style="margin-top: 20px;">
+                <button type="submit" class="btn btn-primary" > &nbsp; Lưu &nbsp; </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--<footer-mobie></footer-mobie>-->

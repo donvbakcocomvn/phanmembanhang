@@ -1,0 +1,23 @@
+<div class="">
+    <div class="form-group">
+        <label for="">Tiêu Đề</label>
+        <input type="text" ng-model="_newsDetail.Name" class="form-control" name="TieuDe" >
+    </div>
+    <div class="form-group">
+        <label for="">Danh Mục</label>
+        <select  type="text" class="form-control" ng-model="_newsDetail.PageID" name="DanhMuc" >
+            <option ng-repeat="item in PagesByType" value="{{item.Id}}" >{{item.Name}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="">Thứ Tự</label>
+        <input type="text" class="form-control" ng-model="_newsDetail.Stt" name="ThuTu" >
+    </div>
+    <div class="form-group">
+        <label for="">Ẩn/Hiện</label>
+        <select type="text" class="form-control" ng-model="_newsDetail.AnHien" name="AnHien" >
+            <option value="0" >Ẩn</option>
+            <option value="1" >Hiện</option>
+        </select>
+    </div>
+</div>

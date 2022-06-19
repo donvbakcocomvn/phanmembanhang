@@ -1,0 +1,20 @@
+<form method="POST" ng-submit="ThemGroups(Groups)" enctype="multipart/form-data" >
+    <div class="modal-header bg-blue-gradient">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Nhóm Quảng Cáo</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group ">
+            <label for="">Mã Nhóm</label>
+            <input required="required" type="text" ng-model="Groups.Code" class="form-control" name="Code"  placeholder="Mã Nhóm">
+        </div>
+        <div class="form-group ">
+            <label for="">Tên Nhóm</label>
+            <input required="required" type="text" ng-model="Groups.Name" class="form-control" name="Name"  placeholder="Tên Nhóm">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true" type="button" >Thoát</button>
+        <button class="btn btn-primary" type="submit" name="AddGroup" >Thêm</button>
+    </div>
+</form>

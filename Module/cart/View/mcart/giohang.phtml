@@ -1,0 +1,84 @@
+
+<div class="box box-primary">
+    <div class="box-body">
+        <div style="width: 300px;" class="d-flex">
+            <input class="form-control" ng-change="TimKiemSanPham(TuKhoaMaSP)" ng-model="TuKhoaMaSP" value="" placeholder="Tìm Sản Phẩm, Mã, Tên Sản Phẩm" >
+            <button class="btn btn-success" type="submit" value="" >Tìm Kiếm</button>
+        </div>
+        <div style="background-color: #fff;position: absolute;top: 40px;z-index: 999;" >
+            <div class="d-flex" ng-repeat="item in _ProductsCart.Products" >
+                <div class="" style="margin-right: 10px;">
+                    <button class="btn btn-success" ng-click="addProductCart(item.ID)" >Thêm Vào Đơn Hàng</button>
+                </div>
+                <img loading="lazy" src="{{item.UrlHinh}}" style="height: 50px;width:70px; margin-right: 10px;" class="img img-responsive" >
+                <div >
+                    <p style="font-weight: bold;" >{{item.nameProduct}}</p>
+                    <p><span>Code: {{item.Code}}</span>
+                        Giá Nhập: <span style="color: red;" ng-bind-html="item.GiaNhapVND" ></span>|
+                        Giá Bán: <span style="color: red;" ng-bind-html="item.PriceVND" ></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-responsive cart_summary">
+            <thead>
+                <tr>
+                    <th class="" >Danh Sách Sản Phẩm
+                        <button class="pull-right" ng-click="ClearCart()"   ><i class="fa fa-2x fa-trash-o"></i></button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="items  in _CartsProduct.Product" >
+                    <td class="cart_description">
+                        <div class="d-flex giohang" >
+                            <div class="imagesSp">
+                                <img style="width: 70px;margin-right: 10px" src="{{items.UrlHinh}}" alt="{{items.nameProduct}}">
+                            </div>
+                            <div class="" style="width: 100%;padding-right: 10px;">
+
+                                <small class="cart_ref">Id : #{{items.Code}}</small><br>
+                                <p style="margin: 0px;font-weight: bold;" class="product-name">
+                                    {{items.nameProduct}}
+                                </p>
+                                <p  ><span ng-bind-html="ToHtml(items.priceVnd)" ></span><label class="label label-success">Còn Hàng</label></p>
+                            </div>
+                            <div class="class">
+
+                                <div  style="width: 170px;padding-left: 10px;">
+                                    Giá Bán:
+                                    <strong ng-bind-html="items.priceVnd" ></strong>
+                                </div>
+                                <div  style="width: 200px;padding-left: 10px;margin-right: 10px;">
+                                    Thành Tiền:
+                                    <strong ng-bind-html="items.ThanhTienVND" ></strong>
+                                </div>
+                                <div class="qty"  >
+                                    <div class=" d-flex">
+                                        <a ng-click="minuNumberProduct(items.ID)" class="btn-cart btn btn-primary" >
+                                            <i class="fa fa-minus"></i>
+                                        </a>
+                                        <input style="width: 60px;" class="inputcartnumber form-control input-md"  ng-model="items.Number">
+                                        <a ng-click="plusNumberProduct(items.ID)" class="btn-cart btn btn-primary" >
+                                            <i class="fa fa-plus"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=""  style="margin-left: 10px;">
+                                <a class="btn btn-danger btn-md pull-right" ng-click="removeProductCart(items.ID)" >Xóa</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr  >
+                    <td>
+                        Tổng Tiền: <b ng-bind-html="_CartsProduct.TotalPriceVND" ></b>
+                        Chưa Có VAT.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

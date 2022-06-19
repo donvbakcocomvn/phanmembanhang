@@ -1,0 +1,28 @@
+<div ng-controller="diachiController" ng-init="GetTinhThanh()" >
+    <div class="" ng-controller="giohangCotroller" ng-init="getcarts()" >
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="box box-primary"  >
+                        <div class="box-header">
+                            <h3 class="box-title">Thông Tin Khách Hàng</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="thong-tin-khach-hang" ></div>
+                        </div>
+                        <div class="box-footer">
+                            <button ng-click="TaoDonHang(_Tinh, _Huyen)" class="btn btn-primary" >Tạo Đơn Hàng</button>
+                            <button ng-click="LuuThongTinKhachHanh(_Tinh, _Huyen, Order)" class="btn pull-right btn-primary" >Lưu Thông Tin Khách Hàng</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7" style="position:relative;" >
+                    <gio-hang></gio-hang>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="donhang-chitiet">
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+<?php
+$Minfor = new \Module\minfor\Model\infor();
+$infors = $Minfor->infors();
+?>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Thông Tin Chung</h3>
+    </div>
+    <div class="panel-body">
+        
+        <form action="" enctype="multipart/form-data" method="POST" >
+            <table class="table table-bordered" >
+
+                <tbody>
+                    <?php
+                    foreach ($infors as $_in) {
+                        $_Config = $Minfor->_decode($_in["Config"]);
+                        ?> 
+                        <tr>
+                            <td><?php echo $_in["ID"] ?></td>
+                            <td class="hidden" ><input class="form-control " name="Name[<?php echo $_in["ID"] ?>]" value="<?php echo $_in["Name"] ?>" > </td>
+                            <td  ><input class="hidden form-control" name="Title[<?php echo $_in["ID"] ?>]" value="<?php echo $_in["Title"] ?>" > 
+                                <?php echo $_in["Title"] ?>
+                            </td>
+                            <td>
+                                <?php
+                                if ($_Config->Type == "file") {
+                                    ?> 
+                                    <img src="<?php echo $_in["Content"] ?>" style="height: 100px;" class="img img-responsive" > 
+                                    <?php
+                                }
+                                ?>
+                                <input class="form-control" type="<?php echo $_Config->Type ?>" name="Content[<?php echo $_in["ID"] ?>]" value="<?php echo $_in["Content"] ?>" > </td>
+                            <td class="hidden" >
+                                <textarea name="Config[<?php echo $_in["ID"] ?>]" class="form-control" ><?php echo $_in["Config"] ?></textarea>    
+                            </td>
+                            <td class="hidden" >
+                                <textarea name="dataConfig[<?php echo $_in["ID"] ?>]" class="form-control" ><?php echo $_in["dataConfig"] ?></textarea>    
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
+                </tbody>
+
+
+            </table>
+            <button name="Luu" class="btn btn-success pull-right" value="Luu"  type="submit" >Lưu</button>
+        </form>
+
+    </div>
+</div>

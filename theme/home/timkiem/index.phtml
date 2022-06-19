@@ -1,0 +1,68 @@
+<?php
+$Produc = new Model\Products();
+$Number = 30;
+$Pages = !empty($_GET["pages"]) ? intval($_GET["pages"]) : 1;
+$Pages = max($Pages, 1);
+$keyword = lib\Common::CheckInput($_GET["keyword"]);
+$DSSP = $Produc->getProductsByName($keyword, $Pages, $Number, $sum);
+$view_theme = new theme\home\functionLayout();
+$view_theme->categorySlider();
+?>
+<div id="view-product-list" class="view-product-list">
+    <h3 class="text-left" style="padding: 15px;font-size: 18px;" >Kết quả tìm kiếm "<?php echo $_GET["keyword"] ?>"</h3>
+    <ul class="display-product-option">
+        <li class="view-as-grid selected">
+            <span>grid</span>
+        </li>
+        <li class="view-as-list">
+            <span>list</span>
+        </li>
+    </ul>
+    <!-- PRODUCT LIST -->
+    <ul class="product-list grid">
+        <?php
+        if ($DSSP)
+            foreach ($DSSP as $_Poroduct) {
+                ?>
+                <li class="col-sx-12 col-sm-3" style="margin-top: 0px;">
+                    <div class="row">
+                        <?php
+                        $view_theme->product($_Poroduct);
+                        ?>
+                    </div>
+                </li>
+                <?php
+            }
+        ?>
+    </ul>
+</div>
+<div class="clearfix"></div>
+<div class="sortPagiBar  pull-left">
+    <div class="bottom-pagination">
+        <div class="row">
+            <nav>
+                <?php
+                $link = "/timkiem/?keyword={$keyword}&pages=[i]";
+                echo lib\Common::PhanTrangTheoSL($sum, $Number, $Pages, $link);
+                ?>
+            </nav>
+        </div>
+    </div>
+    <div class="show-product-item hidden">
+        <select name="">
+            <option value="">Show 18</option>
+            <option value="">Show 20</option>
+            <option value="">Show 50</option>
+            <option value="">Show 100</option>
+        </select>
+    </div>
+    <div class="sort-product hidden">
+        <select>
+            <option value="">Product Name</option>
+            <option value="">Price</option>
+        </select>
+        <div class="sort-product-icon">
+            <i class="fa fa-sort-alpha-asc"></i>
+        </div>
+    </div>
+</div>

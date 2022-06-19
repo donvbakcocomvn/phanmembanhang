@@ -1,0 +1,2 @@
+Them dong
+ALTER TABLE `bakcodt_categories` ADD `Code` VARCHAR(50) NOT NULL AFTER `catID`;

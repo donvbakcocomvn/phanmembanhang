@@ -1,0 +1,58 @@
+<?php
+$modelDetail = new Model\news\newsCategory($modelDetail);
+?>
+<div class="row">
+    <div class="col-md-12">
+        <form action="" enctype="multipart/form-data" method="POST" >
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Sửa</h3>
+                </div>
+                <div class="box-body">
+                    <div class="col-md-4">
+                        <?php
+                        \Model\news\newsCategoryForm::Id($modelDetail->Id)->render();
+                        \Model\news\newsCategoryForm::Name($modelDetail->Name)->renderHTML();
+                        ?>
+                        <?php
+                        \Model\news\newsCategoryForm::Parents($modelDetail->Parents)->renderHTML();
+                        ?>
+                        <?php
+                        \Model\news\newsCategoryForm::Title($modelDetail->Title)->renderHTML();
+                        ?>
+                        <?php
+                        \Model\news\newsCategoryForm::Des($modelDetail->Des)->renderHTML();
+                        ?>
+                        <?php
+                        \Model\news\newsCategoryForm::Keyword($modelDetail->Keyword)->renderHTML();
+                        \Model\news\newsCategoryForm::isActive($modelDetail->isActive)->renderHTML();
+                        ?>
+                    </div>
+                    <div class="col-md-4">
+                        <fieldset>
+                            <legend>Hình Ảnh</legend>
+                            <div class="form-group">
+                                <img src="<?php echo $modelDetail->Images; ?>" id="HinhDaiDien"  class="img img-responsive" style="height: 70px;"  >
+                                <div class="d-flex">
+                                    <?php
+                                    \Model\news\newsCategoryForm::Images($modelDetail->Images)->render();
+                                    \Model\news\newsCategoryForm::SelectImages("Images", null, "#HinhDaiDien")->render();
+                                    ?>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <?php
+                        \Model\news\newsCategoryForm::Content($modelDetail->Content)->renderHTML();
+                        ?>
+                    </div>
+                </div>
+                <div class="box-footer text-right">
+                    <button type="submit" name="Save" class=" btn btn-primary" >Lưu</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

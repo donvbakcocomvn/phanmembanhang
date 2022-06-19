@@ -1,0 +1,16 @@
+<div class="AvataMobie hidden-lg hidden-md ">
+    <div class="d-flex item">
+        <div class="class">
+            <img src="/public/user_no_photo.png" alt="" class=" img-circle">
+        </div>
+        <div style="width: 80%;" >
+            <a href="/index/logout/" onclick="return window.confirm('Bạn có muốn thoát không?');" style="color: #fff;line-height: 1em;" class="pull-right" >
+                Thoát
+                <i class="fa fa-sign-in" ></i>
+            </a>
+            <h3 class="NameUser" class="text-center XinChao" >Xin Chào: {{_User.Name}}</h3>
+            <p class="Phone" >SĐT: <span ng-bind-html="_User.Phone" ></span></p>
+            <p class="soDu" >Tài khoản: <b ng-bind-html="_User.Username" ></b></p>
+        </div>
+    </div>
+</div>

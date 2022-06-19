@@ -1,0 +1,150 @@
+<?php
+$a = new Model_Adapter();
+ob_start();
+$p = new \Model\pages();
+$p->idPa = $p->createID(table_prefix . "pages");
+?>
+<div class="row"  ng-controller="editpageController" ng-init='editpageInit(<?php echo $a->_encode($p); ?>)' >
+    <section class="col-md-12" >
+        <div class="box box-solid ">
+            <div class="box-header ">
+                <a href="/mpage/" class="btn btn-sm btn-primary pull-left" style="margin-right: 10px;" >
+                    <i class="fa fa-arrow-left" ></i>
+                </a>
+                <h3 class="box-title">Thêm Trang </h3>
+                <!-- tools box -->
+                <div class="pull-right box-tools">
+                    <div class="btn-group bakco-categorymenu">
+                    </div>
+                    <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <!--<button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>-->
+                </div><!-- /. tools -->
+            </div><!-- /.box-header -->
+            <div class="box-body ">
+                <form action="/mpage/addpage/" method="POST" enctype="multipart/form-data" >
+
+                    <div class="col-md-9" >
+                        <div class="form-group">
+                            <label for="">__Name___</label>
+                            <input type="text" value="{{itemPage.Name}}" required="" class="form-control" name="Name" >
+                        </div>
+                        <div class="form-group">
+                            <label for="">__Summary___</label>
+                            <textarea class="editorMini" id="Summary"  name="Summary" >{{itemPage.Summary}}</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">__Content___</label>
+                            <textarea class="editor" id="Content"  name="Content" >{{itemPage.Content}}</textarea>
+                        </div>
+                        <textarea class="hidden form-control" name="Note"  class="form-control"  rows="10" >{{itemPage.Note}}</textarea>
+
+                    </div>
+                    <div class="col-md-3" >
+
+                        <button name="AddPage" style="margin-bottom: 15px;" class="btn btn-success " >Thêm Trang</button>
+
+                        <div class="box box-primary">
+                            <div class="box-header">
+                                <h3 class="box-title">SEO</h3>
+                                <div class="box-tools">
+                                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="">__Title___</label>
+                                    <textarea class="form-control"  name="Title" >{{itemPage.Title}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">__Des___</label>
+                                    <textarea class="form-control"  name="Des" >{{itemPage.Des}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">__Keyword___</label>
+                                    <textarea class="form-control"  name="Keyword" >{{itemPage.Keyword}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header">
+                                <h3 class="box-title">Hình Ảnh</h3>
+                                <div class="box-tools">
+                                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="">__Urlimages___</label>
+                                    <img src="{{itemPage.Urlimages}}" class="img img-responsive" >
+                                    <div class="d-flex">
+                                        <input  type="text" readonly="" value="{{itemPage.Urlimages}}" id="HinhBaiViet" class="form-control" name="Urlimages" >
+                                        <button type="button" onclick="BrowseServer('Images:/baiviet/', 'HinhBaiViet')" class="btn btn-success" ><i class="fa fa-image" ></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header">
+                                <h3 class="box-title">Thông Tin Khác</h3>
+                                <div class="box-tools">
+                                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="">__isShow___</label>
+                                    <input type="text" value="{{itemPage.isShow}}" class="form-control" name="isShow" >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">__Type___</label>
+                                    <input type="text" value="{{itemPage.Type}}" class="form-control" name="Type" >
+                                </div>
+                                <div class="form-group hidden ">
+                                    <label for="">__idPa___</label>
+                                    <input type="text" value="{{itemPage.idPa}}" class="form-control" name="idPa" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="">__idGroup___</label>
+                                    <input type="text" value="{{itemPage.idGroup}}" class="form-control" name="idGroup" >
+                                </div>
+                                <div class="form-group hidden">
+                                    <label for="">__Alias___</label>
+                                    <input type="text" value="{{itemPage.Alias}}" class="form-control" name="Alias" >
+                                </div>
+                                <div class="form-group ">
+                                    <label for="">__OrderBy___</label>
+                                    <input type="text" value="{{itemPage.OrderBy}}" class="form-control" name="OrderBy" >
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                </form>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+<?php
+$str = ob_get_clean();
+
+$str = str_replace("__Name___", "Tên Trang", $str);
+$str = str_replace("__Urlimages___", "Hình", $str);
+$str = str_replace("__isShow___", "Hiển Thị", $str);
+$str = str_replace("__Type___", "Loại Trang", $str);
+$str = str_replace("__idGroup___", "Nhóm", $str);
+$str = str_replace("__Title___", "Tiêu Đề", $str);
+$str = str_replace("__Des___", "Mô Tả", $str);
+$str = str_replace("__Keyword___", "Từ Khóa", $str);
+$str = str_replace("__Summary___", "Tóm Tắt", $str);
+$str = str_replace("__Content___", "Nội Dung", $str);
+
+
+echo $str;
+?>

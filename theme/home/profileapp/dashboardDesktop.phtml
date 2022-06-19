@@ -1,0 +1,11 @@
+<div class="" ng-init="GetDashboard()" >
+    <div class="row">
+
+        <div class="col-md-4" style="margin-bottom: 15px;" ng-repeat="item in _DashboardDesktop" >
+            <div  class="bg-blue boxs">
+                <h2 class="boxs-number" ng-bind-html="item.Number" ></h2>
+                <p class="boxs-name" ng-bind-html="item.Name" >Tổng Tiền</p>
+            </div>
+        </div>
+    </div>
+</div>

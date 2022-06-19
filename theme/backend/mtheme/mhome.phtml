@@ -1,0 +1,118 @@
+<?php
+$lib = new \lib\io();
+$a = $lib->readFile(ROOT_DIR . "/theme/home/_lib/homeconfig");
+?>
+<div class="row " ng-controller="mhomeController" ng-init='mhomeInit("<?php echo $_Param[0]; ?>",<?php echo $a; ?>)'  >
+    <section class="col-md-12 " >
+        <div class="box box-solid ">
+            <div class="box-header bg-green-gradient">
+                <i class="fa fa-list"></i>
+                <h3 class="box-title">Cấu hình Trang Chủ</h3>
+            </div>
+            <div class="box-body table-responsive">
+                <form action="" method="POST" enctype="multipart/form-data" >
+                    <textarea class="form-control" name="ConfigHome" >{{Home}}</textarea>
+                    <div class="box box-solid ">
+                        <div class="box-header ">
+                            <i class="fa fa-list"></i>
+                            <h3 class="box-title">Main Slide</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="col-md-3" >
+                                <select ng-model="Home.Mainslide" class="form-control" >
+                                    <option value="0" >Ẩn</option>
+                                    <option value="1" >Hiện</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box box-solid ">
+                        <div class="box-header ">
+                            <i class="fa fa-list"></i>
+                            <h3 class="box-title">Thanh Dịch Vụ</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="col-md-3" >
+                                <select ng-model="Home.DichVu" class="form-control" >
+                                    <option value="0" >Ẩn</option>
+                                    <option value="1" >Hiện</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box box-solid ">
+                        <div class="box-header ">
+                            <i class="fa fa-list"></i>
+                            <h3 class="box-title">Nội Dung Chính</h3>
+                        </div>
+                        <div class="box-body connectedSortable">
+                            <div class="col-md-3" ng-repeat="item in Home.displayPosition" >
+                                <div class="box box-solid ">
+                                    <div class="box-header ">
+                                        <i class="fa fa-list"></i>
+                                        <h3 class="box-title">Các Khu Vực</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label>Mã Danh Mục</label>
+                                            <select class="form-control" ng-model="item.DanhMuc" >
+                                                <option ng-selected="item.Mau == 'mau1'" ng-repeat="item in ListPages" value="{{item.idPa}}" >{{item.Name}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Mẫu Hiển Thị</label>
+                                            <select class="form-control" ng-model="item.Mau"    >
+                                                <option ng-selected="item.Mau == 'mau1'" value="mau1" >Mẫu 1</option>
+                                                <option ng-selected="item.Mau == 'mau2'" value="mau2" >Mẫu 2</option>
+                                                <option ng-selected="item.Mau == 'mau3'" value="mau3" >Mẫu 3</option>
+                                                <option ng-selected="item.Mau == 'mau4'" value="mau4" >Mẫu 4</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <button type="button" class="btn btn-success" ng-click="clickAdddisplayPosition()" >Add</button>
+                        </div>
+
+                    </div>
+                    <div class="box box-solid ">
+                        <div class="box-header ">
+                            <i class="fa fa-list"></i>
+                            <h3 class="box-title">Danh Mục Sản Phẩm</h3>
+                        </div>
+                        <div class="box-body connectedSortable">
+                            <div class="col-md-4" ng-repeat="item in Home.DanMucSanPham track by $index" >
+                                <div class="box box-solid ">
+                                    <div class="box-header ">
+                                        <i class="fa fa-list"></i>
+                                        <h3 class="box-title">Danh Mục</h3>
+                                        <div class="box-tools">
+                                            <button type="button" class="btn btn-danger" ng-click="clickRemoveList($index, Home.DanMucSanPham)" >Xóa</button>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <select class="form-control" ng-model="item.DanhMuc" >
+                                                <option  ng-repeat="item1 in ListDanhMuc" value="{{item1.catID}}" >{{item1.catName}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success" ng-click="clickAddList(itemDanhMuc, Home.DanMucSanPham)" >Thêm</button>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" name="SaveConfigHome" class="btn btn-success"  >Lưu</button>
+                </form>
+
+
+
+            </div>
+        </div>
+    </section>
+
+</div>
+

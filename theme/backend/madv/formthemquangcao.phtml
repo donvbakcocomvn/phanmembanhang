@@ -1,0 +1,34 @@
+<form ng-submit="ThemQuangCao(_AddAdvs)" method="POST" enctype="multipart/form-data" >
+    <div class="form-group">
+        <label for="">Tên Quảng Cáo</label>
+        <input type="text" class="form-control" ng-model="_AddAdvs.Name" name="Name"  placeholder="Tên Quản Cáo">
+    </div>
+    <div class="form-group">
+        <label for="">Đường Dẫn</label>
+        <input type="text" class="form-control" ng-model="_AddAdvs.Link" name="Link"  placeholder="...">
+    </div>
+    <div class="form-group">
+        <p for=""><b>Hình Ảnh</b></p>
+        <img style="background-color: #fff;height: 100px;" src="{{_AddAdvs.Urlimages}}"  >
+        <div class="d-flex "  >
+            <input class="form-control" readonly="" id="ThemUrlHinhQuangCao" style="width: 100%;" name="UrlImage"  type="text"  >
+            <button onclick="BrowseServer('Images:/quangcao/', 'ThemUrlHinhQuangCao')" class="btn btn-success" type="button" ><i class="fa fa-image" ></i> </button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="">Nhóm Quảng Cáo</label>
+        <select ng-model="_AddAdvs.Group" class="form-control" name="Group"  >
+            <option ng-repeat="itemg in _AdvGroups" value="{{itemg.Code}}" >{{itemg.Name}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="">Nội Dung</label>
+        <textarea ng-model="_AddAdvs.Content" class="form-control" name="Content"  placeholder="Nội Dung Quảng Cáo"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="">Thuộc Tính</label>
+        <textarea ng-model="_AddAdvs.Attribute" class="form-control" name="Content"  placeholder="Thuộc Tính"></textarea>
+    </div>
+    <button type="submit" class="btn btn-success" name="AddAdv"  >Tạo Quảng Cáo</button>
+</form>

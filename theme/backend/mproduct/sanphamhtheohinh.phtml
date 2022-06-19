@@ -1,0 +1,153 @@
+<?php
+$folder = Model\Products::hinhsanphamTam;
+if (isset($_FILES["HinhAnh"])) {
+    $hh = new Model\HinhAnh();
+    $hh->upload_multi_image($_FILES["HinhAnh"], $folder);
+}
+$dsHinh = [];
+$red = new lib\redDirectory();
+$red->redDirectoryByPath($folder, $dsHinh);
+?>
+<script type="text/javascript" >
+    app.controller("ThemNhanhCtrl", function($scope, $http) {
+        $http.get("/backend/getCategorys").then(function(res) {
+            $scope._ListCategory = res.data;
+        });
+        $http.get("/backend/getBrands").then(function(res) {
+            $scope._Brands = res.data;
+            console.log($scope._Brands);
+        });
+    })
+</script>
+<div class="box box-primary" ng-controller="ThemNhanhCtrl"  >
+    <div class="box-header">
+        <h3 class="box-title">Thêm Nhanh Sản Phẩm</h3>
+        <div class="box-tools">
+            <a href="/mproduct/xoahinhanh/" class="btn btn-sm btn-danger" >Xóa Hết</a>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row" style="margin-bottom: 10px;" >
+            <div class="col-md-12">
+                <form action=""  class="form-inline" enctype="multipart/form-data" method="POST" >
+                    <div class="form-group">
+                        <label for="">Chọn File</label>
+                        <input type="file" maxlength="" multiple="true" name="HinhAnh[]" >
+                    </div>
+                    <button type="submit" class="btn btn-success btn-sm" > OK</button>
+                </form>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Cài Đặt Chung</h3>
+                        <div class="box-tools">
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Tiền Tố Tên Sản Phẩm</label>
+                                    <input type="text" class="form-control" ng-model="TienTo" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Hậu Tố Tên Sản Phẩm</label>
+                                    <input type="text" class="form-control" ng-model="HauTo" >
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Tiền Tố Mô Tả Sản Phẩm</label>
+                                    <input type="text" class="form-control" ng-model="TienToMoTa" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Hậu Tố Mô Tả Sản Phẩm</label>
+                                    <input type="text" class="form-control" ng-model="HauToMoTa" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form action="" onsubmit="return confirm('Bạn có chắc không?')" enctype="multipart/form-data" method="POST" >
+                    <?php
+                    foreach ($dsHinh as $k => $filename) {
+                        $ProducName = explode(".", $filename);
+                        unset($ProducName[count($ProducName) - 1]);
+                        $ProducName = implode(".", $ProducName);
+                        ?>
+                        <div class="col-md-12">
+                            <div class="box box-primary">
+                                <div class="box-header">
+                                    <h3 class="box-title"><?php echo $ProducName ?></h3>
+                                    <div class="box-tools">
+                                        <a href="/mproduct/xoahinhanhTen/<?php echo md5($filename); ?>" class="btn btn-sm btn-danger" ><i class="fa fa-times" ></i></a>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="thumbnail" style="margin: auto;width: auto;max-width: 100%;  " >
+                                                <img style="height: 150px;" class="img img-responsive" src="<?php echo "/" . $folder . $filename ?>" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                <div class="col-md-3 form-group">
+                                                    <label for="">Tên Sản Phẩm</label>
+                                                    <input type="text" class="form-control" value="{{TienTo}}<?php echo $ProducName ?>{{HauTo}}" name="TenSanPham[]" >
+                                                    <input type="hidden" value="<?php echo $filename ?>" name="HinhAnh[]" >
+                                                </div>
+                                                <div class="col-md-3 form-group">
+                                                    <label for="">Giá</label>
+                                                    <input type="number" class="form-control" value="0" name="Price[]" >
+                                                </div>
+                                                <div class="col-md-3 form-group">
+
+                                                    <label >Danh Mục : </label>
+                                                    <select class="form-control "  name="catID[]" >
+                                                        <option  ng-repeat="cat in _ListCategory" ng-selected="cat.catID == '<?php echo $_Param[0] ?>'" value="{{cat.catID}}" >
+                                                            {{cat.catName}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3 form-group">
+                                                    <label >Thương Hiệu : </label>
+                                                    <select class="form-control "  name="brand[]" >
+                                                        <option  ng-repeat="brand in _Brands" value="{{brand.Id}}" >
+                                                            {{brand.Name}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Mô tả Ngắn</label>
+                                                <textarea type="text" class="form-control" value="" name="MoTa[]" >{{TienToMoTa}}  {{HauToMoTa}}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    if ($dsHinh) {
+                        ?>
+                        <div class="box-footer">
+                            <button type="submit"  name="OK" class="pull-right btn btn-success" >Thêm Mới</button>
+                        </div>
+                        <?php
+                    }
+                    ?>
+
+                </form>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
