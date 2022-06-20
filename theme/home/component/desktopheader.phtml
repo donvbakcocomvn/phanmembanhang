@@ -76,14 +76,8 @@
                                 <div class="cart-block-list">
                                     <ul>
                                         <li class="product-info" ng-repeat="items in _Cart.Product">
-                                            <div class="p-left">
-                                                <a style="border-radius: 10px;border: 1px solid red;width: 20px;height: 20px;text-align: center" ng-click="removeProductCart(items.ID)" class="remove_link"></a>
-                                                <a href="{{items.linkProduct}}">
-                                                    <img class="img-responsive" src="{{items.UrlHinh}}" alt="{{items.nameProduct}}">
-                                                </a>
-                                            </div>
-                                            <div class="p-right">
-                                                <p class="p-name">{{items.nameProduct}}</p>
+                                            <div class=" ">
+                                                <h2 class="p-name">{{items.nameProduct}}</h2>
                                                 <p class="p-rice" ng-bind-html="ToHtml(items.priceVnd)"></p>
                                                 <p>SL: {{items.Number}}</p>
                                             </div>
