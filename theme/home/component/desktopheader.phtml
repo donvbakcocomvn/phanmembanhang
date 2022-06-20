@@ -1,7 +1,7 @@
 <div class="top-header ">
     <div class="container">
         <div class="top-bar-social">
-            <p style="line-height: 30px;"  ><i style="line-height: 30px;" class="fa fa-map-marker" ></i>  __DiaChi___</p>
+            <p style="line-height: 30px;"><i style="line-height: 30px;" class="fa fa-map-marker"></i> __DiaChi___</p>
         </div>
         <div class="support-link">
             <a ng-repeat="item in _Menu.TopHeaderMenu" href="{{item.Link}}">
@@ -11,7 +11,7 @@
         <?php
         if (isset($_SESSION[UserLogin])) {
             if ($_SESSION[UserLogin] != null) {
-                ?>
+        ?>
                 <div id="user-info-top" class="user-info pull-right">
                     <div class="dropdown">
                         <a class="current-open" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
@@ -23,20 +23,20 @@
                             <li><a href="/profile/index/">Xin Chào: <?php echo $_SESSION[UserLogin]["Name"]; ?></a></li>
                             <li><a href="/profile/index/#/thongtin">Thông Tin Tài Khoản</a></li>
                             <li><a href="/profile/index/#/don-hang">Quản Lý Đơn Hàng </a></li>
-                            <li><a href="/dang-xuat.html">Đăng Xuất</a></li>
+                            <li><a href="/dang-xuat">Đăng Xuất</a></li>
                         </ul>
                     </div>
                 </div>
-                <?php
+            <?php
             }
         } else {
             ?>
             <div id="user-info-top" class="user-info pull-right">
-                <div >
-                    <a class="current-open" href="/dang-nhap.html"><span>Đăng Nhập</span></a>
+                <div>
+                    <a class="current-open" href="/dang-nhap"><span>Đăng Nhập</span></a>
                 </div>
             </div>
-            <?php
+        <?php
         }
         ?>
 
@@ -53,19 +53,19 @@
             <div class="col-xs-4 col-sm-12 col-md-6 col-lg-6 header-search-box">
                 <form action="/timkiem/index/" method="get" class="form-inline">
                     <div class="form-group input-serach">
-                        <input value="<?php echo isset($_GET["keyword"]) ? $_GET["keyword"] : '' ?>"  name="keyword" type="text"  placeholder="Từ khóa">
+                        <input value="<?php echo isset($_GET["keyword"]) ? $_GET["keyword"] : '' ?>" name="keyword" type="text" placeholder="Từ khóa">
                     </div>
                     <button type="submit" class="pull-right btn-search"></button>
                 </form>
             </div>
-            <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 group-button-header"> 
+            <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 group-button-header">
                 <div class="d-flex HotLine">
-                    <div class="" style="background-color: #003bb3;border-radius: 100%;margin-right: 10px;" >
-                        <img style="height: 40px" src="/public/home/bachhoagiadinh/phoneicon.png" alt=""/>
+                    <div class="" style="background-color: #003bb3;border-radius: 100%;margin-right: 10px;">
+                        <img style="height: 40px" src="/public/home/bachhoagiadinh/phoneicon.png" alt="" />
                     </div>
-                    <div class="content" style="margin-right: 10px;" >
+                    <div class="content" style="margin-right: 10px;">
                         <h2>__Hotline___</h2>
-                        <p class="hotroTime" >08:00AM - 08:00PM</p>
+                        <p class="hotroTime">08:00AM - 08:00PM</p>
                     </div>
                     <div class="btn-cart" id="cart-block">
                         <a title="My cart" href="/cart/">Giỏ Hàng</a>
@@ -75,7 +75,7 @@
                                 <h5 class="cart-title">{{_Cart.SumProduct}} SP Trong Giỏ Hàng</h5>
                                 <div class="cart-block-list">
                                     <ul>
-                                        <li class="product-info" ng-repeat="items in _Cart.Product" >
+                                        <li class="product-info" ng-repeat="items in _Cart.Product">
                                             <div class="p-left">
                                                 <a style="border-radius: 10px;border: 1px solid red;width: 20px;height: 20px;text-align: center" ng-click="removeProductCart(items.ID)" class="remove_link"></a>
                                                 <a href="{{items.linkProduct}}">
@@ -84,7 +84,7 @@
                                             </div>
                                             <div class="p-right">
                                                 <p class="p-name">{{items.nameProduct}}</p>
-                                                <p class="p-rice" ng-bind-html="ToHtml(items.priceVnd)" ></p>
+                                                <p class="p-rice" ng-bind-html="ToHtml(items.priceVnd)"></p>
                                                 <p>SL: {{items.Number}}</p>
                                             </div>
                                         </li>
@@ -92,9 +92,9 @@
                                 </div>
                                 <div class="toal-cart">
                                     <span>Tạm Tính: </span>
-                                    <span class="toal-price pull-right" ng-bind-html="ToHtml(_Cart.TotalPriceVND)" ></span>
+                                    <span class="toal-price pull-right" ng-bind-html="ToHtml(_Cart.TotalPriceVND)"></span>
                                 </div>
-                                <div class="cart-buttons" >
+                                <div class="cart-buttons">
                                     <a href="/cart/taodonhang" ng-show="_Cart.SumProduct > 0" class="btn-check-out">Đặt Hàng</a>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
         </div>
     </div>
 </div>
-<div id="nav-top-menu" class="nav-top-menu">
+<div id="nav-top-menu" class="hidden nav-top-menu">
     <div class="container">
         <div class="row">
             <div id="main-menu" class="main-menu">
@@ -119,11 +119,11 @@
                         </div>
                         <div id="navbar" class="navbar-collapse collapse">
                             <ul class="nav navbar-nav mainmenu">
-                                <li ng-repeat="item in _Menu.TopMainMenu| orderBy :'OrderBy'" ng-class="item.SubMenu != null ? 'dropdown' : ''" >
+                                <li ng-repeat="item in _Menu.TopMainMenu| orderBy :'OrderBy'" ng-class="item.SubMenu != null ? 'dropdown' : ''">
                                     <a href="{{item.Link}}" ng-show="item.SubMenu == null">
                                         {{item.Name}}
                                     </a>
-                                    <a href="{{item.Link}}" ng-show="item.SubMenu"  class="dropdown-toggle"  data-toggle="dropdown">
+                                    <a href="{{item.Link}}" ng-show="item.SubMenu" class="dropdown-toggle" data-toggle="dropdown">
                                         {{item.Name}}
                                     </a>
                                     <ul ng-show="item.SubMenu" class="dropdown-menu container-fluid">
@@ -133,7 +133,8 @@
                                     </ul>
                                 </li>
                             </ul>
-                        </div><!--/.nav-collapse -->
+                        </div>
+                        <!--/.nav-collapse -->
                     </div>
                 </nav>
             </div>

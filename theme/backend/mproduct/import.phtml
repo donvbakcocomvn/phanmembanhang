@@ -1,0 +1,31 @@
+<div class="container" ng-controller="pagesindexController">
+    <div class="row ">
+        <section class="col-md-3"></section>
+        <section class="col-md-6">
+            <div class="box box-solid ">
+                <div class="box-header ">
+                    <h3 class="box-title">import sản phẩm</h3>
+                    <div class="box-tools">
+                        <a class="btn btn-primary" href='/mproduct/addproduct/'>Thêm Sản Phẩm</a>
+                    </div>
+                </div>
+                <div class="box-body ">
+                    <a href="/public/excel/1655707181.xlsx" style="padding: 10px;display: block;" target="dowload">
+                        Tải file mẫu
+                        <i class="fa fa-download"></i>
+                    </a>
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <label style="background: #aaa;padding: 10px;cursor: pointer;">
+                            <br>
+                            Chọn file
+                            <input type="file" style="visibility: hidden;" name="import_excel" />
+                        </label>
+                        <br>
+                        <input type="submit" name="import" id="import" class="btn btn-primary" value="Import" />
+
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

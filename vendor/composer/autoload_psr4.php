@@ -6,18 +6,27 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'ZipStream\\' => array($vendorDir . '/maennchen/zipstream-php/src'),
     'Zend\\Stdlib\\' => array($vendorDir . '/zendframework/zend-stdlib/src'),
     'Zend\\Db\\' => array($vendorDir . '/zendframework/zend-db/src'),
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
+    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
     'Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
+    'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
+    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src', $vendorDir . '/psr/http-factory/src'),
+    'Psr\\Http\\Client\\' => array($vendorDir . '/psr/http-client/src'),
     'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
+    'PhpOffice\\PhpSpreadsheet\\' => array($vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'PFBC\\' => array($vendorDir . '/namdongvando/rpfbc/src'),
     'OpenApi\\' => array($vendorDir . '/zircote/swagger-php/src'),
+    'MyCLabs\\Enum\\' => array($vendorDir . '/myclabs/php-enum/src'),
+    'Matrix\\' => array($vendorDir . '/markbaker/matrix/classes/src'),
     'Imagesoptimizer\\' => array($vendorDir . '/namdongvando/imagesoptimizer/src'),
     'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/lib/Doctrine/Common/Lexer'),
     'Doctrine\\Common\\Annotations\\' => array($vendorDir . '/doctrine/annotations/lib/Doctrine/Common/Annotations'),
+    'Complex\\' => array($vendorDir . '/markbaker/complex/classes/src'),
 );

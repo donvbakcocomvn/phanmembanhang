@@ -1,10 +1,15 @@
 <?php
 
-class Controller_mproduct extends Controller_backend {
+use App\Product;
+use Module\duser\Model\Duser;
+
+class Controller_mproduct extends Controller_backend
+{
 
     public $Product;
 
-    function __construct() {
+    function __construct()
+    {
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
         error_reporting(E_ALL);
@@ -12,7 +17,8 @@ class Controller_mproduct extends Controller_backend {
         parent::__construct();
     }
 
-    function index() {
+    function index()
+    {
         if (isset($_POST["XoaHet"])) {
             $DSID = $_POST["Xoa"];
             foreach ($DSID as $id => $value) {
@@ -29,7 +35,8 @@ class Controller_mproduct extends Controller_backend {
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "mproduct");
     }
 
-    function ThemNhanSanPhan() {
+    function ThemNhanSanPhan()
+    {
         if (isset($_POST["ThemSanPham"])) {
             $_POST['ID'] = $this->Product->bodautv($_POST['ID']);
             $io = new \lib\io();
@@ -45,7 +52,7 @@ class Controller_mproduct extends Controller_backend {
                 $editP['oldPrice'] = $_POST["oldPrice"];
                 $editP['Summary'] = $_POST["Summary"];
                 $editP['Content'] = $_POST["Content"];
-                $images = new \lib\images\images();
+                $images = new \lib\images\Images();
                 try {
                     $imagesUrl = $images->getImagesFromUrl($_POST["UrlHinh"]);
                 } catch (Exception $ex) {
@@ -68,12 +75,14 @@ class Controller_mproduct extends Controller_backend {
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "mproduct");
     }
 
-    function productnoprice() {
+    function productnoprice()
+    {
 
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "mproduct");
     }
 
-    function editproduct() {
+    function editproduct()
+    {
 
         if (isset($_POST["LuuSanPham"])) {
             $editP = $this->Product->ProductsByID($_POST['ID'], FALSE);
@@ -109,7 +118,8 @@ class Controller_mproduct extends Controller_backend {
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "mproduct");
     }
 
-    function copyproduct() {
+    function copyproduct()
+    {
         if (isset($_POST["LuuSanPham"])) {
             $_POST['ID'] = $this->Product->bodautv($_POST['nameProduct']);
             $editP = $this->Product->ProductsByID(intval($_POST['ID']), FALSE);
@@ -145,7 +155,8 @@ class Controller_mproduct extends Controller_backend {
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "mproduct");
     }
 
-    function createformeditproduct() {
+    function createformeditproduct()
+    {
         $lib = new lib\form();
         if ($lib->createFormByClassToFile("\Model\Products", "theme\\backend\\mproduct\\editproduct_form.phtml")) {
             $this->Product->_header("/mproduct/editproduct");
@@ -154,12 +165,14 @@ class Controller_mproduct extends Controller_backend {
         }
     }
 
-    function detailproduct() {
+    function detailproduct()
+    {
         $data["p"] = $this->Product->ProductsByID($this->param[0], FALSE);
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "mproduct");
     }
 
-    function addproduct() {
+    function addproduct()
+    {
         if (isset($_POST["ThemSanPham"])) {
             $_POST['ID'] = $this->Product->bodautv($_POST['ID']);
             $editP = $this->Product->ProductsByID(intval($_POST['ID']), FALSE);
@@ -194,14 +207,16 @@ class Controller_mproduct extends Controller_backend {
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "mproduct");
     }
 
-    function deleteproduct() {
+    function deleteproduct()
+    {
         $data["p"] = $this->Product->DeleteProductsByID($this->param[0]);
 
         $this->Product->_header($_SERVER["HTTP_REFERER"]);
     }
 
-    function getProductsBycatID() {
-//        mproduct/getProductsBycatID/CatID/Page/
+    function getProductsBycatID()
+    {
+        //        mproduct/getProductsBycatID/CatID/Page/
         $this->param[1] = isset($this->param[1]) ? intval($this->param[1]) : 1;
         $a = new \Model\Category();
         $p = new \Model\Products();
@@ -226,7 +241,8 @@ class Controller_mproduct extends Controller_backend {
         return;
     }
 
-    function getProductsPT() {
+    function getProductsPT()
+    {
         $PagesIndex = isset($this->param[0]) ? intval($this->param[0]) : 1;
         $PagesNumber = isset($this->param[1]) ? intval($this->param[1]) : 20;
         $options["name"] = isset($this->param[2]) ? $this->param[2] : "";
@@ -253,20 +269,23 @@ class Controller_mproduct extends Controller_backend {
         return;
     }
 
-    function getListCategory() {
+    function getListCategory()
+    {
         $a = new \Model\Category();
         $b = $a->AllCategorys(FALSE);
         echo $a->_encode($b);
     }
 
-    function xoahinhsanpham() {
+    function xoahinhsanpham()
+    {
         $a = file_get_contents('php://input');
         $b = $this->Product->_decode($a);
         $c = substr($b->path, 1);
         unlink($c);
     }
 
-    function savePriceProduct() {
+    function savePriceProduct()
+    {
         $Pr = new Model\Products();
         $P = $Pr->ProductsByID($_POST["ID"], false);
         if ($P) {
@@ -275,7 +294,8 @@ class Controller_mproduct extends Controller_backend {
         }
     }
 
-    function seachajax() {
+    function seachajax()
+    {
 
         $name = $_POST["Name"];
         $product = new Model\Products();
@@ -286,11 +306,13 @@ class Controller_mproduct extends Controller_backend {
         echo json_encode($a, JSON_UNESCAPED_UNICODE);
     }
 
-    function seach() {
+    function seach()
+    {
         $this->ViewTheme([], Model_ViewTheme::get_viewthene(), "mproduct");
     }
 
-    function productnopriceAjax() {
+    function productnopriceAjax()
+    {
         $product = new Model\Products();
         $a = $product->ProductsNoPrice();
         foreach ($a as $key => $value) {
@@ -299,7 +321,8 @@ class Controller_mproduct extends Controller_backend {
         echo json_encode($a, JSON_UNESCAPED_UNICODE);
     }
 
-    private function ProducttoJSON($p) {
+    private function ProducttoJSON($p)
+    {
         $v = new Model\Products($p);
         unset($p["Content"]);
         unset($p["Summary"]);
@@ -308,11 +331,13 @@ class Controller_mproduct extends Controller_backend {
         return $p;
     }
 
-    function phantrang() {
+    function phantrang()
+    {
         $this->PartialView("");
     }
 
-    function sanphamhtheohinh() {
+    function sanphamhtheohinh()
+    {
         $sp = new Model\Products();
         if (isset($_POST["TenSanPham"])) {
             $tenSanPham = $_POST["TenSanPham"];
@@ -353,7 +378,7 @@ class Controller_mproduct extends Controller_backend {
                 $ar["Views"] = 0;
                 $ar["isShow"] = 1;
                 $ar["lang"] = "vi";
-//                var_dump($ar);
+                //                var_dump($ar);
                 ini_set('display_errors', 1);
                 ini_set('display_startup_errors', 1);
                 error_reporting(E_ALL);
@@ -363,7 +388,8 @@ class Controller_mproduct extends Controller_backend {
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "mproduct");
     }
 
-    function xoahinhanh() {
+    function xoahinhanh()
+    {
         $dir = new lib\redDirectory();
         $a = [];
         $dir->redDirectoryByPath(Model\Products::hinhsanphamTam, $a);
@@ -371,7 +397,8 @@ class Controller_mproduct extends Controller_backend {
         lib\Common::ToUrl($_SERVER["HTTP_REFERER"]);
     }
 
-    function xoahinhanhTen() {
+    function xoahinhanhTen()
+    {
         $fileNameXoa = $this->getParam()[0];
         $dir = new lib\redDirectory();
         $a = [];
@@ -385,10 +412,60 @@ class Controller_mproduct extends Controller_backend {
         lib\Common::ToUrl($_SERVER["HTTP_REFERER"]);
     }
 
-    function suanhanhform() {
+    function suanhanhform()
+    {
         $this->AView([], Model_ViewTheme::get_viewthene());
     }
 
-}
+    public function import()
+    {
 
-?>
+        try {
+            if (isset($_FILES["import_excel"])) {
+                $allowed_extension = array('xls', 'csv', 'xlsx');
+                $file_array = explode(".", $_FILES["import_excel"]["name"]);
+                $file_extension = end($file_array);
+                if (in_array($file_extension, $allowed_extension) == false) {
+                    throw new Exception("File không đúng định dạng");
+                }
+                $file_type = \PhpOffice\PhpSpreadsheet\IOFactory::identify($_FILES['import_excel']['tmp_name']);
+                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($file_type);
+                $spreadsheet = $reader->load($_FILES['import_excel']['tmp_name']);
+                $data = $spreadsheet->getSheet(0)->toArray();
+                foreach ($data as $row) {
+                    $id = intval($row[0]);
+                    if ($id > 0) {
+                        $row[4] = str_replace(",", "", $row[4]);
+                        $price = intval($row[4]);
+                        $sp["Code"] = $row[3];
+                        $sp["nameProduct"] = $row[1];
+                        $sp["unitPrice"] = $row[2];
+                        $sp["Price"] = $price;
+                        $sp["Username"] = Duser::CurentUsernameAdmin(true)->Username;
+                        $sp['Alias'] = $this->Product->bodautv($sp["nameProduct"]);
+                        $sp['oldPrice'] = 0;
+                        $sp['Summary'] = "";
+                        $sp['catID'] = "";
+                        $sp['brand'] = "";
+                        $sp['Content'] = "";
+                        $sp['UrlHinh'] = "";
+                        $sp['DateCreate'] = date("Y-m-d H:i:s", time());
+                        $sp['Number'] = 1;
+                        $sp['Note'] = "";
+                        $sp['BuyTimes'] = 0;
+                        $sp['Views'] = 0;
+                        $sp['Serial'] = time();
+                        $sp['isShow'] = isset($_POST["isShow"]) ? 1 : 0;
+                        $sp['lang'] = "vi";
+                        // var_dump($sp); 
+                        $this->Product->AddProducts($sp);
+                        // die();
+                    }
+                }
+            }
+            $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "");
+        } catch (Exception $ex) {
+            echo $ex->getMessage();
+        }
+    }
+}

@@ -17,6 +17,8 @@ RewriteRule ^(.*)$ /$1?%1%2 [R=301,L]
 RewriteCond %{QUERY_STRING} ^(.*)&?zarsrc=[^&]+&?(.*)$ [NC]
 RewriteRule ^(.*)$ /$1?%1%2 [R=301,L]
 
+php_value memory_limit 1024M
+
 RewriteRule public -  [L]
 
 RewriteCond %{HTTPS} off
@@ -26,3 +28,4 @@ RewriteRule dang-nhap\.html  index.php?ctrl=index&action=login&param=1 [L]
 RewriteRule dang-xuat\.html  index.php?ctrl=index&action=logout&param=1 [L]
 RewriteRule (.*)-sp-(.*)\.html  index.php?ctrl=index&action=ctsanpham&alias=$1&id=$2&param=1 [L]
 RewriteRule (.*)  index.php [L]
+

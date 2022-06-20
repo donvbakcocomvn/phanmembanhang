@@ -1,26 +1,31 @@
 <?php
 
-class Controller_component extends Controller_index {
+class Controller_component extends Controller_index
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         Model_ViewTheme::set_viewthene("gocvoi");
     }
 
-    function index() {
+    function index()
+    {
         return $this->AView([], Model_ViewTheme::get_viewthene());
     }
 
-    function mobieHeader() {
+    function mobieHeader()
+    {
         return $this->AView([], Model_ViewTheme::get_viewthene());
     }
 
-    function desktopheader() {
+    function desktopheader()
+    {
         return $this->AView([], Model_ViewTheme::get_viewthene());
     }
 
-    function sanphamdanhmuc() {
+    function sanphamdanhmuc()
+    {
         return $this->AView([], Model_ViewTheme::get_viewthene());
     }
-
 }

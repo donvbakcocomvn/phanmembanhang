@@ -2,43 +2,47 @@
 
 use Model\UsersService;
 
-class Controller_index extends Application {
+class Controller_index extends Application
+{
 
     public $param;
     public $ViewTheme;
     public $Pages;
     public $News;
 
-    function __construct() {
+    function __construct()
+    {
         $this->param = $this->getParam();
         $this->Pages = new \Model\pages();
         $this->News = new \Model\news();
         Model_ViewTheme::set_viewthene("home");
     }
 
-    function index() {
+    function index()
+    {
         Model_Seo::$Title = "__Title___";
         Model_Seo::$des = "__Des___";
         Model_Seo::$key = "__Keyword___";
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "");
     }
 
-    function sanpham() {
+    function sanpham()
+    {
 
         Model_Seo::$Title = "Sản Phẩm";
         Model_Seo::$des = "{SEO_Des}";
         Model_Seo::$key = "{SEO_Keyword}";
         $bre = new Model\Breadcrumb();
         $abre[] = [
-            "link" => "#"
-            , "title" => "Sản Phẩm"
+            "link" => "#", "title" => "Sản Phẩm"
         ];
 
         $bre->setBreadcrumb($abre);
         $this->ViewTheme([], Model_ViewTheme::get_viewthene(), "danhmuc");
     }
 
-    function ctsanpham() {
+    function ctsanpham()
+    {
 
         $_GET["alias"] = lib\Common::CheckInput($_GET["alias"]);
         $mp = new Model\Products();
@@ -57,16 +61,22 @@ class Controller_index extends Application {
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "product");
     }
 
-    function syspage($url) {
+    function syspage($url)
+    {
         $Category = new Model\Category();
-//        var_dump($url);
+        //        var_dump($url);
+        $data = [];
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
     }
-
-    function category($url) {
+    public function thanhtoan()
+    {
+        $this->ViewTheme([], Model_ViewTheme::get_viewthene());
+    }
+    function category($url)
+    {
 
         $Category = new Model\Category();
-//        lấy danh ra
+        //        lấy danh ra
         $linkDanhMuc = $url[1][0];
         $pathCat = $Category->getCategoryFromPath($linkDanhMuc);
         $catCurent = $Category->Category4Path($pathCat);
@@ -84,7 +94,8 @@ class Controller_index extends Application {
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
     }
 
-    function news($url) {
+    function news($url)
+    {
         $aliasPages = $url[1][0];
         $aliasNews = $url[2][0];
         $Page = $this->Pages->PagesByAlias($aliasPages, FALSE);
@@ -112,7 +123,8 @@ class Controller_index extends Application {
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
     }
 
-    function pages($url) {
+    function pages($url)
+    {
         $pages = new \Model\pages();
         $_Pages = $pages->PagesByAlias($url[1][0], FALSE);
         $Pages = new \Model\pages($_Pages);
@@ -129,7 +141,8 @@ class Controller_index extends Application {
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
     }
 
-    function product($url) {
+    function product($url)
+    {
 
         $mp = new Model\Products();
         $p = $mp->ProductsByAlias($url[2][0], FALSE);
@@ -144,7 +157,8 @@ class Controller_index extends Application {
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "product");
     }
 
-    function pagesdetail($url) {
+    function pagesdetail($url)
+    {
 
         $pages = new \Model\pages();
         $_Pages = $pages->PagesByAlias($url[1][0], FALSE);
@@ -161,7 +175,8 @@ class Controller_index extends Application {
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
     }
 
-    function syspagedetail($Url) {
+    function syspagedetail($Url)
+    {
         $data["Page"] = $this->Pages->TimPages4TieuDeKD($Url[1][0]);
         $p = new Model_Pages($data["Page"]);
         Model_Seo::$Title = $p->Title;
@@ -170,14 +185,15 @@ class Controller_index extends Application {
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
     }
 
-    function login() {
+    function login()
+    {
 
         $_SESSION[UserLogin] = isset($_SESSION[UserLogin]) ? $_SESSION[UserLogin] : null;
         if ($_SESSION[UserLogin]) {
             Common\Common::toUrl("/profile/");
         }
         $_SESSION["DangKy"] = isset($_SESSION["DangKy"]) ? $_SESSION["DangKy"] : \lib\guid::guidV4();
-//        var_dump($_SESSION["DangKy"]);
+        //        var_dump($_SESSION["DangKy"]);
         Model\FormLogin::setFormName($_SESSION["DangKy"]);
         if (isset($_POST[$_SESSION["DangKy"]])) {
             try {
@@ -201,12 +217,10 @@ class Controller_index extends Application {
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "login");
     }
 
-    function logout() {
+    function logout()
+    {
         $_SESSION[UserLogin] = null;
         Common\Common::toUrl("/profile/index");
         exit();
     }
-
 }
-?>
-

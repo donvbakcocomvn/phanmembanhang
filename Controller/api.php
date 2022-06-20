@@ -1,41 +1,46 @@
 <?php
 
 // api này không cần dang nhap
-class Controller_api extends Application {
+class Controller_api extends Application
+{
 
     public $param;
     public $Menu;
     static private $version = "111";
 
-    function __construct() {
-//        header($string);
-        echo ":a";
+    function __construct()
+    {
+        //        header($string); 
         header('Access-Control-Allow-Origin: *');
         $this->Menu = new \Model\Menu();
         $this->param = $this->getParam();
     }
 
-    function GetTinhThanhQuanHuyen() {
+    function GetTinhThanhQuanHuyen()
+    {
         $TinhThanh = new Model\TinhThanh\TinhThanh();
         $Id = intval($this->getParam()[0]);
         $Tt = $TinhThanh->GetByParentActive($Id);
         echo \lib\APIs::Json_Encode($Tt);
     }
 
-    function version() {
+    function version()
+    {
         $a = ["Version" => session_id()];
-//        $a = ["Version" => time()];
+        //        $a = ["Version" => time()];
         $lib = new \lib\APIs();
         $lib->ArrayToApi($a);
     }
 
-    function index() {
+    function index()
+    {
         $cat = new Model\Category();
         $a = $cat->Categorys4IDParent(0);
         $cat->_encode($a);
     }
 
-    function getMainMenu() {
+    function getMainMenu()
+    {
         $cat = new Model\Category();
         $a = $cat->Categorys4IDParent(0);
         if ($a)
@@ -49,7 +54,8 @@ class Controller_api extends Application {
         echo $cat->_encode($a);
     }
 
-    function getMenus() {
+    function getMenus()
+    {
         $Menu = [];
 
         $a = $this->Menu->MenuByGroupThemeParent("home", "TopHeaderMenu", 0, FALSE);
@@ -108,15 +114,16 @@ class Controller_api extends Application {
                     }
             }
         $Menu["LeftMenu"] = $a;
-//        $this->TopMainMenu = $this->Menu->_encode($this->TopMainMenu["body"]);
-//        $this->FooterMenu = $this->Menu->_encode($this->FooterMenu["body"]);
-//        $this->FooterMenuCongTy = $this->Menu->_encode($this->FooterMenuCongTy["body"]);
-//        $this->FooterMenuHoTro = $this->Menu->_encode($this->FooterMenuHoTro["body"]);
-//        $this->FooterMenuDichVu = $this->Menu->_encode($this->FooterMenuDichVu["body"]);
+        //        $this->TopMainMenu = $this->Menu->_encode($this->TopMainMenu["body"]);
+        //        $this->FooterMenu = $this->Menu->_encode($this->FooterMenu["body"]);
+        //        $this->FooterMenuCongTy = $this->Menu->_encode($this->FooterMenuCongTy["body"]);
+        //        $this->FooterMenuHoTro = $this->Menu->_encode($this->FooterMenuHoTro["body"]);
+        //        $this->FooterMenuDichVu = $this->Menu->_encode($this->FooterMenuDichVu["body"]);
         $lib->ArrayToApi($Menu);
     }
 
-    function getProductByID() {
+    function getProductByID()
+    {
         $Produc = new Model\Products();
         $_p = $Produc->ProductsByID($this->param[0], FALSE);
         $_p["Price"] = intval($_p["Price"]);
@@ -126,24 +133,27 @@ class Controller_api extends Application {
         print_r($Produc->_encode($_p));
     }
 
-    function getAdvByGroup() {
+    function getAdvByGroup()
+    {
         $cat = new \Model\adv();
         $a = $cat->AdvsByGroup($this->param[0], FALSE);
         echo $cat->_encode($a);
     }
 
-    function getPages() {
+    function getPages()
+    {
         $Pa = new \Model\pages();
         $Apis = new \lib\APIs();
         $a = $Pa->PagesByType(1, FALSE);
         $Apis->ArrayToApi($a);
     }
 
-    function getMainMenuThong($param) {
-
+    function getMainMenuThong($param)
+    {
     }
 
-    function getPagesLink() {
+    function getPagesLink()
+    {
         $M_Pages = new \Model\pages();
         $lib = new lib\APIs();
         $a = $M_Pages->PagesMin(FALSE);
@@ -155,7 +165,8 @@ class Controller_api extends Application {
         $lib->ArrayToApi($a);
     }
 
-    function getProductsHot() {
+    function getProductsHot()
+    {
         $Produc = new Model\Products();
         $Ps = $Produc->ProductsHotNew(12, FALSE);
         foreach ($Ps as $key => $_ps) {
@@ -170,7 +181,8 @@ class Controller_api extends Application {
         $lib->ArrayToApi($Ps);
     }
 
-    function getProductsHotView() {
+    function getProductsHotView()
+    {
         $Produc = new Model\Products();
         $Ps = $Produc->ProductsHotView(12, FALSE);
         foreach ($Ps as $key => $_ps) {
@@ -185,7 +197,8 @@ class Controller_api extends Application {
         $lib->ArrayToApi($Ps);
     }
 
-    function gettintuchot() {
+    function gettintuchot()
+    {
         $News = new Model\news();
         $Ps = $News->NewsHot();
         foreach ($Ps as $k => $new) {
@@ -199,7 +212,8 @@ class Controller_api extends Application {
         $lib->ArrayToApi($Ps);
     }
 
-    function updateHomeSlide() {
+    function updateHomeSlide()
+    {
         $a = new \Model\adv();
         $libImg = new \lib\imageComp();
         $DS = $a->AdvsByGroup("homeslide", FALSE);
@@ -217,7 +231,8 @@ class Controller_api extends Application {
         $io->writeFile($fileName, $content);
     }
 
-    function homeslide() {
+    function homeslide()
+    {
         $io = new \lib\io();
         $fileName = "cache/homeslide.json";
         if (file_exists($fileName)) {
@@ -226,7 +241,8 @@ class Controller_api extends Application {
         }
     }
 
-    function danhmucnoibat() {
+    function danhmucnoibat()
+    {
         $io = new \lib\io();
         $fileName = "cache/danhmucnoibat.json";
         if (file_exists($fileName)) {
@@ -247,7 +263,8 @@ class Controller_api extends Application {
         $io->writeFile($fileName, $content);
     }
 
-    function mailDatHang() {
+    function mailDatHang()
+    {
         $order = new \Module\cart\Model\Order();
         $Order = $order->orderbyid($this->getParam()[0])[0];
         $mail = new \Module\mail\Model\Mail();
@@ -258,7 +275,8 @@ class Controller_api extends Application {
         $mail->SendMail($sub, $body, $sender);
     }
 
-    function getcarts() {
+    function getcarts()
+    {
         $cart = new \Module\cart\Model\Cart();
         $data["Product"] = $cart->Products();
         foreach ($data["Product"] as $k => $value) {
@@ -274,7 +292,4 @@ class Controller_api extends Application {
         $lib = new \lib\APIs();
         $lib->ArrayToApi($data);
     }
-
 }
-
-?>

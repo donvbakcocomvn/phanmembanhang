@@ -31,8 +31,8 @@ and open the template in the editor.
     display: flex;
 }
 .nav-top-menu {
-    background: #f96d10;
-    border-top: 1px solid #f96d10;
+    background: #0061A8;
+    border-top: 1px solid #0061A8;
 }
 .cart-block .cart-block-content .product-info .p-right{
     line-height: 17px;
@@ -84,7 +84,7 @@ a{
     background-color: #aaa;
 }
 .sortPagiBar .bottom-pagination .pagination .active a{
-    background-color: #f96d10;
+    background-color: #0061A8;
 }
 .product-list.list .add-to-cart a{
     margin-left: 5px;
@@ -115,7 +115,7 @@ sup{
     line-height: 1.5em;
 }
 .display-product-option li.selected span, .display-product-option li:hover span{
-    background-color: #f96d10;
+    background-color: #0061A8;
 }
 h2.product-name a{
     color: #000;
@@ -140,13 +140,13 @@ h2.product-name a{
 .main-header{
     padding-top: 15px;
     padding-bottom: 15px;
-    background-color: gold;
+    background-color: #fff;
 }
 .main-header .header-search-box .form-inline{
     background-color: #fff;
 }
 .option5 .top-header {
-    background: #f96d10;
+    background: #0061A8;
     font-size: 14px;
     color: #fff;
 }
@@ -193,7 +193,7 @@ h2.product-name a{
     font-weight: bold;
 }
 .DanhMuc-panel .panel-heading h2 span{
-    border-bottom: 2px solid #f96d10;padding-bottom: 5px;padding-left: 15px;padding-right: 15px;
+    border-bottom: 2px solid #0061A8;padding-bottom: 5px;padding-left: 15px;padding-right: 15px;
     text-transform: uppercase;
     font-weight: 500;
 }
@@ -219,7 +219,7 @@ h2.product-name a{
     padding: 0px;
 }
 .mainmenu ul li a:hover{
-    color: #f96d10;
+    color: #0061A8;
 }
 .mainmenu ul li a{
     padding: 5px;

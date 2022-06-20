@@ -1,0 +1,19 @@
+<?php
+
+use Model\ThanhToan;
+
+$thanhToan = new ThanhToan();
+
+$resul =  $thanhToan->InsertLSGiaodich(["username" => "admin", "password" => "123456"], "123123112", 120000, 1, "abcs", "admin");
+// var_dump($resul);
+?>
+
+<form action="http://113.161.252.163:8000/service.asmx/InsertLSGiaodich" method="post">
+
+    <input type="text" class="form-control" value="123123112" name="Sothe" placeholder="">
+    <input type="text" class="form-control" value="120000" name="Sotien" placeholder="">
+    <input type="text" class="form-control" value="1" name="LoaiGD" placeholder="">
+    <input type="text" class="form-control" value="thanh toan anhn" name="NoidungGD" placeholder="">
+    <input type="text" class="form-control" value="123456" name="taikhoan" placeholder="">
+    <button class="btn btn-success">ThanhToan</button>
+</form>

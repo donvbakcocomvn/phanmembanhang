@@ -1,50 +1,50 @@
-<div class="columns-container"  >
+<div class="columns-container">
     <div class="container" id="columns">
         <h2 class="page-heading no-line text-center">
             <span class="page-heading-title2">Giỏ Hàng</span>
-        </h2> 
-        <p class="text-center" style="line-height: 2.3em;" >Chúng Tôi sẽ liên lạc với bạn khi bạn tạo đơn hàng</p>
+        </h2>
         <div class="page-content page-order">
             <div class="order-detail-content">
                 <table class="table table-bordered table-responsive cart_summary">
-                    <thead >
-                        <tr style="background-color: gold;padding-bottom: 5px;padding-top: 5px;" >
-                            <th class="" >
-                                <a class="pull-right" ng-click="XoaGioHang()" style="color: #000"   ><i class="fa fa-2x fa-trash-o"></i></a>
-                                <p  ><b>Sản Phẩm</b></p>
+                    <thead>
+                        <tr style="background-color: gold;padding-bottom: 5px;padding-top: 5px;">
+                            <th class="">
+                                <a class="pull-right" ng-click="XoaGioHang()" style="color: #000"><i class="fa fa-2x fa-trash-o"></i></a>
+                                <p><b>Sản Phẩm</b></p>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="items  in _Cart.Product" >
+                        <tr ng-repeat="items  in _Cart.Product">
                             <td class="cart_description">
-                                <div class="d-flex giohang" >
-                                    <div class="imagesSp">
-                                        <a href="#"><img style="width: 70px;margin-right: 10px" src="{{items.UrlHinh}}" alt="{{items.nameProduct}}"></a>
+                                <div class="d-flex giohang">
+                                    <div class="imagesSp hidden">
+                                        <a href="#">
+                                            <img style="width: 70px;margin-right: 10px" src="{{items.UrlHinh}}" alt="{{items.nameProduct}}">
+                                        </a>
                                     </div>
                                     <div class="" style="width: 100%;padding-right: 10px;">
-                                        <a class="btn btn-danger btn-xs pull-right" ng-click="removeProductCart(items.ID)" >Xóa</a>
-                                        <small class="cart_ref">Id : #{{items.ID}}</small><br>
+                                        <a class="btn btn-danger btn-xs pull-right" ng-click="removeProductCart(items.ID)">Xóa</a>
                                         <h2 class="product-name">
-                                            <a href="{{items.linkProduct}}">
-                                                {{items.nameProduct}}
-                                            </a>
+                                            {{items.nameProduct}}
                                         </h2>
-                                        <p ><span ng-bind-html="items.priceVnd" ></span><label style="margin-left: 5px;" class="label label-success">Còn Hàng</label></p>
+                                        <small class="cart_ref">Id : #{{items.Code}}</small><br>
+
+                                        <p><span ng-bind-html="items.priceVnd"></span></p>
                                     </div>
-                                    <div class="qty" style="min-width: 76px;" >
+                                    <div class="qty" style="min-width: 76px;">
                                         <input style="" class="inputcartnumber form-control input-sm" type="text" ng-value="items.Number">
                                         <div class=" btn-group-xs">
-                                            <a ng-click="minuNumberProduct(items.ID)" class="btn-block btn-cart btn-primary" >
+                                            <a ng-click="minuNumberProduct(items.ID)" class="btn-block btn-cart btn-primary">
                                                 <i class="fa fa-minus"></i>
                                             </a>
-                                            <a ng-click="plusNumberProduct(items.ID)" class="btn-block btn-cart btn-primary" >
+                                            <a ng-click="plusNumberProduct(items.ID)" class="btn-block btn-cart btn-primary">
                                                 <i class="fa fa-plus"></i>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="hidden-sm hidden-xs" style="width: 120px;padding-left: 10px;">
-                                        <strong ng-bind-html="ToHtml(items.ThanhTienVND)" ></strong>
+                                        <strong ng-bind-html="ToHtml(items.ThanhTienVND)"></strong>
                                     </div>
 
                                 </div>
@@ -52,7 +52,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <p class="text-right" >Tổng Tiền: <b ng-bind-html="_Cart.TotalPriceVND" ></b></p>
+                                <p class="text-right">Tổng Tiền: <b ng-bind-html="_Cart.TotalPriceVND"></b></p>
                             </td>
                         </tr>
 

@@ -2,7 +2,8 @@
 
 namespace theme\home;
 
-class functionLayout {
+class functionLayout
+{
 
     const DanMucSanPham = "DanMucSanPham";
 
@@ -15,7 +16,8 @@ class functionLayout {
     public $FooterMenuCongTy;
     public $FileConfig;
 
-    function __construct() {
+    function __construct()
+    {
         $this->NameTheme = 'home';
         $this->TopMainMenu = [];
         $this->FooterMenu = [];
@@ -27,19 +29,22 @@ class functionLayout {
         $this->loadmenu();
     }
 
-    function LoadConfig() {
+    function LoadConfig()
+    {
         $lib = new \lib\io();
         $ad = new \Model_Adapter();
         return $ad->_decode($lib->readFile($this->FileConfig));
     }
 
-    function LoadConfigArray() {
+    function LoadConfigArray()
+    {
         $lib = new \lib\io();
         $ad = new \Model_Adapter();
         return json_decode($lib->readFile($this->FileConfig), JSON_OBJECT_AS_ARRAY);
     }
 
-    function GetConfigByKey($key) {
+    function GetConfigByKey($key)
+    {
         $a = $this->LoadConfigArray();
         if (isset($a[$key])) {
             return $a[$key];
@@ -47,8 +52,9 @@ class functionLayout {
         return null;
     }
 
-    function loadmenu() {
-//        return về mảng json
+    function loadmenu()
+    {
+        //        return về mảng json
 
         $a = $this->Menu->MenuByTheme($this->NameTheme);
         foreach ($a as $k => $Menu) {
@@ -86,13 +92,14 @@ class functionLayout {
         $this->FooterMenuDichVu = $this->Menu->_encode($this->FooterMenuDichVu["body"]);
 
 
-//        var_dump($this->TopMainMenu);
+        //        var_dump($this->TopMainMenu);
     }
 
-    function gethtml() {
+    function gethtml()
+    {
         $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $hotlint_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . "/";
-        ?>
+?>
         <title><?php echo \Model_Seo::$Title; ?></title>
         <meta charset="utf-8">
         <meta http-equiv="cache-control" content="no-cache" />
@@ -122,12 +129,13 @@ class functionLayout {
         <link rel="apple-touch-icon" sizes="72x72" href="__Logo___">
         <link rel="apple-touch-icon" sizes="114x114" href="__Logo___">
         <link rel="manifest" href="/public/manifest.json?v=<?php echo filemtime('public/manifest.json') ?>">
-        <?php
+    <?php
     }
 
-    function head() {
+    function head()
+    {
         $this->gethtml();
-        ?>
+    ?>
         <title><?php echo \Model_Seo::$Title; ?></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -142,34 +150,36 @@ class functionLayout {
         <link rel="stylesheet" type="text/css" href="/public/home/assets/css/style.css?v=<?php echo filemtime('public/home/assets/css/style.css') ?>" />
         <link rel="stylesheet" type="text/css" href="/public/home/assets/css/responsive.css" />
         <link rel="stylesheet" type="text/css" href="/public/home/assets/css/option5.css?v=<?php echo filemtime('public/home/assets/css/option5.css') ?>" />
-        <link href="/public/home/css/style.css" rel="stylesheet" type="text/css"/>
-        <link href="/public/home/assets/css/MauTemplate.css" rel="stylesheet" type="text/css"/>
-        <link href="/public/home/bachhoagiadinh/Style.css?v=<?php echo filemtime('public/home/bachhoagiadinh/Style.css'); ?>" rel="stylesheet" type="text/css"/>
+        <link href="/public/home/css/style.css" rel="stylesheet" type="text/css" />
+        <link href="/public/home/assets/css/MauTemplate.css" rel="stylesheet" type="text/css" />
+        <link href="/public/home/bachhoagiadinh/Style.css?v=<?php echo filemtime('public/home/bachhoagiadinh/Style.css'); ?>" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="/public/home/assets/lib/jquery/jquery-1.11.2.min.js"></script>
         <script src="/public/lazyloadimg/lazyloading.js" type="text/javascript"></script>
-        <script src="/public/partials/loaderpartials/home/homeconfig.js?v=<?php echo 'public/partials/loaderpartials/home/homeconfig.js'; ?>" type="text/javascript" ></script>
+        <script src="/public/partials/loaderpartials/home/homeconfig.js?v=<?php echo 'public/partials/loaderpartials/home/homeconfig.js'; ?>" type="text/javascript"></script>
         <script src="/public/home/bachhoagiadinh/App.js?v=<?php echo 'public/home/bachhoagiadinh/App.js'; ?>" type="text/javascript"></script>
 
         <?php
     }
 
-    function header() {
+    function header()
+    {
         $Cat = new \Model\Category();
         $Cats = $Cat->Categorys();
         if (\Model\Driver::is_mobile()) {
-            ?>
+        ?>
             <div id="header" class=" header mobie-header"></div>
-            <?php
+        <?php
         } else {
-            ?>
+        ?>
             <!-- HEADER -->
-            <div id="header" class=" header desktop-header" > </div>
+            <div id="header" class=" header desktop-header"> </div>
             <!-- end header -->
-            <?php
+        <?php
         }
     }
 
-    function leftmenu() {
+    function leftmenu()
+    {
         $Cat = new \Model\Category();
         $Cats = $Cat->Categorys();
         ?>
@@ -179,60 +189,61 @@ class functionLayout {
             $dem = 0;
             if ($Cats)
                 foreach ($Cats as $_Category) {
+            ?>
+                <li class="">
+                    <span></span> <a href="<?php echo $_Category->linkCurentCategory() ?>"> <?php echo $_Category->catName ?> </a>
+                    <!--ds danh muc con-->
+                    <?php
+                    //                                                            Cấp 2
+                    $lCat = $_Category->Categorys4IDParent($_Category->catID);
+                    if ($lCat) {
+                        foreach ($lCat as $_Category1) {
                     ?>
-                    <li class="" >
-                        <span></span> <a href="<?php echo $_Category->linkCurentCategory() ?>"> <?php echo $_Category->catName ?> </a>
-                        <!--ds danh muc con-->
-                        <?php
-//                                                            Cấp 2
-                        $lCat = $_Category->Categorys4IDParent($_Category->catID);
-                        if ($lCat) {
-                            foreach ($lCat as $_Category1) {
-                                ?>
-                                <ul>
-                                    <li><span></span>
-                                        <a href="<?php echo $_Category1->linkCurentCategory(); ?>" >
-                                            <?php echo $_Category1->catName ?>
-                                        </a>
-                                        <ul>
-                                            <?php
-                                            $lCat1 = $_Category1->Categorys4IDParent($_Category1->catID);
-                                            if ($lCat1) {
-                                                foreach ($lCat1 as $_Category2) {
-                                                    ?>
-                                                    <!--link danh muc ??-->
-                                                    <li><span></span> <a href="<?php echo $_Category2->linkCurentCategory(); ?>"><?php echo $_Category2->catName ?></a></li>
-                                                    <?php
-                                                }
+                            <ul>
+                                <li><span></span>
+                                    <a href="<?php echo $_Category1->linkCurentCategory(); ?>">
+                                        <?php echo $_Category1->catName ?>
+                                    </a>
+                                    <ul>
+                                        <?php
+                                        $lCat1 = $_Category1->Categorys4IDParent($_Category1->catID);
+                                        if ($lCat1) {
+                                            foreach ($lCat1 as $_Category2) {
+                                        ?>
+                                                <!--link danh muc ??-->
+                                                <li><span></span> <a href="<?php echo $_Category2->linkCurentCategory(); ?>"><?php echo $_Category2->catName ?></a></li>
+                                        <?php
                                             }
-                                            ?>
-                                        </ul>
-                                    </li>
-                                </ul>
-                                <?php
-                            }
-                            ?>
-
-                            <?php
+                                        }
+                                        ?>
+                                    </ul>
+                                </li>
+                            </ul>
+                        <?php
                         }
                         ?>
-                    </li>
+
                     <?php
+                    }
+                    ?>
+                </li>
+            <?php
                     $dem++;
                 }
             ?>
         </ul>
 
-        <?php
+    <?php
     }
 
-    function homeslider() {
+    function homeslider()
+    {
 
         $a = new \Model\adv();
         $DS = $a->GetFileContentGroup("homeslide");
-//        var_dump($DS);
-//        echo count($DS);
-        ?>
+        //        var_dump($DS);
+        //        echo count($DS);
+    ?>
         <div id="home-slider">
             <div class="container">
                 <div class="row">
@@ -242,9 +253,9 @@ class functionLayout {
                                 <?php
                                 foreach ($DS as $value) {
                                     $_value = new \Model\adv($value);
-                                    ?>
-                                    <li><img  loading="lazy" style="width:100%;height: 350px;" alt="<?php echo $_value->Name; ?>" src="<?php echo $_value->Urlimages ?>" title="<?php echo $_value->Name; ?>" /></li>
-                                    <?php
+                                ?>
+                                    <li><img loading="lazy" style="width:100%;height: 350px;" alt="<?php echo $_value->Name; ?>" src="<?php echo $_value->Urlimages ?>" title="<?php echo $_value->Name; ?>" /></li>
+                                <?php
                                 }
                                 ?>
                             </ul>
@@ -254,12 +265,13 @@ class functionLayout {
             </div>
         </div>
 
-        <?php
+    <?php
     }
 
-    function services() {
-        ?>
-        <div ng-show="<?php echo $this->LoadConfig()->DichVu ?> == '1'" >
+    function services()
+    {
+    ?>
+        <div ng-show="<?php echo $this->LoadConfig()->DichVu ?> == '1'">
             <div class="container">
                 <div class="service ">
                     <div class="col-xs-6 col-sm-3 service-item">
@@ -267,7 +279,9 @@ class functionLayout {
                             <img alt="services" src="/public/home/assets/data/s1.png" />
                         </div>
                         <div class="info">
-                            <a href="#"><h3>Hỗ Trợ Giao Hàng</h3></a>
+                            <a href="#">
+                                <h3>Hỗ Trợ Giao Hàng</h3>
+                            </a>
                             <span>Giao Hàng Nội Thành Phố</span>
                         </div>
                     </div>
@@ -276,7 +290,9 @@ class functionLayout {
                             <img alt="services" src="/public/home/assets/data/s2.png" />
                         </div>
                         <div class="info">
-                            <a href="#"><h3>Chất Lượng</h3></a>
+                            <a href="#">
+                                <h3>Chất Lượng</h3>
+                            </a>
                             <span>Phân phối sản phẩm chất lượng</span>
                         </div>
                     </div>
@@ -285,8 +301,10 @@ class functionLayout {
                             <img alt="services" src="/public/home/assets/data/s3.png" />
                         </div>
 
-                        <div class="info" >
-                            <a href="#"><h3>Hỗ Trợ Mua Hộ</h3></a>
+                        <div class="info">
+                            <a href="#">
+                                <h3>Hỗ Trợ Mua Hộ</h3>
+                            </a>
                             <span>Mua Hộ Sản phẩm</span>
                         </div>
                     </div>
@@ -295,27 +313,30 @@ class functionLayout {
                             <img alt="services" src="/public/home/assets/data/s4.png" />
                         </div>
                         <div class="info">
-                            <a href="#"><h3>Sản Phẩm</h3></a>
+                            <a href="#">
+                                <h3>Sản Phẩm</h3>
+                            </a>
                             <span>Sản Phẩm </span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <?php
+    <?php
     }
 
-    function footer() {
-        ?>
+    function footer()
+    {
+    ?>
         <footer id="footer2">
-            <div class="footer-top"  >
+            <div class="footer-top">
                 <div class="container">
                     <div class="row">
                         <div class="hidden-sm hidden-xs col-sm-9">
                             <div class="footer-menu">
                                 <ul>
-                                    <li ng-repeat='menuitem in <?php echo $this->FooterMenu ?>' >
-                                        <a ng-show="!menuitem.submenu" href="{{menuitem.Link}}" >{{menuitem.Name}}</a>
+                                    <li ng-repeat='menuitem in <?php echo $this->FooterMenu ?>'>
+                                        <a ng-show="!menuitem.submenu" href="{{menuitem.Link}}">{{menuitem.Name}}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -335,7 +356,7 @@ class functionLayout {
                 </div>
             </div>
             <!-- footer paralax-->
-            <div class="footer-paralax "  >
+            <div class="footer-paralax ">
                 <div class="footer-bottom">
                     <div class="container">
                         <div class=" ">
@@ -358,11 +379,12 @@ class functionLayout {
             </div>
             <!-- ./footer paralax-->
         </footer>
-        <?php
+    <?php
     }
 
-    function js() {
-        ?>
+    function js()
+    {
+    ?>
 
         <script type="text/javascript" src="/public/home/assets/lib/bootstrap/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/public/home/assets/lib/select2/js/select2.min.js"></script>
@@ -375,7 +397,8 @@ class functionLayout {
         <?php
     }
 
-    function categorySlider($isMultyCategory = -1) {
+    function categorySlider($isMultyCategory = -1)
+    {
         $adv = new \Model\adv();
         if ($isMultyCategory == -1) {
             $lisAdv = $adv->AdvsByGroup("cat0");
@@ -388,93 +411,84 @@ class functionLayout {
             if (count($lisAdv) == 1) {
                 $lisAdv[1] = $lisAdv[0];
             }
-            ?>
+        ?>
             <!-- category-slider -->
-            <div class="category-slider"  >
-                <ul class="owl-carousel owl-style2" data-dots="false" data-loop="true" data-nav = "true" data-autoplayTimeout="1000" data-autoplayHoverPause = "true" data-items="1">
+            <div class="category-slider">
+                <ul class="owl-carousel owl-style2" data-dots="false" data-loop="true" data-nav="true" data-autoplayTimeout="1000" data-autoplayHoverPause="true" data-items="1">
                     <?php
                     foreach ($lisAdv as $_adv) {
-                        ?>
+                    ?>
                         <li>
                             <img src="<?php echo $_adv->Urlimages ?>" alt="<?php echo $_adv->Name ?>">
                         </li>
-                        <?php
+                    <?php
                     }
                     ?>
                 </ul>
             </div>
             <!-- ./category-slider -->
-            <?php
+        <?php
         }
     }
 
-    function product($produc) {
+    function product($produc)
+    {
         $produc = new \Model\Products($produc);
         $p = new \Model\Products();
         $images = $p->getAllImges($produc->ID);
         ?>
         <div class="product-container">
-            <div class="left-block">
-                <a href="<?php echo $produc->linkProduct(); ?>">
-                    <img style="height: 250px;" loading="lazy" onerror="this.src='/public/no-image.jpg'" class="img-responsive" alt="<?php echo $produc->nameProduct ?>" src="<?php
-                    echo $produc->UrlHinh();
-                    ?>" />
-                </a>
+            <div class="right-block">
+                <h2 class="product-name"><a href="<?php echo $produc->linkProduct(); ?>"><?php echo $produc->nameProduct ?></a></h2>
+                <div class="content_price">
+                    <span class="price product-price"><?php echo $produc->Price() ?></span>
+                </div>
+                <div class="info-orther">
+                    <p>ID: <?php echo $produc->ID ?></p>
+                </div>
                 <div class="add-to-cart">
                     <?php
                     $produc->btnGioHang();
                     ?>
                 </div>
-            </div>
-            <div class="right-block">
-                <h2 class="product-name" style="height: 65px" ><a href="<?php echo $produc->linkProduct(); ?>"><?php echo $produc->nameProduct ?></a></h2>
-                <div class="content_price">
-                    <span class="price product-price"><?php echo $produc->Price() ?></span>
-                </div>
-                <div class="info-orther">
-                    <p>Mã Sản Phẩm: <?php echo $produc->ID ?></p>
-                    <p class="availability">Tình Trạng: <span>Còn hàng</span></p>
-                    <div class="product-desc">
-                        <?php
-                        echo strip_tags($produc->Summary);
-                        ?>
-                    </div>
-                </div>
+
             </div>
         </div>
-        <?php
+    <?php
     }
 
-    function HienThiMau($Pages, $function = "mau1") {
+    function HienThiMau($Pages, $function = "mau1")
+    {
         $Model_Pages = new \Model\pages();
         $Note = $Model_Pages->_decode($Pages["Note"]);
         $this->$function($Pages);
     }
 
-    function mau1($Pages) {
+    function mau1($Pages)
+    {
         $Model_news = new \Model\news();
         $newsByPage = $Model_news->NewsByPagesLimitNumber($Pages["idPa"], 5, FALSE);
-        ?>
+    ?>
         <div>
-            <div class="Mau1" >
+            <div class="Mau1">
                 <h2 class="text-center Mua1-title">
                     <?php echo $Pages["Name"]; ?>
                 </h2>
-                <div class="Mau1-Summary text-center" >
+                <div class="Mau1-Summary text-center">
                     <?php echo $Pages["Summary"]; ?>
                 </div>
-                <div class="Mau1-body" style="background-image: url('/public/bg/bg1.jpg')" >
-                    <div class="container"  >
-                        <div class=""  >
+                <div class="Mau1-body" style="background-image: url('/public/bg/bg1.jpg')">
+                    <div class="container">
+                        <div class="">
                             <?php
                             foreach ($newsByPage as $_news) {
                                 $news = new \Model\news($_news);
-                                ?>
-                                <div class="col-md-3 item"  >
-                                    <div class="post" >
-                                        <div class="post-thumb image-hover2 " style="margin: auto;" >
+                            ?>
+                                <div class="col-md-3 item">
+                                    <div class="post">
+                                        <div class="post-thumb image-hover2 " style="margin: auto;">
                                             <a href="<?php echo $news->linkNewsCurent(); ?>">
-                                                <img  onerror="this.src='/public/home/assets/data/option3/blog1.jpg'" class="img img-responsive" src="<?php echo $_news["UrlHinh"] ?>" alt="<?php echo $_news["Name"] ?>">
+                                                <img onerror="this.src='/public/home/assets/data/option3/blog1.jpg'" class="img img-responsive" src="<?php echo $_news["UrlHinh"] ?>" alt="<?php echo $_news["Name"] ?>">
                                             </a>
                                         </div>
                                         <div class="post-desc">
@@ -484,7 +498,7 @@ class functionLayout {
                                         </div>
                                     </div>
                                 </div>
-                                <?php
+                            <?php
                             }
                             ?>
 
@@ -494,31 +508,32 @@ class functionLayout {
                 <!-- ./blog list -->
             </div>
         </div>
-        <?php
+    <?php
     }
 
-    function mau2($Pages) {
+    function mau2($Pages)
+    {
         $Model_news = new \Model\news();
         $newsByPage = $Model_news->NewsByPagesLimitNumber($Pages["idPa"], 5, FALSE);
-        ?>
-        <div  >
+    ?>
+        <div>
             <!-- blog list -->
-            <div class="Mau2" >
+            <div class="Mau2">
                 <h2 class="text-center Mua2-title">
                     <span><?php echo $Pages["Name"] ?></span>
                 </h2>
-                <div class="Mau2-body" >
-                    <div class="container"  >
-                        <div class=""  >
+                <div class="Mau2-body">
+                    <div class="container">
+                        <div class="">
 
                             <?php
                             foreach ($newsByPage as $_news) {
                                 $news = new \Model\news($_news);
-                                ?>
-                                <div class="col-md-4 item" >
-                                    <div class="row" >
-                                        <div class="col-md-4 post-thumb  image-hover2 " style="margin: auto;" >
-                                            <div class="row" >
+                            ?>
+                                <div class="col-md-4 item">
+                                    <div class="row">
+                                        <div class="col-md-4 post-thumb  image-hover2 " style="margin: auto;">
+                                            <div class="row">
                                                 <a href="<?php echo $news->linkNewsCurent(); ?>">
                                                     <img onerror="this.src='/public/home/assets/data/option3/blog1.jpg'" class="img img-responsive" src="<?php echo $_news["UrlHinh"] ?>" alt="<?php echo $_news["Name"] ?>">
                                                 </a>
@@ -532,7 +547,7 @@ class functionLayout {
                                         </div>
                                     </div>
                                 </div>
-                                <?php
+                            <?php
                             }
                             ?>
                         </div>
@@ -541,20 +556,21 @@ class functionLayout {
                 <!-- ./blog list -->
             </div>
         </div>
-        <?php
+    <?php
     }
 
-    function mau3($Pages) {
+    function mau3($Pages)
+    {
         $Model_news = new \Model\news();
         $newsByPage = $Model_news->NewsByPagesLimitNumber($Pages["idPa"], 5, FALSE);
         $MPages = new \Model\pages($Pages);
-        ?>
+    ?>
         <div class="Mau3">
             <h2 class="text-center Mua2-title">
                 <span><?php echo $Pages["Name"] ?></span>
             </h2>
             <div class="container">
-                <div >
+                <div>
                     <div class="col-xs-12 col-sm-6 col-md-6" style="padding: 5px">
                         <div class="tin-chinh">
                             <a href="<?php echo $MPages->linkPagesCurent() ?>" title="<?php echo $MPages->Name ?>">
@@ -570,7 +586,7 @@ class functionLayout {
                         <?php
                         for ($index = 0; $index < count($newsByPage) && $index < 4; $index++) {
                             $news = new \Model\news($newsByPage[$index]);
-                            ?>
+                        ?>
                             <div class="col-xs-6 col-sm-6 col-md-6" style="padding:5px">
                                 <div class="tin-phu">
                                     <a href="<?php echo $news->linkNewsCurent() ?>" title="<?php echo $news->Name ?>">
@@ -584,7 +600,7 @@ class functionLayout {
                                     </a>
                                 </div>
                             </div>
-                            <?php
+                        <?php
                         }
                         ?>
 
@@ -592,26 +608,27 @@ class functionLayout {
                 </div>
             </div>
         </div>
-        <?php
+    <?php
     }
 
-    function mau4($Pages) {
+    function mau4($Pages)
+    {
         $Model_news = new \Model\news();
         $newsByPage = $Model_news->NewsByPagesLimitNumber($Pages["idPa"], 5, FALSE);
-        ?>
-        <div  >
-            <div class="container"  >
+    ?>
+        <div>
+            <div class="container">
                 <!-- blog list -->
                 <div class="blog-list">
                     <h2 class="text-center Mua2-title">
                         <span><?php echo $Pages["Name"] ?></span>
                     </h2>
                     <div class="blog-list-wapper">
-                        <ul class="owl-carousel" data-dots="false" data-loop="false" data-nav = "false" data-margin = "10" data-autoplayTimeout="1000" data-autoplayHoverPause = "true" data-responsive='{"0":{"items":2},"600":{"items":3},"1000":{"items":6}}'>
+                        <ul class="owl-carousel" data-dots="false" data-loop="false" data-nav="false" data-margin="10" data-autoplayTimeout="1000" data-autoplayHoverPause="true" data-responsive='{"0":{"items":2},"600":{"items":3},"1000":{"items":6}}'>
                             <?php
                             for ($index = 0; $index < count($newsByPage) && $index < 4; $index++) {
                                 $news = new \Model\news($newsByPage[$index]);
-                                ?>
+                            ?>
                                 <li>
                                     <div class="post-thumb image-hover2">
                                         <a href="<?php echo $news->linkNewsCurent() ?>" title="<?php echo $news->Name ?>">
@@ -619,7 +636,7 @@ class functionLayout {
                                         </a>
                                     </div>
                                 </li>
-                                <?php
+                            <?php
                             }
                             ?>
 
@@ -629,10 +646,11 @@ class functionLayout {
                 <!-- ./blog list -->
             </div>
         </div>
-        <?php
+<?php
     }
 
-    function DeCodeHTML() {
+    function DeCodeHTML()
+    {
         $str = ob_get_clean();
         $Content = new \Model\Content();
         $DSOption = $Content->Contents();
@@ -644,5 +662,4 @@ class functionLayout {
         }
         echo $str;
     }
-
 }

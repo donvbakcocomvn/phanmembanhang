@@ -2,19 +2,23 @@
 
 namespace Model\Product;
 
-class ProductService extends \Model\DB implements \Model\IModel {
+class ProductService extends \Model\DB implements \Model\IModel
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         \Model\DB::$TableName = table_prefix . "product";
         parent::__construct();
     }
 
-    public function Delete($id) {
+    public function Delete($id)
+    {
         $where = "`ID` = '{$id}'";
         return $this->UpdateDB($where);
     }
 
-    public function GetAllByBrandPT($name, &$total, $indexPage = 1, $pageNumber = 10) {
+    public function GetAllByBrandPT($name, &$total, $indexPage = 1, $pageNumber = 10)
+    {
         $indexPage = intval($indexPage);
         $pageNumber = intval($pageNumber);
         $sqlDanhMuc = "";
@@ -46,7 +50,8 @@ class ProductService extends \Model\DB implements \Model\IModel {
         return $this->SelectPT($where, $indexPage, $pageNumber, $total);
     }
 
-    public function GetAllPT($name, &$total, $indexPage = 1, $pageNumber = 10) {
+    public function GetAllPT($name, &$total, $indexPage = 1, $pageNumber = 10)
+    {
         $sqlDanhMuc = "";
         $sqlTinhTrang = "";
         $sqlBrand = "";
@@ -60,12 +65,14 @@ class ProductService extends \Model\DB implements \Model\IModel {
             $Brand = isset($name['Brand']) ? $name['Brand'] : FALSE;
             $name = isset($name['Name']) ? $name['Name'] : '';
         }
-
         if ($DanhMuc) {
             $sqlDanhMuc = "and `catID` = '{$DanhMuc}'";
         }
         if ($TinhTrang >= 0) {
-            $sqlTinhTrang = "and `Number` = '{$TinhTrang}'";
+            $sqlTinhTrang = "and `Number` > 0";
+            if ($TinhTrang == 0) {
+                $sqlTinhTrang = "and `Number` = 0";
+            }
         }
         if ($Brand != FALSE) {
             $sqlBrand = "and `brand` = '{$Brand}'";
@@ -74,29 +81,33 @@ class ProductService extends \Model\DB implements \Model\IModel {
         return $this->SelectPT($where, $indexPage, $pageNumber, $total);
     }
 
-    public function GetById($id) {
+    public function GetById($id)
+    {
         $where = "`ID` = '{$id}'";
         return $this->Select($where);
     }
 
-    public function Post($model) {
+    public function Post($model)
+    {
         return $this->Insert($model);
     }
 
-    public function Put($model) {
+    public function Put($model)
+    {
         $where = "`ID` = '{$model["ID"]}'";
         return $this->Update($model, $where);
     }
 
-    public static function ToSelect() {
+    public static function ToSelect()
+    {
         $a = new ProductService();
         $where = "1";
         return $a->GetToSelect($where, ["ID", "nameProduct"]);
     }
 
-    public static function GetProductById($item) {
+    public static function GetProductById($item)
+    {
         $ps = new ProductService();
         return $ps->GetById($item);
     }
-
 }

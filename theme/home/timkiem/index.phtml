@@ -8,8 +8,8 @@ $DSSP = $Produc->getProductsByName($keyword, $Pages, $Number, $sum);
 $view_theme = new theme\home\functionLayout();
 $view_theme->categorySlider();
 ?>
-<div id="view-product-list" class="view-product-list">
-    <h3 class="text-left" style="padding: 15px;font-size: 18px;" >Kết quả tìm kiếm "<?php echo $_GET["keyword"] ?>"</h3>
+<div id="view-product-list" class="view-product-list grid">
+    <h3 class="text-left" style="padding: 15px;font-size: 18px;">Kết quả tìm kiếm "<?php echo $_GET["keyword"] ?>"</h3>
     <ul class="display-product-option">
         <li class="view-as-grid selected">
             <span>grid</span>
@@ -19,19 +19,19 @@ $view_theme->categorySlider();
         </li>
     </ul>
     <!-- PRODUCT LIST -->
-    <ul class="product-list grid">
+    <ul class="product-list list">
         <?php
         if ($DSSP)
             foreach ($DSSP as $_Poroduct) {
-                ?>
-                <li class="col-sx-12 col-sm-3" style="margin-top: 0px;">
-                    <div class="row">
-                        <?php
-                        $view_theme->product($_Poroduct);
-                        ?>
-                    </div>
-                </li>
-                <?php
+        ?>
+            <li class="col-sx-12 col-sm-3" style="margin-top: 0px;">
+                <div class="row">
+                    <?php
+                    $view_theme->product($_Poroduct);
+                    ?>
+                </div>
+            </li>
+        <?php
             }
         ?>
     </ul>

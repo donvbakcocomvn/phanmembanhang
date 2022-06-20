@@ -2,13 +2,15 @@
 
 namespace Module\cart\Controller;
 
-class index extends \Controller_index {
+class index extends \Controller_index
+{
 
     public $Product;
     public $Cart;
     public $Breadcrumb;
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->Breadcrumb = new \Model\Breadcrumb();
         $this->Bread[] = [
@@ -19,12 +21,14 @@ class index extends \Controller_index {
         $this->Cart = new \Module\cart\Model\Cart();
     }
 
-    function index() {
+    function index()
+    {
         $this->Breadcrumb->setBreadcrumb($this->Bread);
-        $this->ViewThemeModule("", "", "cart");
+        $this->ViewThemeModule("", "", "");
     }
 
-    function addproduct() {
+    function addproduct()
+    {
         try {
 
             $id = $this->param[0];
@@ -47,7 +51,8 @@ class index extends \Controller_index {
         $this->Cart->_header($_SERVER["HTTP_REFERER"]);
     }
 
-    function muaNhanh() {
+    function muaNhanh()
+    {
         $id = $this->param[0];
         $p = $this->Product->ProductsByID($id, FALSE);
         $p["Summary"] = "";
@@ -61,28 +66,29 @@ class index extends \Controller_index {
         $this->Cart->_header(\Module\cart\Model\Cart::LinkDatHang());
     }
 
-    function removeproduct() {
+    function removeproduct()
+    {
         $id = $this->param[0];
         $this->Cart->removeProduct2Cart($id);
         $this->Cart->_header($_SERVER["HTTP_REFERER"]);
     }
 
-    function plusNumberProduct() {
+    function plusNumberProduct()
+    {
         $id = $this->param[0];
         $this->Cart->plusNumberProduct($id);
         $this->Cart->_header($_SERVER["HTTP_REFERER"]);
     }
 
-    function minuNumberProduct() {
+    function minuNumberProduct()
+    {
         $id = $this->param[0];
         $this->Cart->minuNumberProduct($id);
         $this->Cart->_header($_SERVER["HTTP_REFERER"]);
     }
 
-    function clearCart() {
+    function clearCart()
+    {
         $this->Cart->clearCart();
     }
-
 }
-
-?>

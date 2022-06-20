@@ -7,7 +7,8 @@
 
 namespace Model;
 
-class Products extends \Model\Database {
+class Products extends \Model\Database
+{
 
     const hinhsanphamTam = "public/hinhsanpham/";
 
@@ -17,6 +18,7 @@ class Products extends \Model\Database {
     public $catID;
     public $brand;
     public $nameProduct;
+    public $unitPrice;
     public $Alias;
     public $Price;
     public $oldPrice;
@@ -32,7 +34,8 @@ class Products extends \Model\Database {
     public $isShow;
     public $lang;
 
-    function __construct($product = null) {
+    function __construct($product = null)
+    {
         parent::__construct();
         if ($product) {
             if (!is_array($product)) {
@@ -46,6 +49,7 @@ class Products extends \Model\Database {
             $this->Code = $product["Code"];
             $this->Username = $product["Username"];
             $this->catID = $product["catID"];
+            $this->unitPrice = $product["unitPrice"] ?? "";
             $this->brand = !empty($product["brand"]) ? $product["brand"] : null;
             $this->nameProduct = $product["nameProduct"];
             $this->Alias = $product["Alias"];
@@ -65,25 +69,30 @@ class Products extends \Model\Database {
         }
     }
 
-    function Products() {
+    function Products()
+    {
         return parent::ProductsAll();
     }
 
-    function ProductsAll() {
+    function ProductsAll()
+    {
         return parent::ProductsAll();
     }
 
-    function ProductsAllPT($Page = 1, $Number = 20, &$Tong = 0) {
+    function ProductsAllPT($Page = 1, $Number = 20, &$Tong = 0)
+    {
         return parent::ProductsAllPT($Page, $Number, $Tong);
     }
 
-    function showPrice($a) {
+    function showPrice($a)
+    {
         if ($a > 0)
             return \Common\Common::MoneyFomat($a);
         return "Liên Hệ";
     }
 
-    function UrlHinh() {
+    function UrlHinh()
+    {
         $fileName = "public/img/images/sanpham/" . $this->UrlHinh;
         if (file_exists($fileName)) {
             return BASE_URL . "public/img/images/sanpham/" . $this->UrlHinh;
@@ -96,7 +105,8 @@ class Products extends \Model\Database {
         return $this->UrlHinh;
     }
 
-    function UrlHinh250x280() {
+    function UrlHinh250x280()
+    {
         $avata = $this->UrlHinh();
         $avata = str_replace(BASE_URL, "/", $avata);
         $thums = $this->UrlHinhName($avata, 250, 280);
@@ -108,7 +118,8 @@ class Products extends \Model\Database {
         return $imgComp->layHinh($avata, 250, 280);
     }
 
-    function UrlHinhName($avata, $w, $h) {
+    function UrlHinhName($avata, $w, $h)
+    {
         $url = substr($avata, 1);
         $a = explode(basename($url), $url);
         $ThuMuc = reset($a);
@@ -125,79 +136,95 @@ class Products extends \Model\Database {
         return null;
     }
 
-    function Price() {
+    function Price()
+    {
         $a = $this->Price;
         if ($a > 0)
             return \Common\Common::MoneyFomat($this->Price);
         return "Liên Hệ";
     }
 
-    function GiaNhap() {
+    function GiaNhap()
+    {
         $a = $this->GiaNhap;
         if ($a > 0)
             return \Common\Common::MoneyFomat($this->Price);
         return "";
     }
 
-    function CatName($id) {
+    function CatName($id)
+    {
         $a = $this->Category4Id($id);
         return $a->catName;
     }
 
-    function DeleteProductsByID($ID) {
+    function DeleteProductsByID($ID)
+    {
         $p = $this->ProductsByID($ID);
         $this->delete(table_prefix . "product", "`ID` = '{$ID}'");
         $this->XoaHinh($p->UrlHinh);
     }
 
-    function EditProducts($Product) {
+    function EditProducts($Product)
+    {
         return parent::EditProducts($Product);
     }
 
-    function AddProducts($Product) {
+    function AddProducts($Product)
+    {
         return parent::AddProducts($Product);
     }
 
-    function linkProduct() {
+    function linkProduct()
+    {
         $id = $this->ID;
         return "/" . $this->Alias . "-sp-{$id}.html";
     }
 
-    function ProductsByID($Id, $isobj = True) {
+    function ProductsByID($Id, $isobj = True)
+    {
         return parent::ProductsByID($Id, $isobj);
     }
 
-    function ProductsByIDEncode($Id) {
+    function ProductsByIDEncode($Id)
+    {
         $sql = "SELECT * FROM `" . table_prefix . "product` where sha1(`ID`) = '{$Id}'";
         $this->Query($sql);
         return $this->fetchRow();
     }
 
-    function ProductsByAlias($Alias, $isobj = True) {
+    function ProductsByAlias($Alias, $isobj = True)
+    {
         return parent::ProductsByAlias($Alias, $isobj);
     }
 
-    function ProductsByCatID($CatId, $page, $number, &$sum) {
+    function ProductsByCatID($CatId, $page, $number, &$sum)
+    {
         return parent::ProductsByCatID($CatId, $page, $number, $sum);
     }
 
-    function getProductsByName($CatId, $page, $number, &$sum) {
+    function getProductsByName($CatId, $page, $number, &$sum)
+    {
         return $this->ProductsByName($CatId, $page, $number, $sum);
     }
 
-    function AllProductsByCatID($CatId) {
+    function AllProductsByCatID($CatId)
+    {
         parent::AllProductsByCatID($CatId);
     }
 
-    function imagesDirectory() {
+    function imagesDirectory()
+    {
         return "/public/img/images/sanpham/" . $this->ID . "/";
     }
 
-    function imagesDirectory4Product($id) {
+    function imagesDirectory4Product($id)
+    {
         return "/public/img/images/sanpham/" . $id . "/";
     }
 
-    function getAllImges($id) {
+    function getAllImges($id)
+    {
         $dir = new \lib\redDirectory();
         $a = [];
         $dir->redDirectoryByPath("public/img/images/sanpham/" . $id . "/", $a);
@@ -207,61 +234,70 @@ class Products extends \Model\Database {
         return $a;
     }
 
-    public function GiamGia() {
-        return (100 - floor(($this->Price / $this->oldPrice ) * 100));
+    public function GiamGia()
+    {
+        return (100 - floor(($this->Price / $this->oldPrice) * 100));
     }
 
-    public function oldPrice() {
+    public function oldPrice()
+    {
         $a = $this->oldPrice;
         if ($a > 0)
             return number_format($a, 0, '.', ',') . " <sup>đ</sup>";
         return "";
     }
 
-    public function linkGioHang() {
+    public function linkGioHang()
+    {
         if ($this->Number == 0) {
             return "#";
         }
         return "/cart/index/addproduct/" . $this->ID;
     }
 
-    public function linkMuaNgay() {
+    public function linkMuaNgay()
+    {
         return "/cart/index/muaNhanh/" . $this->ID;
     }
 
-    public function ReSetSoLuong($Id, $sl) {
+    public function ReSetSoLuong($Id, $sl)
+    {
         $p = $this->ProductsByID($Id, FALSE);
         $p["Number"] = $p["Number"] + $sl;
         $p["Number"] = max($p["Number"], 0);
         return $this->EditProducts($p);
     }
 
-    public function TinhTrang() {
+    public function TinhTrang()
+    {
         if ($this->Number == 0) {
             return "Hết Hàng";
         }
         return "Còn Hàng";
     }
 
-    public function btnGioHang($class = "") {
+    public function btnGioHang($class = "")
+    {
         if ($this->Number == 0) {
             return;
         }
-        ?>
-        <a ng-click="addProductCart('<?php echo $this->ID; ?>')" class="<?php echo $class; ?>" >Thêm Giỏ Hàng</a>
-        <?php
+?>
+        <a ng-click="addProductCart('<?php echo $this->ID; ?>')" class="<?php echo $class; ?>">Thêm Giỏ Hàng</a>
+    <?php
     }
 
-    public function btnMuaNgay($class = "") {
+    public function btnMuaNgay($class = "")
+    {
         if ($this->Number == 0) {
             return;
         }
-        ?>
+    ?>
         <a class="<?php echo $class; ?>" href="<?php echo $this->linkMuaNgay(); ?>">Mua Ngay</a>
-        <?php
+<?php
     }
 
-    public function Obj2Api() {
+    public function Obj2Api()
+    {
 
         $ar["ID"] = $this->ID;
         $ar["Code"] = $this->Code;
@@ -291,7 +327,8 @@ class Products extends \Model\Database {
         return $ar;
     }
 
-    public function ProductsNameAllPT($name = "", $Page = 1, $Number = 20, &$Tong = 0) {
+    public function ProductsNameAllPT($name = "", $Page = 1, $Number = 20, &$Tong = 0)
+    {
         $Page = intval($Page);
         $Page = max($Page, 1);
         $start = ($Page - 1) * $Number;
@@ -305,7 +342,8 @@ class Products extends \Model\Database {
         return $a;
     }
 
-    public function ProductsNameAllPTNangCao($options = ["name" => "", "catID" => 0], $Page = 1, $Number = 20, &$Tong = 0) {
+    public function ProductsNameAllPTNangCao($options = ["name" => "", "catID" => 0], $Page = 1, $Number = 20, &$Tong = 0)
+    {
         $name = !empty($options["name"]) ? $options["name"] : '';
         $catID = !empty($options["catID"]) ? $options["catID"] : 0;
         $Page = intval($Page);
@@ -326,32 +364,37 @@ class Products extends \Model\Database {
         return $a;
     }
 
-    function Category($id = null) {
+    function Category($id = null)
+    {
         if ($id == null)
             $id = $this->catID;
         $a = $this->Category4Id($id, false);
         return new Category($a);
     }
 
-    public function ProductsGiamGia($indexPges, $numberPges, $sum) {
+    public function ProductsGiamGia($indexPges, $numberPges, $sum)
+    {
         $sql = "SELECT * FROM `" . table_prefix . "product` where `oldPrice` > 0";
         $this->Query($sql);
         $a = $this->fetchAll();
         return $a;
     }
 
-    public function DateCreate() {
+    public function DateCreate()
+    {
         return date("d-m-Y h:i:s", strtotime($this->DateCreate));
     }
 
-    public function brand() {
+    public function brand()
+    {
         $brand = new Brand\BrandService();
         if ($this->brand)
             return new Brand\BrandService($brand->GetById($this->brand));
         return new Brand\BrandService($brand->GetById(Brand\BrandService::NoBrand()));
     }
 
-    public function XoaHinh($urlHinh) {
+    public function XoaHinh($urlHinh)
+    {
         if (file_exists($urlHinh)) {
             unlink($urlHinh);
             return;
@@ -362,11 +405,13 @@ class Products extends \Model\Database {
         }
     }
 
-    public function isShow() {
+    public function isShow()
+    {
         return $this->isShow == 1 ? "Hiện" : "Ẩn";
     }
 
-    static function status() {
+    static function status()
+    {
         $status = [1 => "Còn Hàng", 0 => "Hết Hàng"];
         return $status;
     }
