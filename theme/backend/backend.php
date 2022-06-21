@@ -4,10 +4,12 @@ namespace theme\backend;
 
 use Module\duser\Model\Duser;
 
-class backend extends \Model\Database {
+class backend extends \Model\Database
+{
 
-    function head() {
-        ?>
+    function head()
+    {
+?>
         <link rel="shortcut icon" href="/public/no-image.jpg" />
         <!-- Bootstrap 3.3.5 -->
         <link rel="stylesheet" href="/public/admin/bootstrap/css/bootstrap.min.css">
@@ -32,19 +34,20 @@ class backend extends \Model\Database {
         <link rel="stylesheet" href="/public/admin/plugins/daterangepicker/daterangepicker-bs3.css">
         <!-- bootstrap wysihtml5 - text editor -->
         <link rel="stylesheet" href="/public/admin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-        <link href="/public/admin/plugins/select2/select2.min.css" rel="stylesheet" type="text/css"/>
-        <link href="/public/admin/CustomCss.css?v=<?php echo filemtime("public/admin/CustomCss.css"); ?>" rel="stylesheet" type="text/css"/>
+        <link href="/public/admin/plugins/select2/select2.min.css" rel="stylesheet" type="text/css" />
+        <link href="/public/admin/CustomCss.css?v=<?php echo filemtime("public/admin/CustomCss.css"); ?>" rel="stylesheet" type="text/css" />
         <script src="/public/ckfinder/ckfinder.js" type="text/javascript"></script>
         <!-- jQuery 2.1.4 -->
         <script src="/public/admin/plugins/jQuery/jQuery-2.1.4.min.js"></script>
 
 
-        <?php
+    <?php
     }
 
-    function Menu() {
+    function Menu()
+    {
         $user = Duser::CurentUsernameAdmin(true);
-        ?>
+    ?>
         <header class="main-header ">
             <!-- Logo -->
             <a href="/backend/" class="logo">
@@ -57,7 +60,7 @@ class backend extends \Model\Database {
                 </a>
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
-                        <li><a href="/" target="_blank"  >Xem Website</a></li>
+                        <li><a href="/" target="_blank">Xem Website</a></li>
                         <li class="hidden dropdown messages-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-envelope-o"></i>
@@ -68,7 +71,8 @@ class backend extends \Model\Database {
                                 <li>
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu">
-                                        <li><!-- start message -->
+                                        <li>
+                                            <!-- start message -->
                                             <a href="#">
                                                 <div class="pull-left">
                                                     <img src="/public/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
@@ -134,7 +138,7 @@ class backend extends \Model\Database {
                             </ul>
                         </li>
                         <!-- Notifications: style can be found in dropdown.less -->
-                        <li  class="hidden dropdown notifications-menu">
+                        <li class="hidden dropdown notifications-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"></i>
                                 <span class="label label-warning">10</span>
@@ -185,7 +189,8 @@ class backend extends \Model\Database {
                                 <li>
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu">
-                                        <li><!-- Task item -->
+                                        <li>
+                                            <!-- Task item -->
                                             <a href="#">
                                                 <h3>
                                                     Design some buttons
@@ -198,7 +203,8 @@ class backend extends \Model\Database {
                                                 </div>
                                             </a>
                                         </li><!-- end task item -->
-                                        <li><!-- Task item -->
+                                        <li>
+                                            <!-- Task item -->
                                             <a href="#">
                                                 <h3>
                                                     Create a nice theme
@@ -211,7 +217,8 @@ class backend extends \Model\Database {
                                                 </div>
                                             </a>
                                         </li><!-- end task item -->
-                                        <li><!-- Task item -->
+                                        <li>
+                                            <!-- Task item -->
                                             <a href="#">
                                                 <h3>
                                                     Some task I need to do
@@ -224,7 +231,8 @@ class backend extends \Model\Database {
                                                 </div>
                                             </a>
                                         </li><!-- end task item -->
-                                        <li><!-- Task item -->
+                                        <li>
+                                            <!-- Task item -->
                                             <a href="#">
                                                 <h3>
                                                     Make beautiful transitions
@@ -276,7 +284,7 @@ class backend extends \Model\Database {
             </nav>
         </header>
         <!-- Left side column. contains the logo and sidebar -->
-        <aside class="main-sidebar" ng-controller="bklayoutController" ng-init='bklayoutInit(<?php echo $this->_encode($_SESSION[QuanTri]); ?>)'  >
+        <aside class="main-sidebar" ng-controller="bklayoutController" ng-init='bklayoutInit(<?php echo $this->_encode($_SESSION[QuanTri]); ?>)'>
             <!-- sidebar: style can be found in sidebar.less -->
             <section class="sidebar ">
                 <!-- Sidebar user panel -->
@@ -292,8 +300,8 @@ class backend extends \Model\Database {
                 <!-- /.search form -->
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu ">
-                    <li class="header text-center text-uppercase " style="color: #ddd;" ><b>Danh Mục Chức Năng</b></li>
-                    <li class="treeview hidden">
+                    <li class="header text-center text-uppercase " style="color: #ddd;"><b>Danh Mục Chức Năng</b></li>
+                    <li class="treeview  ">
                         <a href="/cart/mcart/index">
                             <i class="fa fa-shopping-cart"></i> <span>Tạo Đơn Hàng</span>
                         </a>
@@ -305,134 +313,147 @@ class backend extends \Model\Database {
                     </li>
                     <?php
                     if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::QuanLyThanhToan])) {
-                        ?>
+                    ?>
                         <li class="treeview">
                             <a href="/cart/xacnhandonhang/index/">
                                 <i class="fa fa-dollar"></i> <span>XN Nhận Tiền</span>
                             </a>
                         </li>
-                        <?php
+                    <?php
                     }
-                    if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::QuanLySanPham])) {
-                        ?>
-                        <li class="treeview">
-                            <a href="/backend/hinhanh">
-                                <i class="fa fa-image"></i> <span>Thư Viện Hình</span>
-                            </a>
-                        </li>
-                        <li class="treeview">
-                            <a href="/brand/index">
-                                <i class="fa fa-image"></i> <span>Thương Hiệu</span>
-                            </a>
-                        </li>
-                        <li class="treeview">
-                            <a href="/mcategory/index">
-                                <i class="fa fa-list-alt"></i> <span>Danh Mục Sản Phẩm</span>
 
-                            </a>
-                        </li>
-                        <?php
-                    }
                     if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::QuanLyDonHang])) {
-                        ?>
-                        <li><a href="/cart/vieworder"><i class="fa fa-shopping-cart"></i> <span>Đơn Hàng</span></a></li>
-                        <li><a href="/cart/mcart/trangnoidung"><i class="fa fa-gear"></i> <span>Cấu Hình Đặt Hàng</span></a></li>
-                        <li><a href="/mail/index/index/MaiThongBaoDonHang"><i class="fa fa-envelope"></i> <span>Cài Đặt Mail Đơn Hàng</span></a></li>
-                        <?php
+                    ?>
+                        <li><a href="/cart/vieworder"><i class="fa fa-shopping-cart"></i> <span>Quản Lý Đơn Hàng</span></a></li>
+
+                    <?php
                     }
                     if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::QuanLySanPham])) {
-                        ?>
+                    ?>
                         <li class="treeview <?php echo \Model\menuactive::SetActive('mproduct'); ?>">
                             <a href="/mproduct/index">
                                 <i class="fa fa-list-alt"></i> <span>Quản Lý Sản Phẩm</span>
                                 <i class="fa fa-angle-right pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
+                                <li>
+                                    <a href="/mcategory/index"><i class="fa fa-list-alt"></i>
+                                        <span>Danh Mục Sản Phẩm</span>
+                                    </a>
+                                </li>
                                 <li><a href="/mproduct/index"><i class="fa fa-circle-o"></i> Quản Lý Sản Phẩm</a></li>
                                 <li><a href="/mproduct/sanphamhtheohinh"><i class="fa fa-circle-o"></i> Thêm Nhanh</a></li>
                             </ul>
                         </li>
-                        <li class="treeview">
-                            <a href="/mtheme/">
-                                <i class="fa fa-list-alt"></i> <span>Quản Lý Giao Diện</span>
 
-                            </a>
-                        </li>
-                        <li class="treeview">
-                            <a href="/minfor/index/thongtincongty">
-                                <i class="fa fa-list-alt"></i> <span>Thông tin công ty</span>
 
-                            </a>
-                        </li>
-                        <li class="treeview <?php echo \Model\menuactive::SetActive('madv'); ?>">
-                            <a href="#">
-                                <i class="fa fa-share"></i> <span>Quản Lý Quảng Cáo</span>
-                                <i class="fa fa-angle-right pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="/madv/index"><i class="fa fa-circle-o"></i> Quản Lý Quảng Cáo</a></li>
-                                <li><a href="/madv/video"><i class="fa fa-circle-o"></i> Quản Lý Video</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview  <?php echo \Model\menuactive::SetActive('mnews'); ?> ">
-                            <a href="/mpage/index">
-                                <i class="fa fa-list-alt"></i> <span>Quản Lý Bài Viết</span>
-                                <i class="fa fa-angle-right pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="/mpage/index"><i class="fa fa-circle-o"></i> Trang </a></li>
-                                <li><a href="/newscategory/index"><i class="fa fa-circle-o"></i> Danh mục bài biết</a></li>
-                                <li><a href="/mnews/index"><i class="fa fa-circle-o"></i> Bài viết</a></li>
-                                <li><a href="/mnews/addnews"><i class="fa fa-circle-o"></i> Thêm Bài viết</a></li>
-                            </ul>
-                        </li>
-                        <?php
+                    <?php
                     }
                     if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::ChinhSuaNoiDung])) {
-                        ?>
+                    ?>
 
-                        <?php
+                    <?php
                     }
-                    if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin])) {
-                        ?>
-                        <li class="treeview">
-                            <a href="/duser/index/index">
-                                <i class="fa fa-list-alt"></i> <span>Quản Lý User</span>
-                            </a>
-                        </li>
-                        <?php
-                    }
-                    if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin])) {
-                        ?>
 
-                        <?php
+                    if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin])) {
+                    ?>
+
+                    <?php
                     }
                     if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin])) {
-                        ?>
+                    ?>
                         <li class="treeview">
                             <a href="/setting/index/">
                                 <i class="fa fa-gear"></i> <span>Cài Đặt</span>
+                                <i class="fa fa-angle-right pull-right"></i>
                             </a>
+                            <ul class="treeview-menu">
+                                <?php
+                                if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::QuanLySanPham])) {
+                                ?>
+                                    <li class="treeview">
+                                        <a href="/backend/hinhanh">
+                                            <i class="fa fa-image"></i> <span>Thư Viện Hình</span>
+                                        </a>
+                                    </li>
+                                    <li class="treeview">
+                                        <a href="/brand/index">
+                                            <i class="fa fa-image"></i> <span>Thương Hiệu</span>
+                                        </a>
+                                    </li>
+
+                                <?php
+                                }
+                                if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin])) {
+                                ?>
+                                    <li class="treeview">
+                                        <a href="/duser/index/index">
+                                            <i class="fa fa-list-alt"></i> <span>Quản Lý User</span>
+                                        </a>
+                                    </li>
+                                <?php
+                                }
+                                ?>
+                                <li class="treeview  <?php echo \Model\menuactive::SetActive('mnews'); ?> ">
+                                    <a href="/mpage/index">
+                                        <i class="fa fa-list-alt"></i> <span>Quản Lý Bài Viết</span>
+                                        <i class="fa fa-angle-right pull-right"></i>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="/mpage/index"><i class="fa fa-circle-o"></i> Trang </a></li>
+                                        <li><a href="/newscategory/index"><i class="fa fa-circle-o"></i> Danh mục bài biết</a></li>
+                                        <li><a href="/mnews/index"><i class="fa fa-circle-o"></i> Bài viết</a></li>
+                                        <li><a href="/mnews/addnews"><i class="fa fa-circle-o"></i> Thêm Bài viết</a></li>
+                                    </ul>
+                                </li>
+                                <li class="treeview">
+                                    <a href="/mtheme/">
+                                        <i class="fa fa-list-alt"></i> <span>Quản Lý Giao Diện</span>
+
+                                    </a>
+                                </li>
+                                <li class="treeview">
+                                    <a href="/minfor/index/thongtincongty">
+                                        <i class="fa fa-list-alt"></i> <span>Thông tin công ty</span>
+
+                                    </a>
+                                </li>
+                                <li class="treeview <?php echo \Model\menuactive::SetActive('madv'); ?>">
+                                    <a href="#">
+                                        <i class="fa fa-share"></i> <span>Quản Lý Quảng Cáo</span>
+                                        <i class="fa fa-angle-right pull-right"></i>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="/madv/index"><i class="fa fa-circle-o"></i> Quản Lý Quảng Cáo</a></li>
+                                        <li><a href="/madv/video"><i class="fa fa-circle-o"></i> Quản Lý Video</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="/cart/mcart/trangnoidung"><i class="fa fa-gear"></i> <span>Cấu Hình Đặt Hàng</span></a></li>
+                                <li><a href="/mail/index/index/MaiThongBaoDonHang"><i class="fa fa-envelope"></i> <span>Cài Đặt Mail Đơn Hàng</span></a></li>
+                            </ul>
                         </li>
-                        <?php
+                    <?php
                     }
+
                     ?>
                 </ul>
 
             </section>
             <!-- /.sidebar -->
         </aside>
-        <?php
+    <?php
     }
 
-    function js() {
-        ?>
+    function js()
+    {
+    ?>
 
         <!-- jQuery UI 1.11.4 -->
         <script src="/public/admin/plugins/jQueryUI/jquery-ui.min.js" type="text/javascript"></script>
         <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
         <script>
-                            $.widget.bridge('uibutton', $.ui.button);</script>
+            $.widget.bridge('uibutton', $.ui.button);
+        </script>
         <!-- Bootstrap 3.3.5 -->
         <script src="/public/admin/bootstrap/js/bootstrap.min.js"></script>
         <!-- Morris.js charts -->
@@ -463,14 +484,14 @@ class backend extends \Model\Database {
         <script src="/public/admin/dist/js/pages/dashboard.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="/public/admin/dist/js/demo.js"></script>
-        <script type="text/javascript" src="/public/admin/AppTheme.js?v=<?php echo filemtime('public/admin/AppTheme.js'); ?>"   ></script>
+        <script type="text/javascript" src="/public/admin/AppTheme.js?v=<?php echo filemtime('public/admin/AppTheme.js'); ?>"></script>
         <script src="/public/admin/App.js?v=<?php echo filemtime('public/admin/App.js'); ?>" type="text/javascript"></script>
-        <?php
+<?php
     }
 
-    function Breadcrumb() {
+    function Breadcrumb()
+    {
         $brea = new \Model\Breadcrumb();
         $brea->backend();
     }
-
 }
