@@ -51,12 +51,12 @@
                 </a>
             </div>
             <div class="col-xs-4 col-sm-12 col-md-6 col-lg-6 header-search-box">
-                <form action="/timkiem/index/" method="get" class="form-inline">
+                <div class="form-inline">
                     <div class="form-group input-serach">
-                        <input value="<?php echo isset($_GET["keyword"]) ? $_GET["keyword"] : '' ?>" name="keyword" type="text" placeholder="Từ khóa">
+                        <input ng-model="seachKeyWord" ng-change="TimKiemSanPham()" name="keyword" type="text" placeholder="Từ khóa">
                     </div>
-                    <button type="submit" class="pull-right btn-search"></button>
-                </form>
+                    <button type="submit" ng-click="TimKiemSanPham()" class="pull-right btn-search"></button>
+                </div>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 group-button-header">
                 <div class="d-flex HotLine">

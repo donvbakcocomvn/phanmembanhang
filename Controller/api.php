@@ -180,6 +180,30 @@ class Controller_api extends Application
         $lib = new lib\APIs();
         $lib->ArrayToApi($Ps);
     }
+    function Product()
+    {
+        $keyword = $_GET["keyword"] ?? "";
+        $Page = $_GET["page"] ?? 1;
+        $Number = $_GET["number"] ?? 24;
+        $Tong = 0;
+        $Product = new Model\Products();
+        $Ps = $Product->ProductsNameAllPTNangCao(["name" => $keyword], $Page, $Number,  $Tong);
+        foreach ($Ps as $key => $_ps) {
+            $_ps = new Model\Products($_ps);
+            $Ps[$key]["UrlHinh"] = $_ps->UrlHinh();
+            $Ps[$key]["Price"] = $_ps->Price();
+            $Ps[$key]["Summary"] = "";
+            $Ps[$key]["Content"] = "";
+            $Ps[$key]["Link"] = $_ps->linkProduct();
+        }
+        $data["Product"] = $Ps;
+        $data["page"] = $Page;
+        $data["number"] = $Number;
+        $data["keyword"] = $keyword;
+
+        $lib = new lib\APIs();
+        $lib->ArrayToApi($data);
+    }
 
     function getProductsHotView()
     {

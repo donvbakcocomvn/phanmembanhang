@@ -282,10 +282,22 @@ class Products extends \Model\Database
             return;
         }
 ?>
-        <a ng-click="addProductCart('<?php echo $this->ID; ?>')" class="<?php echo $class; ?>">Thêm Giỏ Hàng</a>
+        <a class="<?php echo $class; ?>" ng-click="addProductCart('<?php echo $this->ID; ?>')" class="<?php echo $class; ?>">
+            <i class="fa fa-plus"></i>
+        </a>
     <?php
     }
-
+    public function btnGioHangMinus($class = "")
+    {
+        if ($this->Number == 0) {
+            return;
+        }
+    ?>
+        <a class="<?php echo $class; ?>" ng-click="removeProductCart('<?php echo $this->ID; ?>')" class="<?php echo $class; ?>">
+            <i class="fa fa-minus"></i>
+        </a>
+    <?php
+    }
     public function btnMuaNgay($class = "")
     {
         if ($this->Number == 0) {
@@ -353,12 +365,12 @@ class Products extends \Model\Database
         if ($catID == 0) {
             $catSQL = " ";
         }
-        $sql = "SELECT count(ID) as `Tong` FROM `" . table_prefix . "product` where `nameProduct` like '%{$name}%' {$catSQL} ";
+        $sql = "SELECT count(ID) as `Tong` FROM `" . table_prefix . "product` where `nameProduct` like '%{$name}%' or `Code` like '%{$name}%' {$catSQL} ";
         $sql = trim($sql);
         $this->Query($sql);
         $a = $this->fetchRow();
         $Tong = $a["Tong"];
-        $sql = "SELECT * FROM `" . table_prefix . "product` where `nameProduct` like '%{$name}%' {$catSQL} order by `DateCreate` DESC limit {$start},{$Number} ";
+        $sql = "SELECT * FROM `" . table_prefix . "product` where `nameProduct` like '%{$name}%' or `Code` like '%{$name}%' {$catSQL} order by `DateCreate` DESC limit {$start},{$Number} ";
         $this->Query($sql);
         $a = $this->fetchAll();
         return $a;

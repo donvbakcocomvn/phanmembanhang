@@ -33,9 +33,9 @@ class index extends \Controller_index
 
             $id = $this->param[0];
             $p = $this->Product->ProductsByID($id, FALSE);
-            if ($p["Number"] == 0) {
-                throw new \Exception("Đã Hết Hàng");
-            }
+            // if ($p["Number"] == 0) {
+            //     throw new \Exception("Đã Hết Hàng");
+            // }
             $p["Summary"] = "";
             $p["Content"] = "";
             $p["Number"] = 1;
@@ -48,7 +48,7 @@ class index extends \Controller_index
         } catch (\Exception $exc) {
             \Model\ThongBao::SetThongBao([\Model\ThongBao::Danger, $exc->getMessage()]);
         }
-        $this->Cart->_header($_SERVER["HTTP_REFERER"]);
+        // $this->Cart->_header($_SERVER["HTTP_REFERER"]);
     }
 
     function muaNhanh()

@@ -12,7 +12,6 @@ class ThanhToan
     private $password;
     private $parameters = array();
 
-
     const SERVICE_WSDL = 'http://113.161.252.163:8000/service.asmx?WSDL';
     public function Header($userName, $passWord)
     {
