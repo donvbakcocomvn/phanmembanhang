@@ -41,7 +41,17 @@ class Database extends \Model\iDatabase
             return $this->fetchRow();
         }
     }
-
+    public function Category4Code($id, $isObj = true)
+    {
+        $sql = "SELECT * FROM `" . table_prefix . "categories` where `Code` = '{$id}'";
+        $this->Query($sql);
+        if ($isObj) {
+            $a = $this->fetchRow();
+            return new \Model\Category($a);
+        } else {
+            return $this->fetchRow();
+        }
+    }
     public function Categorys()
     {
         $sql = "SELECT * FROM `" . table_prefix . "categories` where `parentCatID` = 0 and `Public` = 1";

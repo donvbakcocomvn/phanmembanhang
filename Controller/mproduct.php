@@ -1,6 +1,7 @@
 <?php
 
 use App\Product;
+use Model\Category;
 use Module\duser\Model\Duser;
 
 class Controller_mproduct extends Controller_backend
@@ -432,11 +433,14 @@ class Controller_mproduct extends Controller_backend
                 $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($file_type);
                 $spreadsheet = $reader->load($_FILES['import_excel']['tmp_name']);
                 $data = $spreadsheet->getSheet(0)->toArray();
+                $danhMuc = new Category();
                 foreach ($data as $row) {
                     $id = intval($row[0]);
                     if ($id > 0) {
                         $row[4] = str_replace(",", "", $row[4]);
                         $price = intval($row[4]);
+                        $danhmuc = intval($row[5]);
+                        $modelDanhMuc =  $danhMuc->Category4Code($danhmuc, true);
                         $sp["Code"] = $row[3];
                         $sp["nameProduct"] = $row[1];
                         $sp["unitPrice"] = $row[2];
@@ -445,7 +449,7 @@ class Controller_mproduct extends Controller_backend
                         $sp['Alias'] = $this->Product->bodautv($sp["nameProduct"]);
                         $sp['oldPrice'] = 0;
                         $sp['Summary'] = "";
-                        $sp['catID'] = "";
+                        $sp['catID'] = $modelDanhMuc->catID;
                         $sp['brand'] = "";
                         $sp['Content'] = "";
                         $sp['UrlHinh'] = "";
