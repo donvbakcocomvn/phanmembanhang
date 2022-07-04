@@ -1,8 +1,10 @@
 <?php
 
+use Common\Common;
+use Model\ThanhToan;
 use Model\UsersService;
 
-class Controller_index extends Application
+class Controller_index extends Controller_backend
 {
 
     public $param;
@@ -12,6 +14,7 @@ class Controller_index extends Application
 
     function __construct()
     {
+        parent::__construct();
         $this->param = $this->getParam();
         $this->Pages = new \Model\pages();
         $this->News = new \Model\news();
@@ -70,6 +73,24 @@ class Controller_index extends Application
     }
     public function thanhtoan()
     {
+        try {
+            $thanhToan = new ThanhToan();
+            if (isset($_POST["thanhToan"])) {
+                $modelThanhToan = $_POST["thanhToan"];
+                $resul =  $thanhToan->InsertLSGiaodich(
+                    $modelThanhToan["MaThe"],
+                    1400,
+                    "ttdh" . date("Y-m-d", time()),
+                );
+                echo $resul->InsertLSGiaodichResult;
+                if ($resul->InsertLSGiaodichResult == 1) {
+                    Common::ToUrl("/cart/thanhcong/");
+                }
+                // 042D5D72D85C80
+            }
+        } catch (\Exception $th) {
+            echo $th->getMessage();
+        }
         $this->ViewTheme([], Model_ViewTheme::get_viewthene());
     }
     function category($url)

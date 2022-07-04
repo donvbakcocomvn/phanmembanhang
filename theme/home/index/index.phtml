@@ -26,10 +26,15 @@
          <div class="col-md-3">
              <table class="table table-bordered table-responsive cart_summary">
                  <thead>
-                     <tr style="background-color: gold;padding-bottom: 5px;padding-top: 5px;">
-                         <th class="">
+                     <tr style="background-color: gold;">
+                         <th class="" style="padding: 0;padding-left:10px;padding-top: 5px;">
                              <a class="pull-right" ng-click="XoaGioHang()" style="color: #000"><i class="fa fa-2x fa-trash-o"></i></a>
                              <p><b>Sản phẩm đã chọn</b></p>
+                         </th>
+                     </tr>
+                     <tr>
+                         <th class="" style="padding: 0;padding-left:10px;padding-top: 5px;">
+                             <input ng-change="SanPhamByCode(MaSanPham)" autofocus type="text" ng-model="MaSanPham" placeholder="Mã Sản Phẩm" />
                          </th>
                      </tr>
                  </thead>

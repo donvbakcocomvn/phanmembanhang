@@ -110,7 +110,10 @@ app.controller(
     $http.get("/api/getMenus/menu").then(function (res) {
       $scope._Menu = res.data;
     });
-    $scope.Title = "<h1>abc</h1>";
+
+    $scope.SanPhamByCode = (code) => {
+      console.log(code);
+    };
     $scope.IntToArray = function (lengthArray) {
       return Array(lengthArray);
     };

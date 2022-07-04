@@ -9,18 +9,17 @@ error_reporting(E_ALL);
 
 include "./vendor/autoload.php";
 
-function minify_output($buffer) {
+function minify_output($buffer)
+{
     $search = array(
         '/\>[^\S ]+/s',
         '/[^\S ]+\</s',
-        '/(\s)+/s'
-        , '/<!--(.|\s)*?-->/'
+        '/(\s)+/s', '/<!--(.|\s)*?-->/'
     );
     $replace = array(
         '>',
         '<',
-        '\\1'
-        , ''
+        '\\1', ''
     );
     if (preg_match("/\<html/i", $buffer) == 1 && preg_match("/\<\/html\>/i", $buffer) == 1) {
         $buffer = preg_replace($search, $replace, $buffer);
@@ -61,14 +60,14 @@ if (isset($_GET["ctrl"])) {
 
 if ($Module) {
     $cname = $Application->getController();
-//    Module_minfor_Controller_index
+    //    Module_minfor_Controller_index
     $class = sprintf("Module\\%s\\Controller\\%s", $Module, $cname);
     if (class_exists($class, TRUE)) {
         $Class = new $class();
         $Class->$action();
     }
 } else {
-//    không module
+    //    không module
     if (class_exists($cname, TRUE)) {
         if (method_exists($cname, $action)) {
             $c = new $cname();
@@ -87,7 +86,7 @@ if ($Module) {
         $action = $Ctrl;
         $c = new Controller_index();
         $c->$action($TieuDeKD);
-//    controler mặc định lấy
+        //    controler mặc định lấy
     }
 }
 

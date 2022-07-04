@@ -22,7 +22,24 @@ class ThanhToan
         return  new SoapHeader("http://tempuri.org/", 'AuthHeader', $headerbody);
     }
 
-
+    function BCSudungthe_sothe(
+        $soThe,
+        $tuNgay = null,
+        $denNgay = null
+    ) {
+        $username = "vankkhang";
+        $password = "vankhang123456";
+        $client = new SoapClient(self::SERVICE_WSDL);
+        $params = [
+            "tungay" => $tuNgay,
+            "denngay" => $denNgay,
+            "sothe" => $soThe,
+            "tieuchi" => 1
+        ];
+        $client->__setSoapHeaders($this->Header($username, $password));
+        $response = $client->__soapCall(__FUNCTION__, $params);
+        return $response;
+    }
 
     public function InsertLSGiaodich(
         $sothe,
@@ -32,45 +49,15 @@ class ThanhToan
 
         $username = "vankkhang";
         $password = "vankhang123456";
-        $client = new SoapClient(self::SERVICE_WSDL, [
-            'cache_wsdl' => WSDL_CACHE_NONE,
-            'trace' => 1,
-            'soap_version' => SOAP_1_2,
-        ]);
+        $client = new SoapClient(self::SERVICE_WSDL);
         $params = [
-            'Username' => $username,
-            'Password' => $password,
             "Sothe" => $sothe,
             "Sotien" =>  $sotien,
             "LoaiGD" => 1,
             "NoidungGD" => $noidungGD,
             "taikhoan" =>  "vankkhang",
         ];
-
-        $paramsXml = <<<XML
-            <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tem="http://tempuri.org/">
-            <soap:Header>
-                <tem:AuthHeader>
-                    <!--Optional:-->
-                    <tem:Username>vankkhang</tem:Username>
-                    <!--Optional:-->
-                    <tem:Password>vankhang123456</tem:Password>
-                </tem:AuthHeader>
-            </soap:Header>
-            <soap:Body>
-                <tem:InsertLSGiaodich>
-                    <tem:Sothe>042D5D72D85C80</tem:Sothe>
-                    <tem:Sotien>1000</tem:Sotien>
-                    <tem:LoaiGD>1</tem:LoaiGD> 
-                    <tem:NoidungGD>ttdh110</tem:NoidungGD> 
-                    <tem:taikhoan>vankkhang</tem:taikhoan>
-                </tem:InsertLSGiaodich>
-            </soap:Body>
-            </soap:Envelope>
-        XML;
-
         $client->__setSoapHeaders($this->Header($username, $password));
-
         $response = $client->__soapCall("InsertLSGiaodich", $params);
         return $response;
         try {

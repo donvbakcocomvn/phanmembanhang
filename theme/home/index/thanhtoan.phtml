@@ -1,29 +1,14 @@
 <div class="container">
-    <?php
 
-    use Model\ThanhToan;
-
-    if (isset($_POST["thanhToan"])) {
-        $thanhToan = new ThanhToan();
-        $modelThanhToan = $_POST["thanhToan"];
-        $resul =  $thanhToan->InsertLSGiaodich(
-            "042D5D72D85C80",
-            1200,
-            "ttdh:110",
-        );
-        echo $resul->InsertLSGiaodichResult;
-    }
-    ?>
     <div class="container">
-
         <div class="col-md-3"></div>
         <div class="col-md-6">
             <h2>Thanh Toán</h2>
             <form action="" method="POST">
                 <div class="form-group">
                     <label for="">Chọn thẻ</label>
-                    <!-- value="042D5D72D85C80" -->
-                    <input value="042D5D72D85C80" style="font-size: 2em;" id="MaThe" type="password" autofocus name="thanhToan[MaThe]" class="form-control">
+
+                    <input value="" style="font-size: 2em;" id="MaThe" type="text" autofocus name="thanhToan[MaThe]" class="form-control">
                 </div>
                 <button class="btn btn-success">Xác Nhận</button>
             </form>
