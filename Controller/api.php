@@ -1,6 +1,10 @@
 <?php
 
 // api này không cần dang nhap
+
+use App\Product;
+use Model\Products;
+
 class Controller_api extends Application
 {
 
@@ -30,6 +34,17 @@ class Controller_api extends Application
         //        $a = ["Version" => time()];
         $lib = new \lib\APIs();
         $lib->ArrayToApi($a);
+    }
+
+    function AddToCartByCode()
+    {
+        try {
+            $code = $this->getParam();
+            // var_dump($code[0]);
+            $sanPham = new Products($code[0]);
+            echo $sanPham->ID;
+        } catch (Exception $ex) {
+        }
     }
 
     function index()

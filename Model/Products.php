@@ -44,6 +44,9 @@ class Products extends \Model\Database
                 if ($product == null) {
                     $product = $this->ProductsByIDEncode($id);
                 }
+                if ($product == null) {
+                    $product = $this->ProductsByCode($id);
+                }
             }
             $this->ID = $product["ID"];
             $this->Code = $product["Code"];
@@ -184,6 +187,12 @@ class Products extends \Model\Database
     function ProductsByID($Id, $isobj = True)
     {
         return parent::ProductsByID($Id, $isobj);
+    }
+    function ProductsByCode($code)
+    {
+        $sql = "SELECT * FROM `" . table_prefix . "product` where `Code` = '{$code}'";
+        $this->Query($sql);
+        return $this->fetchRow();
     }
 
     function ProductsByIDEncode($Id)

@@ -111,9 +111,6 @@ app.controller(
       $scope._Menu = res.data;
     });
 
-    $scope.SanPhamByCode = (code) => {
-      console.log(code);
-    };
     $scope.IntToArray = function (lengthArray) {
       return Array(lengthArray);
     };
@@ -149,6 +146,14 @@ app.controller(
       await $http.get("/cart/index/addproduct/" + id).then(function (res) {
         $scope.getcarts();
         Alert(typeSuccess, "Đã thêm sản phẩm");
+      });
+    };
+    $scope.SanPhamByCode = (code) => {
+      $http.get(`/api/AddToCartByCode/${code}`).then(function (res) {
+        if (res.data) {
+          $scope.addProductCart(res.data);
+          $scope.MaSanPham = "";
+        }
       });
     };
     $scope.removeProductCart = async function (id) {

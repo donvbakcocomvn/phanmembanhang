@@ -1,8 +1,11 @@
 <?php
 
 use Common\Common;
+use lib\APIs;
+use lib\guid;
 use Model\ThanhToan;
 use Model\UsersService;
+use Module\cart\Model\Cart;
 
 class Controller_index extends Controller_backend
 {
@@ -71,22 +74,58 @@ class Controller_index extends Controller_backend
         $data = [];
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
     }
+
+    function taodonhang($id)
+    {
+        $cart = new Cart();
+        $modelOrder = new \Module\cart\Model\Order();
+        $Order["Name"] = $id;
+        $Order["TotalPrice"] = $cart->TotalPrice();
+        $Order["CodeOrder"] =  guid::guidV4();
+        $Order["Email"] = "";
+        $Order["Status"] = 4;
+        $Order["Saler"] = $_SESSION[QuanTri]["Username"];
+        $Order["Note"] = "";
+        $Order["Tinh"] = 0;
+        $Order["Huyen"] = 0;
+        $Order["Phone"] = "";
+        $Order["NgayTao"] = date("Y-m-d H:i:s", time());
+        $Order["Address"] = "";
+        $modelOrder->createOrder($Order);
+        foreach ($cart->Products() as $P) {
+            $OD["Name"] = "Chi Tiết Đơn Hàng " . $Order["CodeOrder"];
+            $OD["Price"] = $P["Price"];
+            $OD["CodeOrder"] = $Order["CodeOrder"];
+            $OD["IdProduct"] = $P["ID"];
+            $OD["Number"] = $P["Number"];
+            $modelOrder->createOrderDetail($OD);
+        }
+        return $Order;
+    }
+
     public function thanhtoan()
     {
         try {
             $thanhToan = new ThanhToan();
+
             if (isset($_POST["thanhToan"])) {
                 $modelThanhToan = $_POST["thanhToan"];
+                $donhang = $this->taodonhang($modelThanhToan["MaThe"]);
+                $cart = new Cart();
+                $TongTien = $cart->TotalPrice();
+
                 $resul =  $thanhToan->InsertLSGiaodich(
                     $modelThanhToan["MaThe"],
-                    1400,
-                    "ttdh" . date("Y-m-d", time()),
+                    $TongTien,
+                    $donhang['CodeOrder'],
                 );
-                echo $resul->InsertLSGiaodichResult;
+                //$resul->InsertLSGiaodichResult;
                 if ($resul->InsertLSGiaodichResult == 1) {
+                    Cart::clearAllCart();
                     Common::ToUrl("/cart/thanhcong/");
                 }
                 // 042D5D72D85C80
+
             }
         } catch (\Exception $th) {
             echo $th->getMessage();
@@ -196,52 +235,52 @@ class Controller_index extends Controller_backend
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
     }
 
-    function syspagedetail($Url)
-    {
-        $data["Page"] = $this->Pages->TimPages4TieuDeKD($Url[1][0]);
-        $p = new Model_Pages($data["Page"]);
-        Model_Seo::$Title = $p->Title;
-        Model_Seo::$des = $p->Des;
-        Model_Seo::$key = $p->Keyword;
-        $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
-    }
+    // function syspagedetail($Url)
+    // {
+    //     $data["Page"] = $this->Pages->TimPages4TieuDeKD($Url[1][0]);
+    //     $p = new Model_Pages($data["Page"]);
+    //     Model_Seo::$Title = $p->Title;
+    //     Model_Seo::$des = $p->Des;
+    //     Model_Seo::$key = $p->Keyword;
+    //     $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
+    // }
 
-    function login()
-    {
+    // function login()
+    // {
 
-        $_SESSION[UserLogin] = isset($_SESSION[UserLogin]) ? $_SESSION[UserLogin] : null;
-        if ($_SESSION[UserLogin]) {
-            Common\Common::toUrl("/profile/");
-        }
-        $_SESSION["DangKy"] = isset($_SESSION["DangKy"]) ? $_SESSION["DangKy"] : \lib\guid::guidV4();
-        //        var_dump($_SESSION["DangKy"]);
-        Model\FormLogin::setFormName($_SESSION["DangKy"]);
-        if (isset($_POST[$_SESSION["DangKy"]])) {
-            try {
-                $FormLogin = $_POST[$_SESSION["DangKy"]];
-                $FormLogin["Username"] = Model\CheckInput::Input($FormLogin["Username"]);
-                $FormLogin["Password"] = Model\CheckInput::Input($FormLogin["Password"]);
-                $modelUser = \Model\AdminService::CheckLogin($FormLogin);
-                if ($modelUser) {
-                    unset($modelUser["Password"]);
-                    $_SESSION[UserLogin] = $modelUser;
-                }
-                if ($_SESSION[UserLogin]) {
-                    Common\Common::toUrl("/profile/index/");
-                }
-            } catch (Exception $exc) {
-                Model\Error::set($exc->getMessage(), Model\Error::Danger);
-            }
-        }
-        $bre = new Model\Breadcrumb();
-        $abre = $bre->setBreadcrumb([["title" => "Đăng Nhập", "link" => "#"]]);
-        $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "login");
-    }
+    //     $_SESSION[UserLogin] = isset($_SESSION[UserLogin]) ? $_SESSION[UserLogin] : null;
+    //     if ($_SESSION[UserLogin]) {
+    //         Common\Common::toUrl("/profile/");
+    //     }
+    //     $_SESSION["DangKy"] = isset($_SESSION["DangKy"]) ? $_SESSION["DangKy"] : \lib\guid::guidV4();
+    //     //        var_dump($_SESSION["DangKy"]);
+    //     Model\FormLogin::setFormName($_SESSION["DangKy"]);
+    //     if (isset($_POST[$_SESSION["DangKy"]])) {
+    //         try {
+    //             $FormLogin = $_POST[$_SESSION["DangKy"]];
+    //             $FormLogin["Username"] = Model\CheckInput::Input($FormLogin["Username"]);
+    //             $FormLogin["Password"] = Model\CheckInput::Input($FormLogin["Password"]);
+    //             $modelUser = \Model\AdminService::CheckLogin($FormLogin);
+    //             if ($modelUser) {
+    //                 unset($modelUser["Password"]);
+    //                 $_SESSION[UserLogin] = $modelUser;
+    //             }
+    //             if ($_SESSION[UserLogin]) {
+    //                 Common\Common::toUrl("/profile/index/");
+    //             }
+    //         } catch (Exception $exc) {
+    //             Model\Error::set($exc->getMessage(), Model\Error::Danger);
+    //         }
+    //     }
+    //     $bre = new Model\Breadcrumb();
+    //     $abre = $bre->setBreadcrumb([["title" => "Đăng Nhập", "link" => "#"]]);
+    //     $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "login");
+    // }
 
-    function logout()
-    {
-        $_SESSION[UserLogin] = null;
-        Common\Common::toUrl("/profile/index");
-        exit();
-    }
+    // function logout()
+    // {
+    //     $_SESSION[UserLogin] = null;
+    //     Common\Common::toUrl("/profile/index");
+    //     exit();
+    // }
 }
