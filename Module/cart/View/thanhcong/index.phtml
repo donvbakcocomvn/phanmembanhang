@@ -4,7 +4,6 @@
 
         use Module\cart\Model\Cart;
 
-
         $Cart = new Cart();
         $html = $Cart->GetDonHangMail($_Param[0]);
         $path = Cart::GetPathContent(Cart::DatHangThanhCong);
@@ -12,5 +11,6 @@
         $content = str_replace("[DonHang]", $html, $content);
         echo $content;
         ?>
+        <a class="btn btn-primary pull-right" href="/cart/thanhcong/print/<?php echo $_Param[0];  ?>/">In phiếu</a>
     </div>
 </div>

@@ -1,6 +1,7 @@
 <?php
 
-class Application {
+class Application
+{
 
     public $url;
     static public $iurl;
@@ -10,47 +11,58 @@ class Application {
     static public $params;
     static public $lang;
 
-    function __construct($url) {
+    function __construct($url)
+    {
         $this->url = $url;
         self::$iurl = $url;
         $this->tach_url($url, self::$module, self::$controller, self::$action, self::$params);
     }
 
-    function is_mobile() {
+    function is_mobile()
+    {
         if (empty($_SERVER['HTTP_USER_AGENT'])) {
             return false;
-        } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Mobile') !== false // many mobile devices (all iPhone, iPad, etc.)
-                || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Silk/') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Kindle') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'BlackBerry') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Opera Mini') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Opera Mobi') !== false) {
+        } elseif (
+            strpos($_SERVER['HTTP_USER_AGENT'], 'Mobile') !== false // many mobile devices (all iPhone, iPad, etc.)
+            || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Silk/') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Kindle') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'BlackBerry') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Opera Mini') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Opera Mobi') !== false
+        ) {
             return true;
         }
         return false;
     }
 
-    static function getController() {
+    static function getController()
+    {
         return self::$controller;
     }
 
-    static function setController($nameController) {
+    static function setController($nameController)
+    {
         return self::$controller = $nameController;
     }
 
-    static function getModule() {
+    static function getModule()
+    {
         return self::$module;
     }
 
-    static function setgetModule($nameModule) {
+    static function setgetModule($nameModule)
+    {
         return self::$module = $nameModule;
     }
 
-    static function getAction() {
+    static function getAction()
+    {
         return self::$action;
     }
 
-    static function setAction($Action) {
+    static function setAction($Action)
+    {
         return self::$action = $Action;
     }
 
-    static function getParam() {
+    static function getParam()
+    {
         if (self::$params) {
             foreach (self::$params as $v => $param) {
                 self::$params[$v] = self::BokyTuDacBietPaRam(self::$params[$v]);
@@ -61,12 +73,14 @@ class Application {
         }
     }
 
-    function setThongBao($ThongBao) {
+    function setThongBao($ThongBao)
+    {
 
         return $_SESSION["ThongBao"] = $ThongBao;
     }
 
-    function setParam($params) {
+    function setParam($params)
+    {
         $Param = $this->getParam();
         if ($Param) {
             $a1[] = $params;
@@ -79,31 +93,37 @@ class Application {
         self::$params = $Param;
     }
 
-    function unsetThongBao() {
+    function unsetThongBao()
+    {
         unset($_SESSION['ThongBao']);
     }
 
-    function getThongBao() {
+    function getThongBao()
+    {
         $ThongBao = isset($_SESSION["ThongBao"]) ? $_SESSION["ThongBao"] : FALSE;
         $this->unsetThongBao();
         return $ThongBao;
     }
 
-    static function getLang() {
+    static function getLang()
+    {
         return self::$lang;
     }
 
-    public function loi404() {
+    public function loi404()
+    {
         header("Location: " . BASE_DIR . "index/loi404");
     }
 
-// kiểm tra các thành phần
-    function KiemTraText($text) {
+    // kiểm tra các thành phần
+    function KiemTraText($text)
+    {
         $text = strip_tags($text);
         return $text;
     }
 
-    function KiemTraURL($url) {
+    function KiemTraURL($url)
+    {
         if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
             return TRUE;
         } else {
@@ -111,12 +131,13 @@ class Application {
         }
     }
 
-    function upload_image($file, $extension, $folder, $newname = '') {
+    function upload_image($file, $extension, $folder, $newname = '')
+    {
         if (isset($_FILES[$file]) && !$_FILES[$file]['error']) {
 
-//         $ext = end(explode('.', $_FILES[$file]['name']));
+            //         $ext = end(explode('.', $_FILES[$file]['name']));
             $ext = trim(substr($_FILES[$file]["type"], 6, strlen($_FILES[$file]["type"])));
-//         $ext = $ext[1];
+            //         $ext = $ext[1];
             $name = basename($_FILES[$file]['name'], '.' . $ext);
 
             if (strpos($extension, $ext) === false) {
@@ -129,7 +150,8 @@ class Application {
                         $_FILES[$file]['name'] = $name . $i . '.' . $ext;
                         break;
                     }
-                } else {
+                }
+            else {
                 $_FILES[$file]['name'] = $newname . '.' . $ext;
             }
 
@@ -143,18 +165,19 @@ class Application {
         return false;
     }
 
-    public function KiemTraFileHinh($Hinh, $size, $nameHinh, $path) {
+    public function KiemTraFileHinh($Hinh, $size, $nameHinh, $path)
+    {
 
         if (($Hinh["type"] == "image/gif") ||
-                ($Hinh["type"] == "image/jpeg") ||
-                ($Hinh["type"] == "image/jpg") ||
-                ($Hinh["type"] == "image/png") &&
-                $Hinh['size'] < $size
+            ($Hinh["type"] == "image/jpeg") ||
+            ($Hinh["type"] == "image/jpg") ||
+            ($Hinh["type"] == "image/png") &&
+            $Hinh['size'] < $size
         ) {
             $typeHinh = explode('/', $Hinh['type']);
             $typeHinh = end($typeHinh);
             $pypath = $path . $nameHinh . "." . $typeHinh;
-//            là hinh thì làm cái gì
+            //            là hinh thì làm cái gì
             if (copy($Hinh["tmp_name"], $pypath)) {
                 if (move_uploaded_file($Hinh["tmp_name"], $pypath)) {
                     return $nameHinh . "." . trim(substr($Hinh["type"], 6, strlen($Hinh["type"])));
@@ -162,31 +185,35 @@ class Application {
                     return FALSE;
                 }
             }
-//            return "." . trim(substr($Hinh["type"], 6, strlen($Hinh["type"])));
+            //            return "." . trim(substr($Hinh["type"], 6, strlen($Hinh["type"])));
         } else {
             return FALSE;
         }
     }
 
-    function getKhachHang() {
+    function getKhachHang()
+    {
         return $_SESSION[KhachHang];
     }
 
-    function KiemTraEmai($email) {
-//      $regule = '/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,4}$/';
+    function KiemTraEmai($email)
+    {
+        //      $regule = '/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\.[a-zA-Z]{2,4}$/';
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 
-    function KiemTraPhone($Phone) {
+    function KiemTraPhone($Phone)
+    {
         if (preg_match("/^[0-9]{10,11}$/", $Phone)) {
             return $Phone;
         }
         return FALSE;
     }
 
-//   dành cho các chuan thuan
+    //   dành cho các chuan thuan
 
-    function BokyTuDacBiet($str) {
+    function BokyTuDacBiet($str)
+    {
 
         if (!empty($str)) {
             $kytu = array("select", "delete", "<script>", "</script>", "insert", "update");
@@ -199,7 +226,8 @@ class Application {
         }
     }
 
-    static function BokyTuDacBietPaRam($str) {
+    static function BokyTuDacBietPaRam($str)
+    {
 
         if (!empty($str)) {
             $kytu = array(";", "select", "delete", "insert", "update");
@@ -212,7 +240,8 @@ class Application {
         }
     }
 
-    function ViewC($data, $CName = "index") {
+    function ViewC($data, $CName = "index")
+    {
         $_Controller = $this->getController();
         $_Action = $this->getAction();
         if (!method_exists("Controller_" . $_Controller, $_Action)) {
@@ -225,7 +254,8 @@ class Application {
         include_once $layout;
     }
 
-    function ViewData($data, $_Controller = "index", $_Action = "index") {
+    function ViewData($data, $_Controller = "index", $_Action = "index")
+    {
         $_Lang = $this->getLang();
         $_Param = $this->getParam();
         $Content = __DIR__ . "/View/{$_Controller}/{$_Action}.phtml";
@@ -233,9 +263,10 @@ class Application {
         include_once $layout;
     }
 
-//   view trang we
+    //   view trang we
 
-    function View($data) {
+    function View($data)
+    {
         if ($this->getController() == "") {
             $this->controller = "index";
         }
@@ -259,7 +290,8 @@ class Application {
         include_once $layout;
     }
 
-    function ViewTemplate($data) {
+    function ViewTemplate($data)
+    {
         if ($this->getController() == "") {
             $this->controller = "index";
         }
@@ -279,7 +311,8 @@ class Application {
         include_once $layout;
     }
 
-    function TemplateView($data) {
+    function TemplateView($data)
+    {
         if ($this->getController() == "") {
             $this->controller = "index";
         }
@@ -294,7 +327,8 @@ class Application {
         include_once $layout;
     }
 
-    function tintucView($data) {
+    function tintucView($data)
+    {
         if ($this->getController() == "") {
             $this->controller = "index";
         }
@@ -306,7 +340,7 @@ class Application {
         $_Param = $this->getParam();
         $_Lang = $this->getLang();
         if (method_exists("Controller_" . $_Controller, $_Action)) {
-//        echo "có action";
+            //        echo "có action";
             $Content = __DIR__ . "/View/" . $this->getController() . "/" . $this->getAction() . ".phtml";
         } else {
             $Content = __DIR__ . "/View/" . $this->getController() . "/index.phtml";
@@ -315,7 +349,8 @@ class Application {
         include_once $layout;
     }
 
-    function controllerView($data) {
+    function controllerView($data)
+    {
         if ($this->getController() == "") {
             $this->controller = "index";
         }
@@ -327,7 +362,7 @@ class Application {
         $_Param = $this->getParam();
         $_Lang = $this->getLang();
         if (method_exists("Controller_" . $_Controller, $_Action)) {
-//        echo "có action";
+            //        echo "có action";
             $Content = __DIR__ . "/View/" . $this->getController() . "/" . $this->getAction() . ".phtml";
         } else {
             $Content = __DIR__ . "/View/" . $this->getController() . "/index.phtml";
@@ -336,7 +371,8 @@ class Application {
         include_once $layout;
     }
 
-    function ViewKhuyet($data) {
+    function ViewKhuyet($data)
+    {
 
         if ($this->getController() == "") {
             $this->controller = "index";
@@ -350,7 +386,7 @@ class Application {
         $_Param = $this->getParam();
         // tìm quản tri
         if (method_exists("Controller_" . $_Controller, $_Action)) {
-//        echo "có action";
+            //        echo "có action";
             $Content = __DIR__ . "/View/" . $this->getController() . "/" . $this->getAction() . ".phtml";
         } else {
             $Content = __DIR__ . "/View/" . $this->getController() . "/index.phtml";
@@ -359,7 +395,8 @@ class Application {
         include_once $layout;
     }
 
-    function ViewTheme($data = NULL, $theme = "", $themelayout = "") {
+    function ViewTheme($data = NULL, $theme = "", $themelayout = "")
+    {
         if (is_array($data)) {
             extract($data);
         }
@@ -377,13 +414,14 @@ class Application {
             $layout = "theme/" . $theme . "/" . "layout{$themelayout}.phtml";
         }
         if (!is_file($layout)) {
-//            throw new Exception("Không Có Theme");
+            //            throw new Exception("Không Có Theme");
         }
         include_once $layout;
     }
 
-    function ViewThemeModule($data = NULL, $theme = "", $themelayout = "") {
-//        echo __DIR__;
+    function ViewThemeModule($data = NULL, $theme = "", $themelayout = "")
+    {
+        //        echo __DIR__;
         if (is_array($data)) {
             extract($data);
         }
@@ -397,8 +435,9 @@ class Application {
         include_once $layout;
     }
 
-    function AViewModule($data = NULL) {
-//        echo __DIR__;
+    function AViewModule($data = NULL)
+    {
+        //        echo __DIR__;
         if (is_array($data)) {
             extract($data);
         }
@@ -410,7 +449,8 @@ class Application {
         include_once $layout;
     }
 
-    function ViewKhuyetIndex($data) {
+    function ViewKhuyetIndex($data)
+    {
 
         if ($this->getController() == "") {
             $this->controller = "index";
@@ -424,7 +464,7 @@ class Application {
         $_Param = $this->getParam();
         // tìm quản tri
         if (method_exists("Controller_" . $_Controller, $_Action)) {
-//        echo "có action";
+            //        echo "có action";
             $Content = __DIR__ . "/View/" . $this->getController() . "/" . $this->getAction() . ".phtml";
         } else {
             $Content = __DIR__ . "/View/" . $this->getController() . "/index.phtml";
@@ -433,7 +473,8 @@ class Application {
         include_once $layout;
     }
 
-    function ViewMobie($data) {
+    function ViewMobie($data)
+    {
 
         if ($this->getController() == "") {
             $this->controller = "index";
@@ -447,7 +488,7 @@ class Application {
         $_Param = $this->getParam();
         // tìm quản tri
         if (method_exists("Controller_" . $_Controller, $_Action)) {
-//        echo "có action";
+            //        echo "có action";
             $Content = __DIR__ . "/View/" . $this->getController() . "/" . $this->getAction() . ".phtml";
         } else {
             $Content = __DIR__ . "/View/" . $this->getController() . "/index.phtml";
@@ -456,7 +497,8 @@ class Application {
         include_once $layout;
     }
 
-    function QView($data) {
+    function QView($data)
+    {
         $_Controller = $this->getController();
         $_Action = $this->getAction();
         $_Param = $this->getParam();
@@ -466,7 +508,8 @@ class Application {
         include_once $layout;
     }
 
-    function AView($data = [], $theme = null) {
+    function AView($data = [], $theme = null)
+    {
         if (is_array($data)) {
             extract($data);
         }
@@ -489,30 +532,27 @@ class Application {
         echo Model\Content::DeCodeHTML();
     }
 
-    function PTURL(&$TieuDeKD) {
+    function PTURL(&$TieuDeKD)
+    {
         $url = self::$iurl;
         $Tree = [
             "news" => [
                 "/\/page-(.*)\/(.*)(\.html)(.*)$/i",
                 "/\/page-(.*)\/(.*)(\.html)$/i",
-            ]
-            ,
+            ],
             "pagesdetail" => [
                 "/\/page-(.*)(.html)(.*)/i",
                 "/\/page-(.*)(.html)/i"
-            ]
-            ,
+            ],
             "pages" => [
                 "/\/page-(.*)\/(.*)/i",
                 "/\/page-(.*)\/(.*)\//i",
                 "/\/page-(.*)/i",
-            ]
-            ,
+            ],
             "product" => [
                 "/\/(.*)\/(.*)(\.html)(.*)$/i",
                 "/\/(.*)\/(.*)(\.html)$/i",
-            ]
-            ,
+            ],
             "category" => array(
                 "/\/(.*)\/(.*)/i",
                 "/\/(.*)\/(.*)\//i",
@@ -531,7 +571,8 @@ class Application {
         }
     }
 
-    function CheckModule($ModuleName) {
+    function CheckModule($ModuleName)
+    {
 
         $a = parse_ini_file("module.ini");
         if (in_array($ModuleName, $a))
@@ -539,8 +580,9 @@ class Application {
         return FALSE;
     }
 
-    function tach_url($url, &$module, &$cname, &$action, &$params) {
-//        tách url
+    function tach_url($url, &$module, &$cname, &$action, &$params)
+    {
+        //        tách url
         $arr = explode("/", $url);
 
         if ($this->CheckModule($arr[1])) {
@@ -582,7 +624,8 @@ class Application {
         }
     }
 
-    function RandomNumber($a) {
+    function RandomNumber($a)
+    {
         $characters = "0123456789abcd";
         $randstring = "";
         for ($i = 0; $i < $a; $i++) {
@@ -591,13 +634,15 @@ class Application {
         return $randstring;
     }
 
-    function RandomString($a = 10) {
+    function RandomString($a = 10)
+    {
         $md5_hash = md5(rand(0, 9999) . time());
         $security_code = substr($md5_hash, 2, $a);
         return $security_code;
     }
 
-    function PartialView($data = NULL, $theme = "") {
+    function PartialView($data = NULL, $theme = "")
+    {
         $theme = $theme == "" ? Model_ViewTheme::get_viewthene() : $theme;
         if (is_array($data)) {
             extract($data);
@@ -608,7 +653,4 @@ class Application {
         $Content = __DIR__ . "/theme/" . $theme . "/" . $_Controller . "/" . $_Action . ".phtml";
         include $Content;
     }
-
 }
-
-?>

@@ -2,13 +2,126 @@
 
 namespace Common;
 
-class Common {
+class Common
+{
 
-    function __construct() {
-
+    function __construct()
+    {
     }
 
-    static function toUrl($url = null) {
+    public static function Number2words($number)
+    {
+        header('Content-Type: text/html; charset=utf-8');
+        $c = new Common();
+        // $c->Number_to_words($number);
+        return $c->convert_number_to_words($number);
+    }
+
+    function convert_number_to_words($number)
+    {
+        $hyphen      = ' ';
+        $conjunction = '  ';
+        $separator   = ' ';
+        $negative    = 'âm ';
+        $decimal     = ' phẩy ';
+        $dictionary  = array(
+            0                   => 'không',
+            1                   => 'một',
+            2                   => 'hai',
+            3                   => 'ba',
+            4                   => 'bốn',
+            5                   => 'năm',
+            6                   => 'sáu',
+            7                   => 'bảy',
+            8                   => 'tám',
+            9                   => 'chín',
+            10                  => 'mười',
+            11                  => 'mười một',
+            12                  => 'mười hai',
+            13                  => 'mười ba',
+            14                  => 'mười bốn',
+            15                  => 'mười năm',
+            16                  => 'mười sáu',
+            17                  => 'mười bảy',
+            18                  => 'mười tám',
+            19                  => 'mười chín',
+            20                  => 'hai mươi',
+            30                  => 'ba mươi',
+            40                  => 'bốn mươi',
+            50                  => 'năm mươi',
+            60                  => 'sáu mươi',
+            70                  => 'bảy mươi',
+            80                  => 'tám mươi',
+            90                  => 'chín mươi',
+            100                 => 'trăm',
+            1000                => 'nghìn',
+            1000000             => 'triệu',
+            1000000000          => 'tỷ',
+            1000000000000       => 'nghìn tỷ',
+            1000000000000000    => 'nghìn triệu triệu',
+            1000000000000000000 => 'tỷ tỷ'
+        );
+        if (!is_numeric($number)) {
+            return false;
+        }
+        if (($number >= 0 && (int) $number < 0) || (int) $number < 0 - PHP_INT_MAX) {
+            // overflow
+            trigger_error(
+                'convert_number_to_words only accepts numbers between -' . PHP_INT_MAX . ' and ' . PHP_INT_MAX,
+                E_USER_WARNING
+            );
+            return false;
+        }
+        if ($number < 0) {
+            return $negative . $this->convert_number_to_words(abs($number));
+        }
+        $string = $fraction = null;
+        if (strpos($number, '.') !== false) {
+            list($number, $fraction) = explode('.', $number);
+        }
+        switch (true) {
+            case $number < 21:
+                $string = $dictionary[$number];
+                break;
+            case $number < 100:
+                $tens   = ((int) ($number / 10)) * 10;
+                $units  = $number % 10;
+                $string = $dictionary[$tens];
+                if ($units) {
+                    $string .= $hyphen . $dictionary[$units];
+                }
+                break;
+            case $number < 1000:
+                $hundreds  = $number / 100;
+                $remainder = $number % 100;
+                $string = $dictionary[$hundreds] . ' ' . $dictionary[100];
+                if ($remainder) {
+                    $string .= $conjunction . $this->convert_number_to_words($remainder);
+                }
+                break;
+            default:
+                $baseUnit = pow(1000, floor(log($number, 1000)));
+                $numBaseUnits = (int) ($number / $baseUnit);
+                $remainder = $number % $baseUnit;
+                $string = $this->convert_number_to_words($numBaseUnits) . ' ' . $dictionary[$baseUnit];
+                if ($remainder) {
+                    $string .= $remainder < 100 ? $conjunction : $separator;
+                    $string .= $this->convert_number_to_words($remainder);
+                }
+                break;
+        }
+        if (null !== $fraction && is_numeric($fraction)) {
+            $string .= $decimal;
+            $words = array();
+            foreach (str_split((string) $fraction) as $number) {
+                $words[] = $dictionary[$number];
+            }
+            $string .= implode(' ', $words);
+        }
+        return $string;
+    }
+    static function toUrl($url = null)
+    {
         if ($url == null) {
             $url = $_SERVER["HTTP_REFERER"];
         }
@@ -16,16 +129,19 @@ class Common {
         exit();
     }
 
-    static function Actual_link() {
+    static function Actual_link()
+    {
         $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         return $actual_link;
     }
 
-    static function LinkQrcode($data) {
+    static function LinkQrcode($data)
+    {
         return "/public/phpqrcode/index.php?data=" . $data;
     }
 
-    static function RandomString($a) {
+    static function RandomString($a)
+    {
         $characters = "0123456789abcdefghjklzxcvbnmqwertyuiopasdfgh{}[]()!@#$%^&*";
         $randstring = "";
         for ($i = 0; $i < $a; $i++) {
@@ -34,7 +150,8 @@ class Common {
         return $randstring;
     }
 
-    static function bodautv($str) {
+    static function bodautv($str)
+    {
         if (!$str)
             return false;
 
@@ -69,7 +186,8 @@ class Common {
         return $str;
     }
 
-    static function DeCodeHTML() {
+    static function DeCodeHTML()
+    {
 
         $str = ob_get_clean();
         $Model_Infor = new \Model\infor();
@@ -85,23 +203,28 @@ class Common {
         echo $str;
     }
 
-    public static function DateTimeFormat() {
+    public static function DateTimeFormat()
+    {
         return "d-m-Y H:i";
     }
 
-    public static function DateTimeToDB() {
+    public static function DateTimeToDB()
+    {
         return "Y-m-d H:i:s";
     }
 
-    public static function DateFormat() {
+    public static function DateFormat()
+    {
         return "H:i d-m-Y";
     }
 
-    public static function ToDate($date) {
+    public static function ToDate($date)
+    {
         return date(self::DateFormat(), strtotime($date));
     }
 
-    static function minimizeCSSsimple($css) {
+    static function minimizeCSSsimple($css)
+    {
         $css = preg_replace('/\/\*((?!\*\/).)*\*\//', '', $css); // negative look ahead
         $css = preg_replace('/\s{2,}/', ' ', $css);
         $css = preg_replace('/\s*([:;{}])\s*/', '$1', $css);
@@ -109,7 +232,8 @@ class Common {
         return $css;
     }
 
-    public static function compress_htmlcode($codedata) {
+    public static function compress_htmlcode($codedata)
+    {
         $searchdata = array(
             '/\>[^\S ]+/s', // remove whitespaces after tags
             '/[^\S ]+\</s', // remove whitespaces before tags
@@ -120,33 +244,40 @@ class Common {
         return $codedata;
     }
 
-    public static function CheckName($param0) {
+    public static function CheckName($param0)
+    {
         return strip_tags($param0);
     }
 
-    public static function CheckPhone($param0) {
+    public static function CheckPhone($param0)
+    {
         return strip_tags($param0);
     }
 
-    public static function CheckEmail($param0) {
+    public static function CheckEmail($param0)
+    {
         return strip_tags($param0);
     }
 
-    public static function CheckDiaChi($formUser) {
+    public static function CheckDiaChi($formUser)
+    {
         return strip_tags($formUser);
     }
 
-    public static function ChekId($userPost) {
+    public static function ChekId($userPost)
+    {
         $userPost = intval($userPost);
         $userPost = max($userPost, 0);
         return intval($userPost);
     }
 
-    public static function CheckId($formUser) {
+    public static function CheckId($formUser)
+    {
         return self::ChekId($formUser);
     }
 
-    public static function PhoneFomat($number) {
+    public static function PhoneFomat($number)
+    {
         $number = preg_replace("/[^\d]/", "", $number);
         // get number length.
         $length = strlen($number);
@@ -157,12 +288,13 @@ class Common {
         return $number;
     }
 
-    public static function NameFileCache($url) {
-        return "cache/" . sha1($url) . ".html";
-        ;
+    public static function NameFileCache($url)
+    {
+        return "cache/" . sha1($url) . ".html";;
     }
 
-    public static function PhanTrang($TongTrang, $TrangHienTai, $DuongDan) {
+    public static function PhanTrang($TongTrang, $TrangHienTai, $DuongDan)
+    {
         $PhanTrang = ' <ul class="pagination mt-10 mb-0">';
         $PhanTrang .= "<li><a>{$TrangHienTai}/{$TongTrang}</a></li>";
         $tu = $TrangHienTai - 4;
@@ -199,25 +331,26 @@ class Common {
         return $PhanTrang;
     }
 
-    public static function GetIndex($k, $pagesIndex, $pageNumber) {
+    public static function GetIndex($k, $pagesIndex, $pageNumber)
+    {
         return ($pageNumber * ($pagesIndex - 1)) + $k + 1;
     }
 
-    public static function CheckInput($param) {
+    public static function CheckInput($param)
+    {
         $param = trim($param);
         $param = addslashes($param);
         $param = htmlspecialchars($param);
         return $param;
     }
 
-    public static function MoneyFomat($param0) {
+    public static function MoneyFomat($param0)
+    {
         return number_format($param0, 0, '.', ',') . " vnđ";
     }
 
-    public static function NumberFomat($param0) {
+    public static function NumberFomat($param0)
+    {
         return number_format($param0, 0, '.', ',');
     }
-
 }
-
-?>

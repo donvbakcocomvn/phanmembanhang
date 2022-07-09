@@ -13,13 +13,15 @@ namespace Module\cart\Controller;
  *
  * @author MSI
  */
-class thanhcong extends \Controller_index {
+class thanhcong extends \Controller_index
+{
 
     public $Product;
     public $Cart;
     public $Breadcrumb;
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->Breadcrumb = new \Model\Breadcrumb();
         $this->Bread[] = [
@@ -30,9 +32,14 @@ class thanhcong extends \Controller_index {
         $this->Cart = new \Module\cart\Model\Cart();
     }
 
-    function index() {
+    function index()
+    {
         $this->Breadcrumb->setBreadcrumb($this->Bread);
         $this->ViewThemeModule("", "", "cart");
     }
+    function print()
+    {
 
+        $this->ViewThemeModule("", "", "print");
+    }
 }
