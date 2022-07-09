@@ -1,8 +1,16 @@
 <div class="columns-container">
     <div class="container" id="columns">
         <?php
-        $path = \Module\cart\Model\Cart::GetPathContent(\Module\cart\Model\Cart::DatHangThanhCong);
-        echo $content = file_get_contents($path);
+
+        use Module\cart\Model\Cart;
+
+
+        $Cart = new Cart();
+        $html = $Cart->GetDonHangMail($_Param[0]);
+        $path = Cart::GetPathContent(Cart::DatHangThanhCong);
+        $content = file_get_contents($path);
+        $content = str_replace("[DonHang]", $html, $content);
+        echo $content;
         ?>
     </div>
 </div>

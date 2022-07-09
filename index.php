@@ -2,10 +2,20 @@
 
 session_start();
 ob_start();
+session_regenerate_id(false);
+if (session_id() == false) {
+    ini_set('session.cookie_secure', 1);
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.use_only_cookies', 1);
+    ini_set('session.cookie_lifetime', 0);
+}
 ini_set('memory_limit', '1024M');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+
+
 
 include "./vendor/autoload.php";
 

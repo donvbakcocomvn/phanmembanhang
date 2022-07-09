@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'a0ade221e4cb6d2de65aaa645ec9572ea74a8d2d',
+        'reference' => '793da18137f7823fae0046f034f708e9698ecd6e',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'a0ade221e4cb6d2de65aaa645ec9572ea74a8d2d',
+            'reference' => '793da18137f7823fae0046f034f708e9698ecd6e',
             'dev_requirement' => false,
         ),
         'doctrine/annotations' => array(
@@ -35,6 +35,15 @@
             'install_path' => __DIR__ . '/../doctrine/lexer',
             'aliases' => array(),
             'reference' => 'c268e882d4dbdd85e36e4ad69e02dc284f89d229',
+            'dev_requirement' => false,
+        ),
+        'econea/nusoap' => array(
+            'pretty_version' => 'v0.9.12',
+            'version' => '0.9.12.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../econea/nusoap',
+            'aliases' => array(),
+            'reference' => 'e83219ee1add324124fea8e448b4cfddf782f8ff',
             'dev_requirement' => false,
         ),
         'ezyang/htmlpurifier' => array(

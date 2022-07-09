@@ -118,15 +118,15 @@ class Cart extends \Model\Database
         ob_start();
 ?>
         <h3>Thông Tin Khách Hàng</h3>
-        <p>Họ Tên: <?php echo $order->Name; ?></p>
-        <p>Email: <?php echo $order->Email; ?></p>
+        <p>Khách Hàng: <?php echo $order->Name; ?></p>
+        <p>Tình Trạng: <label class="label-success"><?php echo $order->Status(); ?></label> </p>
+        <!-- <p>Email: <?php echo $order->Email; ?></p>
         <p>SĐT: <?php echo $order->Phone; ?></p>
-        <p>Địa Chỉ: <?php echo $order->Address; ?></p>
+        <p>Địa Chỉ: <?php echo $order->Address; ?></p> -->
         <h3>Thông Tin Đơn Hàng</h3>
         <table style="width: 100%;">
             <thead>
                 <tr>
-                    <th class="">Hình</th>
                     <th class="">Mô Tả</th>
                     <th class="" style="width: 100px;">Số Lượng</th>
                     <th class="" style="width: 100px;">Thành Tiền</th>
@@ -138,17 +138,10 @@ class Cart extends \Model\Database
                         $_P = new \Model\Products($SanPham["IdProduct"]);
                 ?>
                         <tr>
-                            <td class="" style="width: 80px;">
-
-                                <img style="height: 70px;" src="<?php echo $_P->UrlHinh() ?>" alt="<?php echo $_P->nameProduct ?>">
-
-                            </td>
                             <td class="cart_description">
                                 <small class="cart_ref">ID : #<?php echo $_P->ID ?></small><br>
                                 <p class="product-name"><a href="<?php echo $_P->linkProduct() ?>"><?php echo $_P->nameProduct ?> </a></p>
                                 <p class="product-name"><?php echo strip_tags($_P->Summary); ?> </p>
-                                <p class="label label-success">Còn Hàng</p>
-                                <p class="label label-danger"><?php echo $_P->Price(); ?></p>
                             </td>
                             <td class="qty" style="width: 100px;">
                                 <?php echo $SanPham["Number"]; ?>

@@ -3,22 +3,26 @@
 use lib\APIs;
 use Module\user\Model\Users\UsersService;
 
-class Controller_apiprofile extends Controller_profile {
+class Controller_apiprofile extends Controller_profile
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
     }
 
-    static function GetCurentUser() {
+    static function GetCurentUser()
+    {
         $_SESSION[UserLogin] = isset($_SESSION[UserLogin]) ? $_SESSION[UserLogin] : null;
         return $_SESSION[UserLogin];
     }
 
-    function GetLichSuGD() {
+    function GetLichSuGD()
+    {
         $usersServie = UsersService::CurentUsers();
         $total = 0;
         $dataAray = $usersServie->LichSuGiaoDịch(1, 10, $total);
-        $dataAray = array_map(function($item) {
+        $dataAray = array_map(function ($item) {
             $item["PriceVND"] = Common\Common::MoneyFomat($item["Price"]);
             return $item;
         }, $dataAray);
@@ -26,7 +30,8 @@ class Controller_apiprofile extends Controller_profile {
         APIs::Json_Encode_ToString($data);
     }
 
-    function Donhang() {
+    function Donhang()
+    {
         try {
             $apiRes = new Model\modelResApi();
             $profile = new \Model\Profile();
@@ -36,7 +41,7 @@ class Controller_apiprofile extends Controller_profile {
             $pageNumber = isset($_REQUEST["pagesNumber"]) ? $_REQUEST["pagesNumber"] : 10;
             $total = 1;
             $donhang = $profile->GetDanhSachDonHang($params, $total, $indexPage, $pageNumber);
-            $donhang = array_map(function($item) {
+            $donhang = array_map(function ($item) {
                 $order = new \Module\cart\Model\Order($item);
                 $item = $order->ToArray();
                 return $item;
@@ -53,7 +58,8 @@ class Controller_apiprofile extends Controller_profile {
         }
     }
 
-    function orderdetail() {
+    function orderdetail()
+    {
         $modelRes = new Model\modelResApi();
         $id = isset($_POST["Id"]) ? $_POST["Id"] : null;
         if ($id == null) {
@@ -65,17 +71,19 @@ class Controller_apiprofile extends Controller_profile {
         APIs::Json_Encode_ToString($modelRes->ToArray());
     }
 
-    function getActionOrder() {
+    function getActionOrder()
+    {
         $oreder = new \Module\cart\Model\Order();
         $listsatus = $oreder->listStatusSaler();
-        $listsatus = array_map(function($item) {
+        $listsatus = array_map(function ($item) {
             $item["Id"] = $item["Id"] . "";
             return $item;
         }, $listsatus);
         APIs::Json_Encode_ToString($listsatus);
     }
 
-    function ThongKeDonHang() {
+    function ThongKeDonHang()
+    {
         $orderService = new \Module\cart\Model\OrderService();
         $params["Saler"] = self::GetCurentUser()["Username"];
         $adminService = new Model\AdminService();
@@ -95,7 +103,4 @@ class Controller_apiprofile extends Controller_profile {
         ];
         APIs::Json_Encode_ToString($a);
     }
-
 }
-
-?>

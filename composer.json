@@ -5,6 +5,7 @@
     "zircote/swagger-php": "^3.2",
     "namdongvando/rpfbc": "^3.22",
     "namdongvando/imagesoptimizer": "^1.0",
-    "phpoffice/phpspreadsheet": "^1.23"
+    "phpoffice/phpspreadsheet": "^1.23",
+    "econea/nusoap": "^0.9.12"
   }
 }

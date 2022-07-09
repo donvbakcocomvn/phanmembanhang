@@ -439,8 +439,13 @@ class Controller_mproduct extends Controller_backend
                     if ($id > 0) {
                         $row[4] = str_replace(",", "", $row[4]);
                         $price = intval($row[4]);
-                        $danhmuc = intval($row[5]);
-                        $modelDanhMuc =  $danhMuc->Category4Code($danhmuc, true);
+                        $danhmucCol = $row[5];
+                        $modelDanhMuc =  $danhMuc->Category4Code($danhmucCol, true);
+                        // var_dump($row[5]);
+                        // echo "danhmucCol";
+                        // var_dump($modelDanhMuc);
+                        // echo $modelDanhMuc->catID;
+                        // return;
                         $sp["Code"] = $row[3];
                         $sp["nameProduct"] = $row[1];
                         $sp["unitPrice"] = $row[2];

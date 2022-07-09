@@ -6,6 +6,7 @@ use lib\guid;
 use Model\ThanhToan;
 use Model\UsersService;
 use Module\cart\Model\Cart;
+use Module\cart\Model\Order;
 
 class Controller_index extends Controller_backend
 {
@@ -66,7 +67,9 @@ class Controller_index extends Controller_backend
         Model_Seo::$key = $p->Summary;
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "product");
     }
-
+    public function php()
+    {
+    }
     function syspage($url)
     {
         $Category = new Model\Category();
@@ -106,6 +109,7 @@ class Controller_index extends Controller_backend
     public function thanhtoan()
     {
         try {
+
             $thanhToan = new ThanhToan();
 
             if (isset($_POST["thanhToan"])) {
@@ -113,19 +117,21 @@ class Controller_index extends Controller_backend
                 $donhang = $this->taodonhang($modelThanhToan["MaThe"]);
                 $cart = new Cart();
                 $TongTien = $cart->TotalPrice();
-
                 $resul =  $thanhToan->InsertLSGiaodich(
                     $modelThanhToan["MaThe"],
                     $TongTien,
-                    $donhang['CodeOrder'],
+                    "147852",
                 );
-                //$resul->InsertLSGiaodichResult;
-                if ($resul->InsertLSGiaodichResult == 1) {
-                    Cart::clearAllCart();
-                    Common::ToUrl("/cart/thanhcong/");
+                if ($resul) {
+                    //$resul->InsertLSGiaodichResult;
+                    if ($resul->InsertLSGiaodichResult == 1) {
+                        Cart::clearAllCart();
+                        $order = new Order();
+                        $order->updateOrderStatus($donhang['CodeOrder'], Order::DaThuTien);
+                        Common::ToUrl("/cart/thanhcong/index/" . $donhang['CodeOrder'] . "/");
+                    }
+                    // 042D5D72D85C80
                 }
-                // 042D5D72D85C80
-
             }
         } catch (\Exception $th) {
             echo $th->getMessage();

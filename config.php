@@ -17,9 +17,9 @@ $_SESSION['TenHienThi'] = 0;
 global $INI;
 
 $INI['host'] = "localhost";
-$INI['username'] = "root";
-$INI['password'] = "";
-$INI['DBname'] = "oetkpjhosting_bachhoagiadinh";
+$INI['username'] = "qlbh_nhanai";
+$INI['password'] = "zaq@123Abc456";
+$INI['DBname'] = "qlbh_nhanai";
 
 spl_autoload_register(function ($class) {
     $class = str_replace("\\", "_", $class);

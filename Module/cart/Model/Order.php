@@ -7,7 +7,8 @@ namespace Module\cart\Model;
  *
  * @author MSI
  */
-class Order extends \Model\Database {
+class Order extends \Model\Database
+{
 
     //put your code here
 
@@ -34,7 +35,8 @@ class Order extends \Model\Database {
     const DaNopTienVeCty = 6;
     const XacNhanDonHang = 7;
 
-    function __construct($order = null) {
+    function __construct($order = null)
+    {
         parent::__construct();
         if ($order) {
             if (!is_array($order)) {
@@ -59,32 +61,44 @@ class Order extends \Model\Database {
         }
     }
 
-    function NgayDat() {
+    function NgayDat()
+    {
         return date("d-m-Y H:i", strtotime($this->NgayTao));
     }
 
-    function Status() {
+    function Status()
+    {
         $a = $this->listStatus();
         return $a[$this->Status];
     }
 
-    function createOrder($Order) {
+    function createOrder($Order)
+    {
         $this->insert(table_prefix . "order", $Order);
     }
 
-    function updateOrder($Order) {
+    function updateOrder($Order)
+    {
         return $this->update(table_prefix . "order", $Order, "`CodeOrder` = '{$Order["CodeOrder"]}'");
     }
+    function updateOrderStatus($CodeOrder, $status)
+    {
+        $Order = ["Status" => $status];
+        return $this->update(table_prefix . "order", $Order, "`CodeOrder` = '{$CodeOrder}'");
+    }
 
-    function createOrderDetail($OrderDetail) {
+    function createOrderDetail($OrderDetail)
+    {
         return $this->insert(table_prefix . "orderdetail", $OrderDetail);
     }
 
-    function orders() {
+    function orders()
+    {
         return $this->select(table_prefix . "order", [], '1');
     }
 
-    function ordersPt($page = 1, $number = 20, &$sun) {
+    function ordersPt($page = 1, $number = 20, &$sun)
+    {
         $sun = 10;
         $page = intval($page);
         $page = max($page, 1);
@@ -95,11 +109,13 @@ class Order extends \Model\Database {
         return $this->select(table_prefix . "order", [], "1  ORDER BY `Id` DESC limit {$page},{$number}");
     }
 
-    function ordersByKey($key = "") {
+    function ordersByKey($key = "")
+    {
         return $this->select(table_prefix . "order", ["Id", 'Name', "TotalPrice", "CodeOrder", "Email", "Phone", "Status"], " `CodeOrder` like '%{$key}%' || `Email` like '%{$key}%' || `Phone` like '%{$key}%' || `Email` like '%{$key}%' ");
     }
 
-    function ordersStatusPt($page = 1, $number = 20, $status = 1, &$sun) {
+    function ordersStatusPt($page = 1, $number = 20, $status = 1, &$sun)
+    {
         $sun = 0;
         $page = intval($page);
         $page = max($page, 1);
@@ -110,46 +126,54 @@ class Order extends \Model\Database {
         return $this->select(table_prefix . "order", [], " `Status` = '{$status}'  ORDER BY `Id` DESC limit {$page},{$number}");
     }
 
-    function ordersPt1() {
+    function ordersPt1()
+    {
         return $this->select(table_prefix . "order", [], '1');
     }
 
-    function orderbyid($id) {
+    function orderbyid($id)
+    {
         return $this->select(table_prefix . "order", [], "`CodeOrder` = '{$id}'");
     }
 
-    function orderDetailbyid($id) {
+    function orderDetailbyid($id)
+    {
         return $this->select(table_prefix . "orderdetail", [], "`CodeOrder` = '{$id}'");
     }
 
-    function listStatus() {
+    function listStatus()
+    {
         $DSStatus = [
-            self::Huy => "Hủy"
-            , self::DangXuLy => "Đang xử lý"
-            , self::MoiDat => "Mới Đặt"
-            , self::DaThuTien => "Đã Thu Tiền"
-            , self::XacNhanDonHang => "Xác Nhận Đơn Hàng"
-            , self::DaNopTienVeCty => "Đã Nộp Tiền Về Công Ty"
+            self::Huy => "Hủy",
+            self::DangXuLy => "Đang xử lý",
+            self::MoiDat => "Mới Đặt",
+            self::DaThuTien => "Đã Thanh Toán",
+            self::XacNhanDonHang => "Xác Nhận Đơn Hàng",
+            self::DaNopTienVeCty => "Đã Nộp Tiền Về Công Ty"
         ];
         return $DSStatus;
     }
 
-    function getStatus($id) {
+    function getStatus($id)
+    {
         $DSStatus = $this->listStatus();
         return $DSStatus[$id];
     }
 
-    public function ProductsByDonHang() {
+    public function ProductsByDonHang()
+    {
         return $this->select(table_prefix . "orderdetail", [], "`CodeOrder` = '{$this->CodeOrder}'");
     }
 
-    public function Saler() {
+    public function Saler()
+    {
         $admin = new \Module\duser\Model\Duser();
         $sale = $admin->GetByUsername($this->Saler);
         return new \Module\duser\Model\Duser($sale);
     }
 
-    function ToArrayMode() {
+    function ToArrayMode()
+    {
         $order["Id"] = $this->Id;
         $order["Name"] = $this->Name;
         $order["TotalPrice"] = $this->TotalPrice;
@@ -164,7 +188,8 @@ class Order extends \Model\Database {
         return $order;
     }
 
-    function ToArray() {
+    function ToArray()
+    {
         $order["Id"] = $this->Id;
         $order["Name"] = $this->Name;
         $order["TotalPrice"] = intval($this->TotalPrice);
@@ -184,48 +209,55 @@ class Order extends \Model\Database {
         return $order;
     }
 
-    public function GetBySale($params, &$total, $indexPage, $pageNumber) {
+    public function GetBySale($params, &$total, $indexPage, $pageNumber)
+    {
         $OredrService = new OrderService();
         return $OredrService->GetOrderBySaler($params, $total, $indexPage, $pageNumber);
     }
 
-    public function listStatusAll() {
+    public function listStatusAll()
+    {
         return [
-            ["Id" => self::MoiDat, "Name" => "Mới Đặt"]
-            , ["Id" => self::XacNhanDonHang, "Name" => "Xác Nhận Đơn Hàng"]
-            , ["Id" => self::DangXuLy, "Name" => "Đang xử lý"]
-            , ["Id" => self::DaThuTien, "Name" => "Đã Thu Tiền"]
-            , ["Id" => self::DaNopTienVeCty, "Name" => "Đã Nộp Tiền Về Công Ty"]
-            , ["Id" => self::Huy, "Name" => "Hủy"]
+            ["Id" => self::MoiDat, "Name" => "Mới Đặt"],
+            ["Id" => self::XacNhanDonHang, "Name" => "Xác Nhận Đơn Hàng"],
+            ["Id" => self::DangXuLy, "Name" => "Đang xử lý"],
+            ["Id" => self::DaThuTien, "Name" => "Đã Thu Tiền"],
+            ["Id" => self::DaNopTienVeCty, "Name" => "Đã Nộp Tiền Về Công Ty"], ["Id" => self::Huy, "Name" => "Hủy"]
         ];
     }
 
-    public function listStatusSaler() {
+    public function listStatusSaler()
+    {
         return [
-            ["Id" => self::MoiDat, "Name" => "Mới Đặt"]
-            , ["Id" => self::XacNhanDonHang, "Name" => "Xác Nhận Đơn Hàng"]
-            , ["Id" => self::DangXuLy, "Name" => "Đang xử lý"]
-            , ["Id" => self::Huy, "Name" => "Hủy"]
+            ["Id" => self::MoiDat, "Name" => "Mới Đặt"],
+            ["Id" => self::XacNhanDonHang, "Name" => "Xác Nhận Đơn Hàng"],
+            ["Id" => self::DangXuLy, "Name" => "Đang xử lý"],
+            ["Id" => self::Huy, "Name" => "Hủy"]
         ];
     }
 
-    public function Tinh() {
+    public function Tinh()
+    {
         return new \Model\TinhThanh\TinhThanh($this->Tinh);
     }
 
-    public function Huyen() {
+    public function Huyen()
+    {
         return new \Model\TinhThanh\TinhThanh($this->Huyen);
     }
 
-    public function DiaChi() {
+    public function DiaChi()
+    {
         return sprintf("%s,%s,%s", $this->Address, $this->Huyen()->Name, $this->Tinh()->Name);
     }
 
-    public function ChekStauts($param0) {
+    public function ChekStauts($param0)
+    {
         return in_array($this->Status, $param0);
     }
 
-    public function ToArrayDeTail() {
+    public function ToArrayDeTail()
+    {
         $order["Id"] = $this->Id;
         $order["Name"] = $this->Name;
         $order["TotalPrice"] = intval($this->TotalPrice);
@@ -243,7 +275,7 @@ class Order extends \Model\Database {
         $order["Saler"] = $this->Saler;
         $order["SalerInfor"] = $this->Saler()->ToArray();
         $orderDetail = $this->orderDetailbyid($this->CodeOrder);
-        $orderDetail = array_map(function($item) {
+        $orderDetail = array_map(function ($item) {
             $idproduct = $item["IdProduct"];
             $ps = new \Model\Products($idproduct);
             $item["Number"] = intval($item["Number"]);
@@ -256,5 +288,4 @@ class Order extends \Model\Database {
         $order["OrderDetail"] = $orderDetail;
         return $order;
     }
-
 }
