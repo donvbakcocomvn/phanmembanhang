@@ -42,4 +42,9 @@ class thanhcong extends \Controller_index
 
         $this->ViewThemeModule("", "", "print");
     }
+    function fail()
+    {
+
+        $this->ViewThemeModule("", "", "cart");
+    }
 }

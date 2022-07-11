@@ -1,22 +1,22 @@
-<label class="btn btn-primary pull-right" >
-    <input ng-model="SuaGroupAdv" style="display: none;" type="checkbox" >
-    <i class="fa fa-edit" ></i>
+<label class="btn btn-primary pull-right">
+    <input ng-model="SuaGroupAdv" style="display: none;" type="checkbox">
+    <i class="fa fa-edit"></i>
 </label>
-<div class="clearfix" ></div>
-<ul class="list-group" ng-init="getAdvGroups()" >
+<div class="clearfix"></div>
+<ul class="list-group" ng-init="getAdvGroups()">
     <li ng-repeat="item in _AdvGroups" class="list-group-item">
         <div class="d-flex">
-            <a style="display: block;margin-left: 10px;cursor: pointer;width:100%;" >
+            <a style="display: block;margin-left: 10px;cursor: pointer;width:100%;">
                 <b>{{item.Name}}</b>
             </a>
             <a ng-show="SuaGroupAdv" ng-click="getAdvGroupsById(item.Id)" class="btn pull-right btn-sm btn-primary" data-toggle="modal" href='#SuaGroupAdv'>
-                <i class="fa fa-edit" ></i>
+                <i class="fa fa-edit"></i>
             </a>
         </div>
     </li>
 </ul>
 <div class="modal fade" id="SuaGroupAdv">
-    <form method="POST" ng-submit="SuaGroups(_GroupsDetail)" enctype="multipart/form-data" >
+    <form method="POST" ng-submit="SuaGroups(_GroupsDetail)" enctype="multipart/form-data">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -26,16 +26,16 @@
                 <div class="modal-body">
                     <div class="form-group ">
                         <label for="">Mã Nhóm</label>
-                        <input required="required" type="text" ng-model="_GroupsDetail.Code" class="form-control" name="Code"  placeholder="Mã Nhóm">
+                        <input required="required" type="text" ng-model="_GroupsDetail.Code" class="form-control" name="Code" placeholder="Mã Nhóm">
                     </div>
                     <div class="form-group ">
                         <label for="">Tên Nhóm</label>
-                        <input required="required" type="text" ng-model="_GroupsDetail.Name" class="form-control" name="Name"  placeholder="Tên Nhóm">
+                        <input required="required" type="text" ng-model="_GroupsDetail.Name" class="form-control" name="Name" placeholder="Tên Nhóm">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger" ng-click="XoaGroups(_GroupsDetail.Id)" >Xóa</button>
+                    <button type="button" class="btn btn-danger" ng-click="XoaGroups(_GroupsDetail.Id)">Xóa</button>
                     <button type="submit" class="btn btn-primary"> Lưu </button>
                 </div>
             </div>

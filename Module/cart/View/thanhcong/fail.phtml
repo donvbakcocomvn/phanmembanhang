@@ -1,0 +1,12 @@
+<div class="columns-container">
+    <div class="container" id="columns">
+        <?php
+
+        use Module\cart\Model\Cart;
+
+        $path = Cart::GetPathContent(Cart::DatHangThatBai);
+        $content = file_get_contents($path);
+        echo $content;
+        ?>
+    </div>
+</div>

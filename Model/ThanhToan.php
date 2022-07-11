@@ -21,22 +21,17 @@ class ThanhToan
             'Username' => self::userName,
             'Password' => self::password
         ];
-        return  new SoapHeader("http://tempuri.org/", 'AuthHeader', $headerbody);
+        return  new SoapHeader("http://tempuri.org/", 'AuthHeader', $headerbody, false);
     }
 
     public function SoapClient()
     {
-        ini_set('soap.wsdl_cache_enabled', '1');
+        ini_set("soap.wsdl_cache_enabled", 0);
+        ini_set('soap.wsdl_cache', 0);
         $options = array(
-            'cache_wsdl' => 1,
-            'trace' => 1,
-            // 'stream_context' => stream_context_create(array(
-            //     'ssl' => array(
-            //         'verify_peer' => false,
-            //         'verify_peer_name' => false,
-            //         'allow_self_signed' => true
-            //     )
-            // ))
+            'version' =>  SOAP_1_2,
+            'cache_wsdl' =>  WSDL_CACHE_NONE,
+
         );
         $client = new SoapClient(self::SERVICE_WSDL, $options);
         $client->__setSoapHeaders($this->Header());
@@ -112,7 +107,8 @@ class ThanhToan
             "sothe" => $soThe,
             "tieuchi" => 1
         ];
-        $response = $client->__soapCall(__FUNCTION__, $params);
+        $response = $client->__soapCall(__FUNCTION__, $params, null, $this->Header());
+
         echo $response->BCSudungthe_sotheResult->any;
         return $response;
     }
@@ -123,7 +119,7 @@ class ThanhToan
         $params = [
             "Sothe" => $soThe,
         ];
-        $response = $client->__soapCall(__FUNCTION__, $params)
+        $response = $client->GetLichsuGD($params)
             ->GetLichsuGDResult;
         return json_decode($response);
     }
@@ -133,11 +129,26 @@ class ThanhToan
         try {
             $client = $this->SoapClient();
             $params = [
-                "Sothe" => $soThe,
+                "sothe" => $soThe,
             ];
-            $response = $client->__soapCall(__FUNCTION__, $params)
+            $response = $client->GetHotenFromSothe($params)
                 ->GetHotenFromSotheResult;
             return $response;
+        } catch (Exception $th) {
+            var_dump($th);
+        }
+    }
+
+    public function GetTTBenhnhan($soThe)
+    {
+        try {
+            $client = $this->SoapClient();
+            $params = [
+                "sothe" => $soThe,
+            ];
+            $response = $client->GetTTBenhnhan($params)
+                ->GetTTBenhnhanResult;
+            return json_decode($response, JSON_OBJECT_AS_ARRAY);
         } catch (Exception $th) {
             var_dump($th);
         }
@@ -157,9 +168,9 @@ class ThanhToan
                 "NoidungGD" => $noidungGD,
                 "taikhoan" =>  "vankkhang",
             ];
-            var_dump($params);
-            // $response = $client->__soapCall(__FUNCTION__, $params);
-            $response = $client->__soapCall("InsertLSGiaodich", $params);
+            // $response = $client->__soapCall("InsertLSGiaodich", $params, null, $this->Header());
+            $response = $client->InsertLSGiaodich($params);
+            // var_dump($response);
             return $response;
         } catch (Exception $ex) {
             echo $ex->getMessage();

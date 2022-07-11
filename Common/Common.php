@@ -346,7 +346,7 @@ class Common
 
     public static function MoneyFomat($param0)
     {
-        return number_format($param0, 0, '.', ',') . " vnđ";
+        return number_format($param0, 0, '.', ',') . "đ";
     }
 
     public static function NumberFomat($param0)

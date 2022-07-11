@@ -109,7 +109,17 @@ class Model_Adapter
         }
         return $data;
     }
-
+    public function fetchAssoc()
+    {
+        $list = $this->Tim();
+        $data = NULL;
+        if ($list) {
+            while ($row = mysqli_fetch_assoc($list)) {
+                $data[] = $row;
+            }
+        }
+        return $data;
+    }
     public function fetchArray()
     {
         $list = $this->Tim();

@@ -2,15 +2,72 @@
     <div class="container" id="columns">
         <?php
 
+        use Common\Common;
+        use Model\ThanhToan;
         use Module\cart\Model\Cart;
+        use Module\cart\Model\Order;
 
+        $order = new Order($_Param[0]);
         $Cart = new Cart();
-        $html = $Cart->GetDonHangMail($_Param[0]);
-        $path = Cart::GetPathContent(Cart::DatHangThanhCong);
-        $content = file_get_contents($path);
-        $content = str_replace("[DonHang]", $html, $content);
-        echo $content;
+        $thanhToan = new ThanhToan();
+        $Products = $order->ProductsByDonHang();
+        $thongTinBenhNhan = $thanhToan->GetTTBenhnhan($order->Name);
+        // var_dump($thongTinBenhNhan);
+        // var_dump($thongTinBenhNhan["HotenBN"]);
+        // $html = $Cart->GetDonHangMail($_Param[0]);
+        // $path = Cart::GetPathContent(Cart::DatHangThanhCong);
+        // $content = file_get_contents($path);
+        // $content = str_replace("[DonHang]", $html, $content);
+        // echo $content;
         ?>
+        <h2>Thông Tin Khách Hàng</h2>
+        <p style="margin: 5px 0;">Khách Hàng:
+            <b> <?php echo $thongTinBenhNhan["HotenBN"]; ?></b>
+        </p>
+        <p style="margin: 5px 0;">Tình Trạng:
+            <label style="padding: 0px;font-weight: bold;" class=""><?php echo $order->Status(); ?></label>
+        </p>
+        <p>Số dư tài khoản:
+            <label style="padding: 0px;font-weight: bold;" class=" ">
+                <?php echo Common::MoneyFomat($thongTinBenhNhan["Soduthe"]); ?>
+            </label>
+        </p>
+        <table style="width: 100%;border: 1px solid navy;margin-bottom: 10px;">
+            <thead style="background-color: navy;">
+                <tr style="color: #fff;">
+                    <th style="padding: 10px;">Sản phẩm</th>
+                    <th style="width: 100px;padding: 10px;">Số Lượng</th>
+                    <th style="width: 100px;padding: 10px;">Thành Tiền</th>
+                </tr>
+            <tbody>
+                <?php
+                if ($Products) {
+                    foreach ($Products as $SanPham) {
+                        $_P = new \Model\Products($SanPham["IdProduct"]);
+                ?>
+                        <tr style="border: 1px solid navy;">
+                            <td style="padding: 5px 10px;border: 1px solid navy;">
+                                <h2>
+                                    <?php echo $_P->nameProduct ?>
+                                </h2>
+                                <small class="cart_ref">Mã : #<?php echo $_P->ID ?></small><br>
+                            </td>
+                            <td style="border: 1px solid navy;text-align: center;vertical-align: middle;">
+                                <?php echo $SanPham["Number"]; ?>
+                            </td>
+                            <td style="border: 1px solid navy;text-align: center;vertical-align: middle;">
+                                <b><?php $ThanhTien = $_P->Price * $SanPham["Number"]; ?>
+                                    <?php echo $_P->showPrice($ThanhTien); ?>
+                                </b>
+                            </td>
+                        </tr>
+                <?php
+                    }
+                }
+                ?>
+            </tbody>
+            </thead>
+        </table>
         <a class="btn btn-primary pull-right" href="/cart/thanhcong/print/<?php echo $_Param[0];  ?>/">In phiếu</a>
     </div>
 </div>

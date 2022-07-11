@@ -119,7 +119,6 @@ app.controller(
     };
     $scope.seachKeyWord = "";
     $scope.TimKiemSanPham = async function () {
-      console.log($scope.seachKeyWord);
       var params = {
         keyword: $scope.seachKeyWord,
       };

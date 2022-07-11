@@ -120,17 +120,20 @@ class Controller_index extends Controller_backend
                 $resul =  $thanhToan->InsertLSGiaodich(
                     $modelThanhToan["MaThe"],
                     $TongTien,
-                    "147852",
+                    $donhang["CodeOrder"],
                 );
                 if ($resul) {
+                    var_dump($resul);
                     //$resul->InsertLSGiaodichResult;
                     if ($resul->InsertLSGiaodichResult == 1) {
                         Cart::clearAllCart();
                         $order = new Order();
                         $order->updateOrderStatus($donhang['CodeOrder'], Order::DaThuTien);
+                        sleep(1);
                         Common::ToUrl("/cart/thanhcong/index/" . $donhang['CodeOrder'] . "/");
+                    } else {
+                        Common::ToUrl("/cart/thanhcong/fail/");
                     }
-                    // 042D5D72D85C80
                 }
             }
         } catch (\Exception $th) {
@@ -239,6 +242,11 @@ class Controller_index extends Controller_backend
         $bre->setBreadcrumb($abre);
         Model\Breadcrumb::$Title = $Pages->Name;
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
+    }
+
+    public function info()
+    {
+        phpinfo();
     }
 
     // function syspagedetail($Url)

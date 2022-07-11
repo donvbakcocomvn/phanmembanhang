@@ -297,15 +297,13 @@ class backend extends \Model\Database
                         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                     </div>
                 </div>
-                <!-- /.search form -->
-                <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu ">
                     <li class="header text-center text-uppercase " style="color: #ddd;"><b>Danh Mục Chức Năng</b></li>
-                    <li class="treeview  ">
+                    <!-- <li class="treeview  ">
                         <a href="/cart/mcart/index">
                             <i class="fa fa-shopping-cart"></i> <span>Tạo Đơn Hàng</span>
                         </a>
-                    </li>
+                    </li> -->
                     <li class="treeview hidden">
                         <a href="/cart/mcart/donhangcuatoi">
                             <i class="fa fa-list"></i> <span>Đơn Hàng Của Tôi</span>
@@ -314,11 +312,11 @@ class backend extends \Model\Database
                     <?php
                     if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::QuanLyThanhToan])) {
                     ?>
-                        <li class="treeview">
+                        <!-- <li class="treeview">
                             <a href="/cart/xacnhandonhang/index/">
                                 <i class="fa fa-dollar"></i> <span>XN Nhận Tiền</span>
                             </a>
-                        </li>
+                        </li> -->
                     <?php
                     }
 
@@ -341,12 +339,14 @@ class backend extends \Model\Database
                                         <span>Danh Mục Sản Phẩm</span>
                                     </a>
                                 </li>
-                                <li><a href="/mproduct/index"><i class="fa fa-circle-o"></i> Quản Lý Sản Phẩm</a></li>
-                                <li><a href="/mproduct/sanphamhtheohinh"><i class="fa fa-circle-o"></i> Thêm Nhanh</a></li>
+                                <li><a href="/mproduct/index">
+                                        <i class="fa fa-circle-o"></i>
+                                        Quản Lý Sản Phẩm
+                                    </a>
+                                </li>
+                                <!-- <li><a href="/mproduct/sanphamhtheohinh"><i class="fa fa-circle-o"></i> Thêm Nhanh</a></li> -->
                             </ul>
                         </li>
-
-
                     <?php
                     }
                     if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::ChinhSuaNoiDung])) {
@@ -414,22 +414,49 @@ class backend extends \Model\Database
                                 </li>
                                 <li class="treeview">
                                     <a href="/minfor/index/thongtincongty">
-                                        <i class="fa fa-list-alt"></i> <span>Thông tin công ty</span>
-
+                                        <i class="fa fa-list-alt"></i>
+                                        <span>Thông tin công ty</span>
                                     </a>
                                 </li>
                                 <li class="treeview <?php echo \Model\menuactive::SetActive('madv'); ?>">
                                     <a href="#">
-                                        <i class="fa fa-share"></i> <span>Quản Lý Quảng Cáo</span>
+                                        <i class="fa fa-share"></i>
+                                        <span>Quản Lý Quảng Cáo</span>
                                         <i class="fa fa-angle-right pull-right"></i>
                                     </a>
                                     <ul class="treeview-menu">
-                                        <li><a href="/madv/index"><i class="fa fa-circle-o"></i> Quản Lý Quảng Cáo</a></li>
-                                        <li><a href="/madv/video"><i class="fa fa-circle-o"></i> Quản Lý Video</a></li>
+                                        <li>
+                                            <a href="/madv/index">
+                                                <i class="fa fa-circle-o"></i> Quản Lý Quảng Cáo
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/madv/video">
+                                                <i class="fa fa-circle-o"></i>
+                                                Quản Lý Video
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
-                                <li><a href="/cart/mcart/trangnoidung"><i class="fa fa-gear"></i> <span>Cấu Hình Đặt Hàng</span></a></li>
-                                <li><a href="/mail/index/index/MaiThongBaoDonHang"><i class="fa fa-envelope"></i> <span>Cài Đặt Mail Đơn Hàng</span></a></li>
+                                <li>
+                                    <a href="/cart/mcart/trangnoidung/">
+                                        <i class="fa fa-gear"></i>
+                                        <span>Cấu Hình Đặt Hàng</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/cart/mcart/trangdathangthatbai/">
+                                        <i class="fa fa-gear"></i>
+                                        <span>Trang đặt hàng thất bại</span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="/mail/index/index/MaiThongBaoDonHang">
+                                        <i class="fa fa-envelope"></i>
+                                        <span>Cài Đặt Mail Đơn Hàng</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     <?php

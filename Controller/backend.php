@@ -1,5 +1,8 @@
 <?php
 
+use Common\Common;
+use Model\ThongKe;
+
 class Controller_backend extends Application
 {
 
@@ -124,5 +127,75 @@ class Controller_backend extends Application
         $a = $brand->Select($where, ["Id", "Name"]);
         $api = new \lib\APIs();
         echo $api->ArrayToString($a);
+    }
+
+    public function thongke()
+    {
+        $resultData = [];
+        if (isset($_GET["btnLoc"])) {
+            if (isset($_GET["fromDate"]) && isset($_GET["toDate"])) {
+                $fromDate = $_GET["fromDate"] ?? "";
+                $toDate = $_GET["toDate"] ?? "";
+                $thongKe = new ThongKe();
+                $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate);
+                $resultData = [];
+                foreach ($result as $index => $row) {
+                    $dong["index"] = $index + 1;
+                    $dong["TenHangHoa"] = $row["nameProduct"];
+                    $dong["DVT"] = $row["unitPrice"];
+                    $dong["MaHang"] = $row["Code"];
+                    $dong["GiaBan"] = Common::MoneyFomat($row["Price"]);
+                    $dong["SoLuong"] = Common::MoneyFomat($row["SoLuong"]);
+                    $dong["ThanhTien"] = Common::MoneyFomat($row["Price"] * $row["SoLuong"]);
+                    $dong["GhiChu"] = "";
+                    $resultData[] = $dong;
+                }
+            }
+        }
+        if (isset($_GET["btnExport"])) {
+            if (isset($_GET["fromDate"]) && isset($_GET["toDate"])) {
+                $fromDate = $_GET["fromDate"] ?? "";
+                $toDate = $_GET["toDate"] ?? "";
+                $thongKe = new ThongKe();
+                $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate);
+                $resultData = [];
+                foreach ($result as $index => $row) {
+                    $dong["index"] = $index + 1;
+                    $dong["TenHangHoa"] = $row["nameProduct"];
+                    $dong["DVT"] = $row["unitPrice"];
+                    $dong["MaHang"] = $row["Code"];
+                    $dong["GiaBan"] = Common::MoneyFomat($row["Price"]);
+                    $dong["SoLuong"] = Common::MoneyFomat($row["SoLuong"]);
+                    $dong["ThanhTien"] = Common::MoneyFomat($row["Price"] * $row["SoLuong"]);
+                    $dong["GhiChu"] = "";
+                    $resultData[] = $dong;
+                }
+            }
+        }
+        $this->ViewTheme(["data" => $resultData], Model_ViewTheme::get_viewthene(), "");
+    }
+    public function export()
+    {
+
+        $resultData = [];
+        if (isset($_GET["fromDate"]) && isset($_GET["toDate"])) {
+            $fromDate = $_GET["fromDate"] ?? "";
+            $toDate = $_GET["toDate"] ?? "";
+            $thongKe = new ThongKe();
+            $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate);
+            $resultData = [];
+            foreach ($result as $index => $row) {
+                $dong["index"] = $index + 1;
+                $dong["TenHangHoa"] = $row["nameProduct"];
+                $dong["DVT"] = $row["unitPrice"];
+                $dong["MaHang"] = $row["Code"];
+                $dong["GiaBan"] = Common::MoneyFomat($row["Price"]);
+                $dong["SoLuong"] = Common::MoneyFomat($row["SoLuong"]);
+                $dong["ThanhTien"] = Common::MoneyFomat($row["Price"] * $row["SoLuong"]);
+                $dong["GhiChu"] = "";
+                $resultData[] = $dong;
+            }
+        }
+        $this->ViewTheme(["data" => $resultData], Model_ViewTheme::get_viewthene(), "");
     }
 }

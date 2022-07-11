@@ -7,6 +7,7 @@ class Cart extends \Model\Database
 
     const MaxNumber = 100;
     const DatHangThanhCong = "DatHangThanhCong";
+    const DatHangThatBai = "DatHangThatBai";
 
     function __construct()
     {
@@ -120,9 +121,6 @@ class Cart extends \Model\Database
         <h3>Thông Tin Khách Hàng</h3>
         <p>Khách Hàng: <?php echo $order->Name; ?></p>
         <p>Tình Trạng: <label class="label-success"><?php echo $order->Status(); ?></label> </p>
-        <!-- <p>Email: <?php echo $order->Email; ?></p>
-        <p>SĐT: <?php echo $order->Phone; ?></p>
-        <p>Địa Chỉ: <?php echo $order->Address; ?></p> -->
         <h3>Thông Tin Đơn Hàng</h3>
         <table style="width: 100%;">
             <thead>

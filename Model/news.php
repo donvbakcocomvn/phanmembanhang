@@ -2,27 +2,29 @@
 
 namespace Model;
 
-class news extends \Model\Database {
+class news extends \Model\Database
+{
 
     public
-            $ID,
-            $PageID,
-            $Name,
-            $Alias,
-            $Summary,
-            $Content,
-            $title,
-            $keyword,
-            $description,
-            $AnHien,
-            $NgayDang,
-            $UrlHinh,
-            $TinNoiBat,
-            $SoLanXem,
-            $Stt;
+        $ID,
+        $PageID,
+        $Name,
+        $Alias,
+        $Summary,
+        $Content,
+        $title,
+        $keyword,
+        $description,
+        $AnHien,
+        $NgayDang,
+        $UrlHinh,
+        $TinNoiBat,
+        $SoLanXem,
+        $Stt;
     private $TableName;
 
-    function __construct($menu = null) {
+    function __construct($menu = null)
+    {
         if ($menu) {
             $this->ID = $menu['ID'];
             $this->PageID = $menu['PageID'];
@@ -44,34 +46,39 @@ class news extends \Model\Database {
         $this->TableName = table_prefix . "news";
     }
 
-    function createNewsID() {
+    function createNewsID()
+    {
         return time() . $this->RandomString(8);
     }
 
-    function linkNewsCurent() {
+    function linkNewsCurent()
+    {
         $p = new pages();
         $_p = $p->PagesById($this->PageID, FALSE);
         $p1 = new pages($_p);
         return $p1->linkPagesCurent() . $this->Alias . ".html";
     }
 
-    function NewsHot() {
+    function NewsHot()
+    {
         return $this->select($this->TableName, [], " `TinNoiBat` = '1' and `AnHien` = 1 ");
     }
 
-    function NewsPT() {
+    function NewsPT()
+    {
 
         return $this->select($this->TableName, [], " 1 ");
     }
 
-    public function GetAllPT($name, $indexpage, $pageNumber, &$total) {
+    public function GetAllPT($name, $indexpage, $pageNumber, &$total)
+    {
         $where = "`PageID` = '{$name}' or `Name` like '%{$name}%'";
         return $this->SelectPT($where, $indexpage, $pageNumber, $total);
     }
 
-    function Thumnail() {
+    function Thumnail()
+    {
         $lib = new \lib\imageComp();
         return "/" . $lib->layHinh($this->UrlHinh, 250, 250, true);
     }
-
 }

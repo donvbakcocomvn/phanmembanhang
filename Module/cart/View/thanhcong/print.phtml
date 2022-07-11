@@ -91,13 +91,16 @@
 
 use Common\Common;
 use Model\Products;
+use Model\ThanhToan;
 use Module\cart\Model\Order;
 
 $id = $_Param[0];
 $order = new Order($id);
+$thanhToan = new ThanhToan();
 $orderDetail = $order->orderDetailbyid($id);
-// var_dump($orderDetail);
-$soTienBangChu = Common::Number2words($order->TotalPrice);
+$thongTinKhachHang = $thanhToan->GetTTBenhnhan($order->Name);
+$soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
+
 ?>
 
 <div class="main">
@@ -105,9 +108,9 @@ $soTienBangChu = Common::Number2words($order->TotalPrice);
         <div class="shop"><br>
             <h2 style="font-weight: bold;">PHIẾU BÁN HÀNG</h2>
             <h4 style="font-style: italic; font-weight: 300; margin: 10px 0;">
-                Ngày <?php echo date("d", time()) ?>
-                tháng <?php echo date("m", time()) ?>
-                năm <?php echo date("Y", time()) ?>
+                Ngày <span style="border-bottom: 2px dotted #aaa;"><?php echo date("d", time()) ?></span>
+                tháng <span style="border-bottom: 2px dotted #aaa;"> <?php echo date("m", time()) ?> </span>
+                năm <span style="border-bottom: 2px dotted #aaa;"><?php echo date("Y", time()) ?> </span>
             </h4>
             <!-- <span class="shop-add">523 Nguyễn Văn Khối, Phường 8 <br>
                     Quận Gò Vấp, Thành Phố Hồ Chí Minh, 7000
@@ -119,8 +122,8 @@ $soTienBangChu = Common::Number2words($order->TotalPrice);
         <div class="temporary">
             <table style="width:100%;">
                 <tr>
-                    <td class="temporary-title">Họ và Tên BN:</td>
-                    <td class="temporary-title"><?php echo $order->Name; ?></td>
+                    <td class="temporary-title">Họ và tên:</td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["HotenBN"]; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Nhân viên phục vụ:</td>
@@ -128,15 +131,23 @@ $soTienBangChu = Common::Number2words($order->TotalPrice);
                 </tr>
                 <tr>
                     <td class="temporary-title">Năm sinh:</td>
-                    <td class="temporary-title">N/A</td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["Ngaysinh"]; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Khoa:</td>
                     <td class="temporary-title">N/A</td>
                 </tr>
                 <tr>
-                    <td class="temporary-title">Mã bệnh án:</td>
-                    <td class="temporary-title">N/A</td>
+                    <td class="temporary-title">Mã bệnh nhân:</td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["MaBN"]; ?></td>
+                </tr>
+                <tr>
+                    <td class="temporary-title">Số dư tài khoản:</td>
+                    <td class="temporary-title">
+                        <?php
+                        echo  Common::MoneyFomat($thongTinKhachHang["Soduthe"]);
+                        ?>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -148,32 +159,37 @@ $soTienBangChu = Common::Number2words($order->TotalPrice);
                     <td>Tên hàng hóa</td>
                     <td>SL</td>
                     <td style="text-align: center;">Đơn giá</td>
-                    <td style="text-align: right;">Thành Tiền</td>
+                    <td style="text-align: right;">Thành tiền</td>
                 </tr>
                 <?php
                 foreach ($orderDetail as $key => $value) {
                     $p = new Products($value["IdProduct"]);
                 ?>
                     <tr>
-                        <td class="temporary-title"><?php echo $p->ID ?></td>
+                        <td class="temporary-title"><?php echo $p->Code ?></td>
                         <td><?php echo $p->nameProduct ?></td>
                         <td><?php echo $value["Number"]; ?></td>
-                        <td style="text-align: center;"><?php echo $value["Price"]; ?></td>
-                        <td style="text-align: right;"><?php echo $value["Price"] * $value["Number"]; ?></td>
+                        <td style="text-align: center;">
+                            <?php
+                            echo Common::MoneyFomat($value["Price"]);
+                            ?>
+                        </td>
+                        <td style="text-align: right;">
+                            <?php echo  Common::MoneyFomat($value["Price"] * $value["Number"]); ?>
+                        </td>
                     </tr>
                 <?php
                 }
                 ?>
-
             </table>
         </div>
         <hr style="border-bottom: 1px dashed #aaa;margin-top: 5px;margin-bottom: 5px;">
         <div style="">
-            <div class="total-order" style=" ">
+            <div class="total-order">
                 <table class="products">
                     <tr>
                         <td>Tổng tiền:</td>
-                        <td><b><?php echo $order->TotalPrice; ?></b></td>
+                        <td><b><?php echo Common::MoneyFomat($order->TotalPrice); ?></b></td>
                     </tr>
                     <tr>
                         <td colspan="2">Tổng tiền bằng chữ:
