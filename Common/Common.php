@@ -276,6 +276,11 @@ class Common
         return self::ChekId($formUser);
     }
 
+    public static function NumberToStringFomatZero($value, $numString = 6)
+    {
+        return str_pad($value, $numString, '0', STR_PAD_LEFT);
+    }
+
     public static function PhoneFomat($number)
     {
         $number = preg_replace("/[^\d]/", "", $number);

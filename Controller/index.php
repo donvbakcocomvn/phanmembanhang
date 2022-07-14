@@ -8,7 +8,7 @@ use Model\UsersService;
 use Module\cart\Model\Cart;
 use Module\cart\Model\Order;
 
-class Controller_index extends Controller_backend
+class Controller_index extends Application
 {
 
     public $param;
@@ -18,7 +18,7 @@ class Controller_index extends Controller_backend
 
     function __construct()
     {
-        parent::__construct();
+
         $this->param = $this->getParam();
         $this->Pages = new \Model\pages();
         $this->News = new \Model\news();
@@ -32,6 +32,8 @@ class Controller_index extends Controller_backend
         Model_Seo::$key = "__Keyword___";
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "");
     }
+
+
 
     function sanpham()
     {
@@ -247,6 +249,12 @@ class Controller_index extends Controller_backend
     public function info()
     {
         phpinfo();
+    }
+
+    public function taophieu()
+    {
+        $donhang = $this->taodonhang(date("ChuaThanhToan"));
+        Common::ToUrl("/cart/thanhcong/index/" . $donhang['CodeOrder'] . "/");
     }
 
     // function syspagedetail($Url)

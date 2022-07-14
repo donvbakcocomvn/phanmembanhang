@@ -35,7 +35,9 @@
                      </tr>
                      <tr>
                          <th class="" style="background-color: #fff;padding: 0;padding-left:10px;padding-top: 5px;">
-                             <input ng-change="SanPhamByCode(MaSanPham)" autofocus type="text" ng-model="MaSanPham" style="background: #fff;" placeholder="Thêm theo mã sản phẩm" />
+                             <form ng-submit="SanPhamByCode(MaSanPham)">
+                                 <input autofocus type="text" ng-model="MaSanPham" style="background: #fff;" placeholder="Thêm theo mã sản phẩm" />
+                             </form>
                          </th>
                      </tr>
                  </thead>
@@ -83,7 +85,18 @@
                  </tbody>
              </table>
              <div class="cart_navigation">
-                 <a class="btn next-btn btn-primary" href="/index/thanhtoan">Thanh Toán</a>
+                 <?php
+                    if (!isset($_SESSION[QuanTri])) {
+                    ?>
+                     <a class="btn next-btn btn-primary" href="/index/dathang">Đặt hàng</a>
+                 <?php
+                    } else {
+                    ?>
+                     <a class="btn next-btn btn-primary" href="/index/thanhtoan">Thanh toán</a>
+                 <?php
+                    }
+                    ?>
+
              </div>
          </div>
      </div>

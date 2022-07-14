@@ -22,14 +22,14 @@
         ?>
         <h2>Thông Tin Khách Hàng</h2>
         <p style="margin: 5px 0;">Khách Hàng:
-            <b> <?php echo $thongTinBenhNhan["HotenBN"]; ?></b>
+            <b> <?php echo $thongTinBenhNhan["HotenBN"] ?? "NA"; ?></b>
         </p>
         <p style="margin: 5px 0;">Tình Trạng:
             <label style="padding: 0px;font-weight: bold;" class=""><?php echo $order->Status(); ?></label>
         </p>
         <p>Số dư tài khoản:
             <label style="padding: 0px;font-weight: bold;" class=" ">
-                <?php echo Common::MoneyFomat($thongTinBenhNhan["Soduthe"]); ?>
+                <?php echo Common::MoneyFomat($thongTinBenhNhan["Soduthe"] ?? 0); ?>
             </label>
         </p>
         <table style="width: 100%;border: 1px solid navy;margin-bottom: 10px;">

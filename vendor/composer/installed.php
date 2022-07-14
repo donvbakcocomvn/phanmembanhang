@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '793da18137f7823fae0046f034f708e9698ecd6e',
+        'reference' => '948b8425b401429a8cba5317b763e2c6af8089ed',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '793da18137f7823fae0046f034f708e9698ecd6e',
+            'reference' => '948b8425b401429a8cba5317b763e2c6af8089ed',
             'dev_requirement' => false,
         ),
         'doctrine/annotations' => array(
@@ -125,6 +125,15 @@
             'install_path' => __DIR__ . '/../phpoffice/phpspreadsheet',
             'aliases' => array(),
             'reference' => '21e4cf62699eebf007db28775f7d1554e612ed9e',
+            'dev_requirement' => false,
+        ),
+        'picqer/php-barcode-generator' => array(
+            'pretty_version' => 'v2.2.4',
+            'version' => '2.2.4.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../picqer/php-barcode-generator',
+            'aliases' => array(),
+            'reference' => 'b98f110cc5a79f723688fb17fd90b9325300d844',
             'dev_requirement' => false,
         ),
         'psr/cache' => array(

@@ -93,7 +93,10 @@ use Common\Common;
 use Model\Products;
 use Model\ThanhToan;
 use Module\cart\Model\Order;
+use Picqer\Barcode\BarcodeGeneratorPNG;
 
+$generator = new BarcodeGeneratorPNG();
+// $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
 $id = $_Param[0];
 $order = new Order($id);
 $thanhToan = new ThanhToan();
@@ -106,6 +109,8 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
 <div class="main">
     <div class="salesslip">
         <div class="shop"><br>
+
+
             <h2 style="font-weight: bold;">PHIẾU BÁN HÀNG</h2>
             <h4 style="font-style: italic; font-weight: 300; margin: 10px 0;">
                 Ngày <span style="border-bottom: 2px dotted #aaa;"><?php echo date("d", time()) ?></span>
@@ -116,6 +121,12 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
                     Quận Gò Vấp, Thành Phố Hồ Chí Minh, 7000
                 </span><br>
                 <span class="shop-tel">SĐT : 0949797755</span><br><br> -->
+            <?php
+            $string = $order->Id;
+            echo '<img style="height:50px;
+            " src="data:image/png;base64,' . base64_encode($generator->getBarcode($string, BarcodeGeneratorPNG::TYPE_CODE_128)) . '">';
+            ?>
+            <p>Mã Phiếu: <?php echo $order->Id; ?></p>
         </div>
         <hr style="border-bottom: 1px dashed #aaa;margin: 0px;">
         <!---------------------------------->
@@ -123,15 +134,15 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
             <table style="width:100%;">
                 <tr>
                     <td class="temporary-title">Họ và tên:</td>
-                    <td class="temporary-title"><?php echo $thongTinKhachHang["HotenBN"]; ?></td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["HotenBN"] ?? "Khách Vãng Lai"; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Nhân viên phục vụ:</td>
-                    <td class="temporary-title"><?php echo $order->Saler; ?></td>
+                    <td class="temporary-title"><?php echo $order->Saler ?? ""; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Năm sinh:</td>
-                    <td class="temporary-title"><?php echo $thongTinKhachHang["Ngaysinh"]; ?></td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["Ngaysinh"] ?? ""; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Khoa:</td>
@@ -139,13 +150,19 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
                 </tr>
                 <tr>
                     <td class="temporary-title">Mã bệnh nhân:</td>
-                    <td class="temporary-title"><?php echo $thongTinKhachHang["MaBN"]; ?></td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["MaBN"] ?? ""; ?></td>
+                </tr>
+                <tr>
+                    <td class="temporary-title">Tình Trạng:</td>
+                    <td class="temporary-title">
+                        <b><?php echo $order->Status() ?? ""; ?></b>
+                    </td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Số dư tài khoản:</td>
                     <td class="temporary-title">
                         <?php
-                        echo  Common::MoneyFomat($thongTinKhachHang["Soduthe"]);
+                        echo  Common::MoneyFomat($thongTinKhachHang["Soduthe"] ?? 0);
                         ?>
                     </td>
                 </tr>
