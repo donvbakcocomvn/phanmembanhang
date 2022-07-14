@@ -111,7 +111,6 @@ class Controller_index extends Controller_backend
         try {
 
             $thanhToan = new ThanhToan();
-
             if (isset($_POST["thanhToan"])) {
                 $modelThanhToan = $_POST["thanhToan"];
                 $donhang = $this->taodonhang($modelThanhToan["MaThe"]);
@@ -132,7 +131,8 @@ class Controller_index extends Controller_backend
                         sleep(1);
                         Common::ToUrl("/cart/thanhcong/index/" . $donhang['CodeOrder'] . "/");
                     } else {
-                        Common::ToUrl("/cart/thanhcong/fail/");
+                        // Số dư không đủ để thanh toán
+                        Common::ToUrl("/cart/thanhcong/fail/{$resul->InsertLSGiaodichResult}/");
                     }
                 }
             }

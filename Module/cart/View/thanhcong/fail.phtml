@@ -2,11 +2,27 @@
     <div class="container" id="columns">
         <?php
 
-        use Module\cart\Model\Cart;
-
-        $path = Cart::GetPathContent(Cart::DatHangThatBai);
-        $content = file_get_contents($path);
-        echo $content;
+        $a = [
+            2 => "Có lỗi khi tạo giao dịch",
+            0 => "Số dư không đủ để thanh toán",
+            -2 => "Không có thông tin tài khoản tích hợp hoặc tài khoản tích hợp không hợp lệ",
+            -3 => "Thẻ không hợp lệ (Thẻ bị mất, hỏng, khóa,..)",
+            -4 => "Thẻ không có trong kho thẻ.",
+        ];
         ?>
+        <h1 style="text-align: center;">
+            <?php
+            $pa = $_Param[0];
+            echo $a[$pa];
+            ?>
+        </h1>
+        <p style="text-align: center;">Liên hệ quản trị viên để được hỗ trợ</p>
+        <!-- o	1: Tạo giao dịch thành công
+o	2: Có lỗi khi tạo giao dịch
+o	0: Số dư không đủ để thanh toán
+o	-2: Không có thông tin tài khoản tích hợp hoặc tài khoản tích hợp không hợp lệ
+o	-3: Thẻ không hợp lệ (Thẻ bị mất, hỏng, khóa,..)
+o	-4: Thẻ không có trong kho thẻ. -->
+
     </div>
 </div>

@@ -1,6 +1,7 @@
 <?php
 
 use Common\Common;
+use Model\ExcelConfig;
 use Model\ThongKe;
 
 class Controller_backend extends Application
@@ -145,7 +146,7 @@ class Controller_backend extends Application
                     $dong["DVT"] = $row["unitPrice"];
                     $dong["MaHang"] = $row["Code"];
                     $dong["GiaBan"] = Common::MoneyFomat($row["Price"]);
-                    $dong["SoLuong"] = Common::MoneyFomat($row["SoLuong"]);
+                    $dong["SoLuong"] = $row["SoLuong"];
                     $dong["ThanhTien"] = Common::MoneyFomat($row["Price"] * $row["SoLuong"]);
                     $dong["GhiChu"] = "";
                     $resultData[] = $dong;
@@ -158,42 +159,110 @@ class Controller_backend extends Application
                 $toDate = $_GET["toDate"] ?? "";
                 $thongKe = new ThongKe();
                 $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate);
+
+                $tuNgay = date("d-m-Y", strtotime($fromDate));
+                $denNgay = date("d-m-Y", strtotime($toDate));
                 $resultData = [];
+                $resultData[] =  [
+                    "SỞ Y TẾ THÀNH PHỐ HỒ CHÍ MINH",
+                ];
+                $resultData[] =  [
+                    "BỆNH VIỆN NHÂN ÁI",
+                ];
+                $resultData[] =  [
+                    "BẢNG KÊ BÁN HÀNG CĂN TIN",
+                ];
+                $resultData[] =  [
+                    "Từ ngày: {$tuNgay} đến ngày: {$denNgay}",
+                ];
+                $resultData[] = [
+                    "STT",
+                    "Danh mục",
+                    "ĐVT",
+                    "Mã hàng hóa",
+                    "Giá Bán",
+                    "Số lượng",
+                    "Thành tiền",
+                    "Ghi Chú"
+                ];
+                $tongTien = 0;
+                $indexBoder = 5;
                 foreach ($result as $index => $row) {
                     $dong["index"] = $index + 1;
                     $dong["TenHangHoa"] = $row["nameProduct"];
                     $dong["DVT"] = $row["unitPrice"];
                     $dong["MaHang"] = $row["Code"];
-                    $dong["GiaBan"] = Common::MoneyFomat($row["Price"]);
-                    $dong["SoLuong"] = Common::MoneyFomat($row["SoLuong"]);
-                    $dong["ThanhTien"] = Common::MoneyFomat($row["Price"] * $row["SoLuong"]);
+                    $dong["GiaBan"] = Common::NumberFomat($row["Price"]);
+                    $dong["SoLuong"] = $row["SoLuong"];
+                    $thanhTien = $row["Price"] * $row["SoLuong"];
+                    $dong["ThanhTien"] = Common::NumberFomat($thanhTien);
+                    $tongTien += $thanhTien;
                     $dong["GhiChu"] = "";
                     $resultData[] = $dong;
+                    $indexBoder++;
                 }
-            }
-        }
-        $this->ViewTheme(["data" => $resultData], Model_ViewTheme::get_viewthene(), "");
-    }
-    public function export()
-    {
 
-        $resultData = [];
-        if (isset($_GET["fromDate"]) && isset($_GET["toDate"])) {
-            $fromDate = $_GET["fromDate"] ?? "";
-            $toDate = $_GET["toDate"] ?? "";
-            $thongKe = new ThongKe();
-            $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate);
-            $resultData = [];
-            foreach ($result as $index => $row) {
-                $dong["index"] = $index + 1;
-                $dong["TenHangHoa"] = $row["nameProduct"];
-                $dong["DVT"] = $row["unitPrice"];
-                $dong["MaHang"] = $row["Code"];
-                $dong["GiaBan"] = Common::MoneyFomat($row["Price"]);
-                $dong["SoLuong"] = Common::MoneyFomat($row["SoLuong"]);
-                $dong["ThanhTien"] = Common::MoneyFomat($row["Price"] * $row["SoLuong"]);
-                $dong["GhiChu"] = "";
-                $resultData[] = $dong;
+                $resultData[] = [
+                    "Tổng tiền",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    Common::NumberFomat($tongTien),
+                    ""
+                ];
+                $resultData[] = [
+                    "Số tiền viết bằng chữ:",
+                    Common::Number2words($tongTien) . " đồng",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ];
+                $ngayLap = date("d", time());
+                $thangLap = date("m", time());
+                $namLap = date("Y", time());
+                $resultData[] = [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "ngày {$ngayLap} tháng {$thangLap} năm {$namLap}",
+                    ""
+                ];
+                $resultData[] = [
+                    "",
+                    "Người lập",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "kế toán",
+                    ""
+                ];
+                $resultData[] = [];
+                $resultData[] = [];
+                $resultData[] = [];
+                $resultData[] = [
+                    "",
+                    "Lê Thị Hồng",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "Hoàng Thị Huệ",
+                    ""
+                ];
+                $fileName = "public/excel/baocao.xlsx";
+                if (is_dir("public/excel")) {
+                    mkdir("public/excel", 0777);
+                }
+                ExcelConfig::BangThongKeHangCangTin($resultData, $fileName, $indexBoder);
             }
         }
         $this->ViewTheme(["data" => $resultData], Model_ViewTheme::get_viewthene(), "");
