@@ -38,37 +38,42 @@ class Products extends \Model\Database
     {
         parent::__construct();
         if ($product) {
+
             if (!is_array($product)) {
                 $id = $product;
                 $product = $this->ProductsByID($id, FALSE);
                 if ($product == null) {
                     $product = $this->ProductsByIDEncode($id);
                 }
+
                 if ($product == null) {
                     $product = $this->ProductsByCode($id);
                 }
             }
-            $this->ID = $product["ID"];
-            $this->Code = $product["Code"];
-            $this->Username = $product["Username"];
-            $this->catID = $product["catID"];
-            $this->unitPrice = $product["unitPrice"] ?? "";
-            $this->brand = !empty($product["brand"]) ? $product["brand"] : null;
-            $this->nameProduct = $product["nameProduct"];
-            $this->Alias = $product["Alias"];
-            $this->Price = $product["Price"];
-            $this->oldPrice = $product["oldPrice"];
-            $this->GiaNhap = $product["GiaNhap"];
-            $this->Summary = isset($product["Summary"]) ? $product["Summary"] : "";
-            $this->Content = isset($product["Content"]) ? $product["Content"] : "";
-            $this->UrlHinh = $product["UrlHinh"];
-            $this->DateCreate = $product["DateCreate"];
-            $this->Number = isset($product["Number"]) ? intval($product["Number"]) : 0;
-            $this->Note = $product["Note"];
-            $this->BuyTimes = $product["BuyTimes"];
-            $this->Views = $product["Views"];
-            $this->isShow = $product["isShow"];
-            $this->lang = $product["lang"];
+
+            if ($product) {
+                $this->ID = $product["ID"];
+                $this->Code = $product["Code"];
+                $this->Username = $product["Username"];
+                $this->catID = $product["catID"];
+                $this->unitPrice = $product["unitPrice"] ?? "";
+                $this->brand = !empty($product["brand"]) ? $product["brand"] : null;
+                $this->nameProduct = $product["nameProduct"];
+                $this->Alias = $product["Alias"];
+                $this->Price = $product["Price"];
+                $this->oldPrice = $product["oldPrice"];
+                $this->GiaNhap = $product["GiaNhap"];
+                $this->Summary = isset($product["Summary"]) ? $product["Summary"] : "";
+                $this->Content = isset($product["Content"]) ? $product["Content"] : "";
+                $this->UrlHinh = $product["UrlHinh"];
+                $this->DateCreate = $product["DateCreate"];
+                $this->Number = isset($product["Number"]) ? intval($product["Number"]) : 0;
+                $this->Note = $product["Note"];
+                $this->BuyTimes = $product["BuyTimes"];
+                $this->Views = $product["Views"];
+                $this->isShow = $product["isShow"];
+                $this->lang = $product["lang"];
+            }
         }
     }
 
@@ -291,9 +296,18 @@ class Products extends \Model\Database
             return;
         }
 ?>
-        <a class="<?php echo $class; ?>" ng-click="addProductCart('<?php echo $this->ID; ?>')" class="<?php echo $class; ?>">
+        <!-- <a class="<?php echo $class; ?>" ng-click="addProductCart('<?php echo $this->ID; ?>')" class="<?php echo $class; ?>">
             <i class="fa fa-plus"></i>
-        </a>
+        </a> --> 
+        <div class="pull-right">
+            <a class="btn btn-success" ng-click="addProductCart('<?php echo $this->ID; ?>')" class="<?php echo $class; ?>">
+                <i class="fa fa-plus"></i>
+            </a>
+            <a class="btn btn-danger" ng-click="removeProductCart('<?php echo $this->ID; ?>')" class="<?php echo $class; ?>">
+                <i class="fa fa-minus"></i>
+            </a>
+        </div>
+
     <?php
     }
     public function btnGioHangMinus($class = "")
@@ -332,6 +346,7 @@ class Products extends \Model\Database
         $ar["GiaNhap"] = intval($this->GiaNhap);
         $ar["GiaNhapVND"] = $this->GiaNhap();
         $ar["oldPrice"] = $this->oldPrice;
+        $ar["unitPrice"] = $this->unitPrice;
         $ar["oldPriceVND"] = $this->OldPrice();
         $ar["Summary"] = "";
         $ar["Content"] = "";

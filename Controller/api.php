@@ -4,6 +4,7 @@
 
 use App\Product;
 use Model\Products;
+use Module\cart\Model\Order;
 
 class Controller_api extends Application
 {
@@ -18,6 +19,16 @@ class Controller_api extends Application
         header('Access-Control-Allow-Origin: *');
         $this->Menu = new \Model\Menu();
         $this->param = $this->getParam();
+    }
+
+    public function getorderbyid()
+    { 
+        $id = $this->getParam()[0];
+        $data=[];
+        $order = new Order($id);
+        // var_dump($order);
+        // $data["Product"] = $order->Products();
+        echo \lib\APIs::Json_Encode($order->ToArrayDeTail());
     }
 
     function GetTinhThanhQuanHuyen()

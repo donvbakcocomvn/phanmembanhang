@@ -100,4 +100,13 @@ class mcart extends \Controller_backend
     {
         return $this->AViewModule([]);
     }
+
+    public function suadonhang()
+    {
+        $this->ViewThemeModule();
+    }
+    public function suadonhangchitiet()
+    {
+        return $this->AViewModule([]);
+    }
 }

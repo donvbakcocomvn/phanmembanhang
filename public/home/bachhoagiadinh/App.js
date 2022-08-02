@@ -174,5 +174,10 @@ app.controller(
         $scope.getcarts();
       });
     };
+    $scope.GetOrderById = function (id) {
+      $http.get(`/api/getorderbyid/${id}`).then(function (res) {
+        $scope._CartByOrder = res.data;
+      });
+    };
   }
 );

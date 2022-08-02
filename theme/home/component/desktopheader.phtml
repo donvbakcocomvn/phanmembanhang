@@ -9,24 +9,29 @@
             </a>
         </div>
         <?php
-        if (isset($_SESSION[UserLogin])) {
-            if ($_SESSION[UserLogin] != null) {
+        if (isset($_SESSION[QuanTri])) {
+            if ($_SESSION[QuanTri] != null) {
         ?>
                 <div id="user-info-top" class="user-info pull-right">
+                    <div>
+                        <a class="current-open" href="/mlogin/"><span> <?php echo $_SESSION[QuanTri]["Name"]; ?></span></a>
+                    </div>
+                </div>
+                <!-- <div id="user-info-top" class="user-info pull-right">
                     <div class="dropdown">
                         <a class="current-open" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
                             <span>
-                                <?php echo $_SESSION[UserLogin]["Name"]; ?>
+                                <?php echo $_SESSION[QuanTri]["Name"]; ?>
                             </span>
                         </a>
                         <ul class="dropdown-menu mega_dropdown" role="menu">
-                            <li><a href="/profile/index/">Xin Chào: <?php echo $_SESSION[UserLogin]["Name"]; ?></a></li>
+                            <li><a href="/profile/index/">Xin Chào: <?php echo $_SESSION[QuanTri]["Name"]; ?></a></li>
                             <li><a href="/profile/index/#/thongtin">Thông Tin Tài Khoản</a></li>
                             <li><a href="/profile/index/#/don-hang">Quản Lý Đơn Hàng </a></li>
                             <li><a href="/dang-xuat">Đăng Xuất</a></li>
                         </ul>
                     </div>
-                </div>
+                </div> -->
             <?php
             }
         } else {
@@ -68,31 +73,7 @@
                         <p class="hotroTime">08:00AM - 08:00PM</p>
                     </div>
                     <div class="btn-cart" id="cart-block">
-                        <a title="My cart" href="/cart/">Giỏ Hàng</a>
-                        <span class="notify notify-right">{{_Cart.SumProduct}}</span>
-                        <div class="cart-block">
-                            <div class="cart-block-content">
-                                <h5 class="cart-title">{{_Cart.SumProduct}} SP Trong Giỏ Hàng</h5>
-                                <div class="cart-block-list">
-                                    <ul>
-                                        <li class="product-info" ng-repeat="items in _Cart.Product">
-                                            <div class=" ">
-                                                <h2 class="p-name">{{items.nameProduct}}</h2>
-                                                <p class="p-rice" ng-bind-html="ToHtml(items.priceVnd)"></p>
-                                                <p>SL: {{items.Number}}</p>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="toal-cart">
-                                    <span>Tạm Tính: </span>
-                                    <span class="toal-price pull-right" ng-bind-html="ToHtml(_Cart.TotalPriceVND)"></span>
-                                </div>
-                                <div class="cart-buttons">
-                                    <a href="/cart/taodonhang" ng-show="_Cart.SumProduct > 0" class="btn-check-out">Đặt Hàng</a>
-                                </div>
-                            </div>
-                        </div>
+                        <a title="My cart" href="/cart/index/donhang">Giỏ Hàng</a>
                     </div>
                 </div>
             </div>
@@ -128,7 +109,6 @@
                                 </li>
                             </ul>
                         </div>
-                        <!--/.nav-collapse -->
                     </div>
                 </nav>
             </div>

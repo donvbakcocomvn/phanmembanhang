@@ -91,4 +91,9 @@ class index extends \Controller_index
     {
         $this->Cart->clearCart();
     }
+    function donhang()
+    {
+       
+        $this->ViewThemeModule("", "", "");        
+    }
 }

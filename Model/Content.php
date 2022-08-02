@@ -26,6 +26,7 @@ class Content {
     function Contents() {
 
         $DSinfor = $this->Infor->infors();
+        $params =[];
         if ($DSinfor)
             foreach ($DSinfor as $in) {
                 $params[$in["Name"]] = $in["Content"];

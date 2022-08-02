@@ -2,8 +2,10 @@
 
 use Common\Common;
 use lib\APIs;
+use lib\Common as LibCommon;
 use lib\guid;
 use Model\ThanhToan;
+use Model\ThanhToan\BenhNhan;
 use Model\UsersService;
 use Module\cart\Model\Cart;
 use Module\cart\Model\Order;
@@ -80,20 +82,25 @@ class Controller_index extends Application
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
     }
 
-    function taodonhang($id)
+    function taodonhang($id, BenhNhan $BenhNhan)
     {
+        $tt = new ThanhToan();
+        $thonTinBenhNhan = $tt->GetTTBenhnhan($id);
+
         $cart = new Cart();
         $modelOrder = new \Module\cart\Model\Order();
         $Order["Name"] = $id;
         $Order["TotalPrice"] = $cart->TotalPrice();
         $Order["CodeOrder"] =  guid::guidV4();
-        $Order["Email"] = "";
+        $Order["Email"] = $BenhNhan->Email;
+        $Order["MaBenhNhan"] = $BenhNhan->MaBN;
+        $Order["MaThe"] = $BenhNhan->Sothe;
         $Order["Status"] = 4;
         $Order["Saler"] = $_SESSION[QuanTri]["Username"];
         $Order["Note"] = "";
         $Order["Tinh"] = 0;
         $Order["Huyen"] = 0;
-        $Order["Phone"] = "";
+        $Order["Phone"] = $BenhNhan->Sodienthoai;
         $Order["NgayTao"] = date("Y-m-d H:i:s", time());
         $Order["Address"] = "";
         $modelOrder->createOrder($Order);
@@ -101,7 +108,7 @@ class Controller_index extends Application
             $OD["Name"] = "Chi Tiết Đơn Hàng " . $Order["CodeOrder"];
             $OD["Price"] = $P["Price"];
             $OD["CodeOrder"] = $Order["CodeOrder"];
-            $OD["IdProduct"] = $P["ID"];
+            $OD["IdProduct"] = $P["Code"];
             $OD["Number"] = $P["Number"];
             $modelOrder->createOrderDetail($OD);
         }
@@ -115,7 +122,14 @@ class Controller_index extends Application
             $thanhToan = new ThanhToan();
             if (isset($_POST["thanhToan"])) {
                 $modelThanhToan = $_POST["thanhToan"];
-                $donhang = $this->taodonhang($modelThanhToan["MaThe"]);
+                $thonTinBenhNhan = $thanhToan->GetTTBenhnhan($modelThanhToan["MaThe"]);
+                // var_dump($thonTinBenhNhan);
+                $BenhNhan = new BenhNhan($thonTinBenhNhan);
+                // var_dump($BenhNhan);
+                if($modelThanhToan["MaThe"]==""){
+                    throw new Exception("Không có mã thẻ");
+                }
+                $donhang = $this->taodonhang($modelThanhToan["MaThe"], $BenhNhan);
                 $cart = new Cart();
                 $TongTien = $cart->TotalPrice();
                 $resul =  $thanhToan->InsertLSGiaodich(
@@ -124,7 +138,7 @@ class Controller_index extends Application
                     $donhang["CodeOrder"],
                 );
                 if ($resul) {
-                    var_dump($resul);
+                    // var_dump($resul);
                     //$resul->InsertLSGiaodichResult;
                     if ($resul->InsertLSGiaodichResult == 1) {
                         Cart::clearAllCart();
@@ -253,7 +267,10 @@ class Controller_index extends Application
 
     public function taophieu()
     {
-        $donhang = $this->taodonhang(date("ChuaThanhToan"));
+        $taoPhieu = new BenhNhan();
+        $taoPhieu->MaBN = null;
+        
+        $donhang = $this->taodonhang("KhachHangVangLai",$taoPhieu);
         Common::ToUrl("/cart/thanhcong/index/" . $donhang['CodeOrder'] . "/");
     }
 

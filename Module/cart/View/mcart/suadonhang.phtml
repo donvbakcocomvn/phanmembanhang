@@ -1,0 +1,32 @@
+<script type="Module" src="/Module/cart/public/QuanLyDonHangController.js?v=<?php echo filectime('Module/cart/public/QuanLyDonHangController.js'); ?>"></script>
+
+<div ng-controller="QuanLyDonHangController">
+    <div class="">
+        <div class="container">
+            <div class="row">
+                <div class="col-m   d-4">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">Tra cứu đơn hàng</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="">Mã Đơn Hàng</label>
+                                <div class="d-flex" >
+                                <input ng-model="MaDonHang" type="text" name="MaHonHang" class="form-control" placeholder="" aria-describedby="helpId">
+                                <button ng-click="onCheckOrder(MaDonHang)" type="button" class="btn btn-success">Tìm kiếm</button>
+                                </div>
+                                <small id="helpId" class="text-muted">mã đơn hàng</small>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="sua-donhang-chitiet"></div>
+            </div>
+         </div>
+    </div>
+</div>

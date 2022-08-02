@@ -5,10 +5,13 @@
                  <li ng-repeat="items in _DanhSachSanPham.Product" class="col-md-3 d-flex" style="min-height: 100px;">
                      <div class="right-block" style="width: 100%;">
                          <h2 class="product-name">
-                             {{items.nameProduct}}
-                         </h2>
-                         <small class="cart_ref">Id: #{{items.Code}}</small><br>
-                         <small class="cart_ref">Giá: {{items.Price}}</small><br>
+                            <a href="#">{{items.nameProduct}}</a></h2>
+                         <div class="content_price">
+                             <span style="color: red;" class="price product-price">{{items.Price}}</span>
+                         </div>
+                         <div class="">
+                             <p>Id: #{{items.Code}}</p>
+                         </div> 
                          <div class="pull-right">
                              <a class="btn btn-success" ng-click="addProductCart(items.ID)" class="<?php echo $class; ?>">
                                  <i class="fa fa-plus"></i>

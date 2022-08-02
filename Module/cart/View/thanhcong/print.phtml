@@ -126,7 +126,7 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
             echo '<img style="height:50px;
             " src="data:image/png;base64,' . base64_encode($generator->getBarcode($string, BarcodeGeneratorPNG::TYPE_CODE_128)) . '">';
             ?>
-            <p>Mã Phiếu: <?php echo $order->Id; ?></p>
+            <p>Mã Phiếu: <?php echo $string; ?></p>
         </div>
         <hr style="border-bottom: 1px dashed #aaa;margin: 0px;">
         <!---------------------------------->
@@ -138,19 +138,19 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
                 </tr>
                 <tr>
                     <td class="temporary-title">Nhân viên phục vụ:</td>
-                    <td class="temporary-title"><?php echo $order->Saler ?? ""; ?></td>
+                    <td class="temporary-title"><?php echo $order->Saler ?? "N/A"; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Năm sinh:</td>
-                    <td class="temporary-title"><?php echo $thongTinKhachHang["Ngaysinh"] ?? ""; ?></td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["Ngaysinh"] ?? "N/A"; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Khoa:</td>
-                    <td class="temporary-title">N/A</td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["Tiensubenh"] ?? "N/A"; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Mã bệnh nhân:</td>
-                    <td class="temporary-title"><?php echo $thongTinKhachHang["MaBN"] ?? ""; ?></td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["MaBN"] ?? "N/A"; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Tình Trạng:</td>

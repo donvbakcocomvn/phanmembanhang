@@ -44,6 +44,12 @@ app.directive("donhangChitiet", function () {
     templateUrl: "/cart/mcart/donhangchitiet/",
   };
 });
+app.directive("suaDonhangChitiet", function () {
+  return {
+    restrict: "EAC",
+    templateUrl: "/cart/mcart/suadonhangchitiet/",
+  };
+});
 app.directive("gioHang", function () {
   return {
     restrict: "EAC",
@@ -90,7 +96,7 @@ app.controller("appController", function ($http, $scope) {
       }
     };
     finder.selectActionData = IdHinh;
-    finder.selectThumbnailActionFunction = function (fileUrl, data) {};
+    finder.selectThumbnailActionFunction = function (fileUrl, data) { };
     finder.popup();
   };
 });
@@ -185,6 +191,39 @@ app.controller("giohangCotroller", function ($http, $scope) {
       $scope._Huyen = $scope.Order.Huyen;
     });
   };
+
+  $scope.XoaSanPhamDonHang = function (item, CodeOrder) {
+    $http.get(`/apibe/XoaSanPhamDonHang/${item.Id}`).then(function (res) {
+      console.log(CodeOrder);
+      console.log(item);
+      $scope.GetOrderDetail(CodeOrder);
+    });
+
+  }
+
+  $scope.ThemSanPhamDonHang = function (param, CodeOrder) {
+    if (param == "") {
+      return;
+    }
+    $http.get(`/apibe/ThemSanPhamDonHang/${param}/${CodeOrder}/`).then(function (res) {
+      $scope.GetOrderDetail(CodeOrder);
+    });
+  }
+
+  $scope.SuaSanPhamDonHang = function (item, CodeOrder, ls) {
+    console.log(CodeOrder);
+    item.Number += (1 * ls);
+    item.Number = Math.max(item.Number, 1);
+    console.log(item);
+    $http.get(`/apibe/SuaSanPhamDonHang/${item.Id}/${item.Number}`).then(function (res) {
+      console.log(CodeOrder);
+      console.log(item);
+      $scope.GetOrderDetail(CodeOrder);
+    });
+
+  }
+
+
   $scope.ShowLyDoAction = function () {
     $scope.ShowChuyenNhanVien = false;
     $scope.ShowLyDo = !$scope.ShowLyDo;
@@ -224,7 +263,9 @@ app.controller("giohangCotroller", function ($http, $scope) {
   $scope.OrderStatus = async function () {
     if ($scope._OrderStatus == null) {
       await $http.get("/apibe/OrderStatus/").then(function (res) {
+
         $scope._OrderStatus = res.data;
+
       });
     }
   };

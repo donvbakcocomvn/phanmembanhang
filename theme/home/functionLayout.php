@@ -328,6 +328,7 @@ class functionLayout
     function footer()
     {
     ?>
+        <div class="clearfix"></div>
         <footer id="footer2">
             <div class="footer-top">
                 <div class="container">
@@ -363,7 +364,7 @@ class functionLayout
                             <div class="row">
                                 <div class="col-sm-8">
                                     <div class="footer-coppyright">
-                                        Copyright © 2015 __WebName___. All Rights Reserved. Designed by: __WebName___
+                                        Copyright © 2022 __WebName___. All Rights Reserved. Designed by: __WebName___
                                     </div>
 
                                 </div>
@@ -441,14 +442,14 @@ class functionLayout
             <div class="right-block">
                 <h2 class="product-name"><a href="<?php echo $produc->linkProduct(); ?>"><?php echo $produc->nameProduct ?></a></h2>
                 <div class="content_price">
-                    <span class="price product-price"><?php echo $produc->Price() ?></span>
+                    <span style="color: red;" class="price product-price"><?php echo $produc->Price() ?></span>
                 </div>
-                <div class="info-orther">
-                    <p>ID: <?php echo $produc->ID ?></p>
+                <div class="">
+                    <p>Id: #<?php echo $produc->Code ?></p>
                 </div>
-                <div class="add-to-cart">
+                <div class=" ">
                     <?php
-                    $produc->btnGioHang();
+                    $produc->btnGioHang("btn btn-primary");
                     ?>
                 </div>
 

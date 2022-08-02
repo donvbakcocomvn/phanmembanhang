@@ -2,6 +2,7 @@
 
 use Common\Common;
 use Model\ExcelConfig;
+use Model\Products;
 use Model\ThongKe;
 
 class Controller_backend extends Application
@@ -135,22 +136,28 @@ class Controller_backend extends Application
         $resultData = [];
         if (isset($_GET["btnLoc"])) {
             if (isset($_GET["fromDate"]) && isset($_GET["toDate"])) {
-                $fromDate = $_GET["fromDate"] ?? "";
-                $toDate = $_GET["toDate"] ?? "";
+                $fromDate = $_REQUEST["fromDate"] ?? "";
+                $toDate = $_REQUEST["toDate"] ?? "";
                 $thongKe = new ThongKe();
                 $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate);
                 $resultData = [];
-                foreach ($result as $index => $row) {
-                    $dong["index"] = $index + 1;
-                    $dong["TenHangHoa"] = $row["nameProduct"];
-                    $dong["DVT"] = $row["unitPrice"];
-                    $dong["MaHang"] = $row["Code"];
-                    $dong["GiaBan"] = Common::MoneyFomat($row["Price"]);
-                    $dong["SoLuong"] = $row["SoLuong"];
-                    $dong["ThanhTien"] = Common::MoneyFomat($row["Price"] * $row["SoLuong"]);
-                    $dong["GhiChu"] = "";
-                    $resultData[] = $dong;
+                if ($result){
+                    foreach ($result as $index => $row) {
+                        $p = new Products($row["Code"]);
+
+                        $dong["index"] = $index + 1;
+                        $dong["TenHangHoa"] = $row["nameProduct"];
+                        $dong["DanhMuc"] = $p->Category()->Code;
+                        $dong["DVT"] = $row["unitPrice"];
+                        $dong["MaHang"] = $row["Code"];
+                        $dong["GiaBan"] = Common::MoneyFomat($row["Price"]);
+                        $dong["SoLuong"] = $row["SoLuong"];
+                        $dong["ThanhTien"] = Common::MoneyFomat($row["Price"] * $row["SoLuong"]);
+                        $dong["GhiChu"] = "";
+                        $resultData[] = $dong;
+                    }
                 }
+                    
             }
         }
         if (isset($_GET["btnExport"])) {
@@ -163,16 +170,16 @@ class Controller_backend extends Application
                 $tuNgay = date("d-m-Y", strtotime($fromDate));
                 $denNgay = date("d-m-Y", strtotime($toDate));
                 $resultData = [];
-                $resultData[] =  [
+                $resultData[] = [
                     "SỞ Y TẾ THÀNH PHỐ HỒ CHÍ MINH",
                 ];
-                $resultData[] =  [
+                $resultData[] = [
                     "BỆNH VIỆN NHÂN ÁI",
                 ];
-                $resultData[] =  [
+                $resultData[] = [
                     "BẢNG KÊ BÁN HÀNG CĂN TIN",
                 ];
-                $resultData[] =  [
+                $resultData[] = [
                     "Từ ngày: {$tuNgay} đến ngày: {$denNgay}",
                 ];
                 $resultData[] = [
@@ -266,5 +273,12 @@ class Controller_backend extends Application
             }
         }
         $this->ViewTheme(["data" => $resultData], Model_ViewTheme::get_viewthene(), "");
+    }
+    public function thongtinthe()
+    {
+        if (isset($_POST["mathe"])) {
+            $maThe = $_POST["mathe"];
+        }
+        $this->ViewTheme([], Model_ViewTheme::get_viewthene(), "");
     }
 }

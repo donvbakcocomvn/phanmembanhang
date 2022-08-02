@@ -1,0 +1,64 @@
+ <div class="container ">
+     <section class="col-md-12 ">
+         <div class="box box-solid ">
+             <div class="box-header">
+             </div>
+             <div class="box-body">
+                 <div class="col-md-3"></div>
+                 <div class="col-md-6">
+                     <?php
+
+                        use Model\ThanhToan;
+                        use Model\ThanhToan\BenhNhan;
+
+                        $maThe = $_POST["mathe"] ?? "";
+                        $thanhToan = new ThanhToan();
+                        $benhNhan = null;
+                        $thongTin = [];
+                        if ($maThe != "") {
+                            $thongTin =  $thanhToan->GetTTBenhnhan($maThe);
+                            if ($thongTin) {
+                                $benhNhan = new BenhNhan($thongTin);
+                            }
+                        }
+
+                        ?>
+                     <h3>Thông tin thẻ</h3>
+                     <form action="" method="POST">
+                         <div class="d-flex">
+                             <input type="password" name="mathe" class="form-control" placeholder="Nhập mã thẻ" value="<?php echo $_REQUEST["mathe"] ?? "" ?>" required="required">
+                             <button class="btn btn-success">Tra cứu</button>
+                         </div>
+                     </form>
+
+                     <table class="table table-hover table-bordered ">
+                         <tbody>
+                             <?php
+                                ob_start();
+                                if ($thongTin) {
+                                    unset($thongTin["Noicap"]);
+                                    unset($thongTin["Ngaycap"]);
+                                    foreach ($thongTin as $key => $value) {
+                                ?>
+                                     <tr>
+                                         <td class="text-right">
+                                             <?php echo $key ?> :
+                                         </td>
+                                         <td><?php echo $value ?></td>
+                                     </tr>
+                             <?php
+                                    }
+                                }
+                                $str = ob_get_clean();
+                                $str = BenhNhan::methodToLable($str);
+                                echo $str;
+                                ?>
+                         </tbody>
+                     </table>
+
+                 </div>
+             </div>
+         </div>
+     </section>
+
+ </div>

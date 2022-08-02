@@ -1,24 +1,41 @@
 <?php
 
+use lib\APIs;
+use Model\AdminService;
+use Model\Products;
 use Module\duser\Model\Duser;
 use Module\cart\Model\OrderService;
 use Module\cart\Model\Order;
+use Module\cart\Model\OrderDetail;
 
-class Controller_apibe extends Controller_backend {
+class Controller_apibe extends Controller_backend
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
     }
 
-    function chuyenDonHang() {
+    public function XoaSanPhamDonHang()
+    {
+        $id = $this->getParam()[0];
+        $orderDetail = new OrderDetail();
+        return  $orderDetail->deleteOrderDetail($id);
+    }
+
+
+    function chuyenDonHang()
+    {
         try {
             $id = \Model\CheckInput::Input($_POST["orderCode"]);
             $userName = \Model\CheckInput::Input($_POST["Username"]);
             $modelOrder = new Order($id);
-            if ($modelOrder->ChekStauts([Order::DaNopTienVeCty,
-                        Order::DaThuTien,
-                        Order::DangXuLy,
-                        Order::ThanhCong]) == true) {
+            if ($modelOrder->ChekStauts([
+                Order::DaNopTienVeCty,
+                Order::DaThuTien,
+                Order::DangXuLy,
+                Order::ThanhCong
+            ]) == true) {
                 throw new Exception("Đơn Hàng Đã Xử lÝ/ Thu Tiền Không thể Chuyển");
             }
             $DUser = new Duser($userName);
@@ -36,7 +53,8 @@ class Controller_apibe extends Controller_backend {
         lib\APIs::Json_Encode_ToString($data);
     }
 
-    function timnhanvien() {
+    function timnhanvien()
+    {
         $admin = new \Model\AdminService();
         $total = 0;
         $indexPage = 1;
@@ -55,13 +73,15 @@ class Controller_apibe extends Controller_backend {
         lib\APIs::Json_Encode_ToString($data);
     }
 
-    function userGroups() {
+    function userGroups()
+    {
         $user = new \Module\duser\Model\Duser();
         $groups = $user->getGroupsAll();
         echo lib\APIs::Json_Encode($groups);
     }
 
-    function XacNhanDonHang() {
+    function XacNhanDonHang()
+    {
         try {
             $Order = new \Module\cart\Model\Order();
             $_Order = $Order->orderbyid($_POST["Id"]);
@@ -82,7 +102,43 @@ class Controller_apibe extends Controller_backend {
         }
     }
 
-    function DataThuTienDonHang() {
+    public function ThemSanPhamDonHang()
+    {
+        $maSanPham = $this->getParam()[0];
+        $codeOrder = $this->getParam()[1];
+        $orderDetail = new OrderDetail();
+        $sanPham = new Products($maSanPham);
+        if ($sanPham->ID == null) {
+            return;
+        }
+        $orderDetailRow = $orderDetail->GetOrderDetailByProductCodeOrder($codeOrder, $maSanPham);
+
+        if ($orderDetailRow == null) {
+            $oder["Name"] = "Thêm Mới";
+            $oder["IdProduct"] = $sanPham->Code;
+            $oder["CodeOrder"] = $codeOrder;
+            $oder["Price"] = $sanPham->Price;
+            $oder["Number"] = 1;
+            $orderDetail->AddOrderDetail($oder);
+            $oderModel  = new Order();
+            return $oderModel->UpdateTongTien($oder["CodeOrder"]);
+        }
+    }
+
+    public function SuaSanPhamDonHang()
+    {
+        $id = intval($this->getParam()[0]);
+        $sl = intval($this->getParam()[1]);
+        $orderDetail = new OrderDetail();
+        $orderD = $orderDetail->GetByOrderDetailById($id);
+        $orderD["Number"] = $sl;
+        $orderDetail->UpdateOrderDetail($orderD);
+        $oder  = new Order();
+        return $oder->UpdateTongTien($orderD["CodeOrder"]);
+    }
+
+    function DataThuTienDonHang()
+    {
         try {
             $Order = new \Module\cart\Model\Order();
             $_Order = $Order->orderbyid($_POST["Id"]);
@@ -100,7 +156,16 @@ class Controller_apibe extends Controller_backend {
         }
     }
 
-    function DaNopTienVeCty() {
+
+    public function getNhanVien()
+    {
+        $admin = new AdminService();
+        $options = $admin->GetAllPT("1 =1 ", ["Username", "Name"]);
+        echo  APIs::Json_Encode($options);
+    }
+
+    function DaNopTienVeCty()
+    {
         try {
             if (Duser::KiemTraQuyen([Duser::Superadmin, Duser::admin, Duser::QuanLyDonHang]) == FALSE) {
                 return;
@@ -121,7 +186,8 @@ class Controller_apibe extends Controller_backend {
         }
     }
 
-    function HuyDonHang() {
+    function HuyDonHang()
+    {
         try {
             $Order = new \Module\cart\Model\Order();
             $_Order = $Order->orderbyid($_POST["Id"]);
@@ -141,7 +207,8 @@ class Controller_apibe extends Controller_backend {
         }
     }
 
-    function getOrderDetail() {
+    function getOrderDetail()
+    {
         $orderId = $this->getParam()[0];
         $order = new \Module\cart\Model\Order();
         $orderDetail = $order->orderbyid($orderId);
@@ -155,7 +222,9 @@ class Controller_apibe extends Controller_backend {
         $dsSanPham = $_order->ProductsByDonHang();
         if ($dsSanPham) {
             foreach ($dsSanPham as $k => $value) {
+                // var_dump($value["IdProduct"]);
                 $prod = new \Model\Products($value["IdProduct"]);
+                $value["Number"] = intval($value["Number"]);
                 $value["ThanhTien"] = $value["Number"] * $value["Price"];
                 $value["PriceVND"] = \lib\Common::MoneyFomat($value["Price"]);
                 $value["ThanhTienVND"] = \lib\Common::MoneyFomat($value["Number"] * $value["Price"]);
@@ -169,12 +238,14 @@ class Controller_apibe extends Controller_backend {
         echo lib\APIs::Json_Encode($orderDetail);
     }
 
-    function OrderStatus() {
+    function OrderStatus()
+    {
         $order = new \Module\cart\Model\Order();
         echo lib\APIs::Json_Encode($order->listStatusAll());
     }
 
-    function saveInformationCustomer() {
+    function saveInformationCustomer()
+    {
         try {
             $khachHang = $_POST["KhachHang"];
             $kh = new \Module\duser\KhachHang\KhachHang($khachHang);
@@ -198,7 +269,8 @@ class Controller_apibe extends Controller_backend {
         }
     }
 
-    function getuserInformation() {
+    function getuserInformation()
+    {
         $phone = $this->getParam()[0];
         $khachHang = new \Module\duser\KhachHang\KhachHang();
         $khachHangDetail = $khachHang->GetByPhone($phone);
@@ -209,7 +281,8 @@ class Controller_apibe extends Controller_backend {
         }
     }
 
-    function getcarts() {
+    function getcarts()
+    {
         $cart = new \Module\cart\Model\Cart();
         $data["Product"] = $cart->Products();
         foreach ($data["Product"] as $k => $value) {
@@ -226,17 +299,19 @@ class Controller_apibe extends Controller_backend {
         $lib->ArrayToApi($data);
     }
 
-    function GetAllCategory() {
+    function GetAllCategory()
+    {
         $a = new \Model\Category();
         $danhMuc = [];
-//        var_dump($danhMuc);
+        //        var_dump($danhMuc);
         $a->GetAllCategory(0, $danhMuc, null, array(0 => "0", 1 => "1"));
         foreach ($danhMuc as $v) {
             echo $v["catName"] . "<br>";
         }
     }
 
-    function getProductsByName() {
+    function getProductsByName()
+    {
         $SanPham = new Model\Products();
         $name = $this->getParam()[0];
         $Page = 1;
@@ -256,20 +331,23 @@ class Controller_apibe extends Controller_backend {
         echo \lib\APIs::Json_Encode($data);
     }
 
-    function GetProductById() {
+    function GetProductById()
+    {
         $id = $this->getParam()[0];
         $product = new Model\Products($id);
         $array = $product->Obj2Api();
         echo $product->_encode($array);
     }
 
-    function productStatus() {
+    function productStatus()
+    {
         header("Content-type: application/json; charset=utf-8");
         $SanPham = new Model\Products();
         echo $SanPham->_encode(Model\Products::status());
     }
 
-    function SaveProduct() {
+    function SaveProduct()
+    {
         $SanPham = new Model\Products();
         $product_detail = $SanPham->ProductsByID($_POST["ID"], false);
         $product_detail["Number"] = intval($_POST["Number"]);
@@ -281,22 +359,25 @@ class Controller_apibe extends Controller_backend {
         $SanPham->EditProducts($product_detail);
     }
 
-    function productCat() {
+    function productCat()
+    {
         $a = new \Model\Category();
         $danhMuc = [];
-//        var_dump($danhMuc);
+        //        var_dump($danhMuc);
         $a->GetAllCategory(0, $danhMuc, null, array(0 => "0", 1 => "1"));
         echo $a->_encode($danhMuc);
     }
 
-    function stringCode() {
+    function stringCode()
+    {
         return str_pad(92, 4, '0', STR_PAD_LEFT);
     }
 
-    function resetCode() {
+    function resetCode()
+    {
         $product = new Model\Products();
         $ps = $product->ProductsAll();
-        $ps = array_map(function($item) {
+        $ps = array_map(function ($item) {
             $Cat = new Model\Category($item["catID"]);
             $item["Code"] = $Cat->Code . lib\Common::addZeroToNumber($item["ID"], 4);
             return $item;
@@ -304,7 +385,8 @@ class Controller_apibe extends Controller_backend {
         $product->EditCodeProducts($ps);
     }
 
-    function GetOrdersByUserName() {
+    function GetOrdersByUserName()
+    {
         $saler = \Module\duser\Model\Duser::CurentUsernameAdmin(true)->Username;
         $order = new \Module\cart\Model\Order();
         $total = 0;
@@ -328,14 +410,17 @@ class Controller_apibe extends Controller_backend {
         echo lib\APIs::Json_Encode($data);
     }
 
-    function GetAllOrders() {
+    function GetAllOrders()
+    {
         $saler = \Module\duser\Model\Duser::CurentUsernameAdmin(true)->Username;
         $order = new \Module\cart\Model\Order();
         $total = 0;
         $indexPage = isset($this->getParam()[0]) ? intval($this->getParam()[0]) : 1;
         $pageNumber = isset($this->getParam()[1]) ? intval($this->getParam()[1]) : 10;
-        $data["Params"]["Status"] = $_POST["Status"];
-        $data["Params"]["Keyword"] = \Model\CheckInput::Input($_POST["Keyword"]);
+        $data["Params"]["Status"] = $_POST["Status"] ?? 4;
+        $data["Params"]["Saler"] = $_POST["Saler"] ?? null;
+        // $saler = isset($params["Saler"]) ? $params["Saler"] : null;
+        $data["Params"]["Keyword"] = \Model\CheckInput::Input($_POST["Keyword"] ?? "");
         $orderBySaler = $order->GetBySale($data["Params"], $total, $indexPage, $pageNumber);
         if ($orderBySaler)
             foreach ($orderBySaler as $k => $order) {
@@ -350,7 +435,4 @@ class Controller_apibe extends Controller_backend {
         $data["data"] = $orderBySaler;
         echo lib\APIs::Json_Encode($data);
     }
-
 }
-
-?>

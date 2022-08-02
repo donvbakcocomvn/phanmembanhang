@@ -66,10 +66,28 @@ class Order extends \Model\Database
         return date("d-m-Y H:i", strtotime($this->NgayTao));
     }
 
-    function Status()
+    public function UpdateTongTien($orderCode)
+    {
+        $orderDetail = $this->orderDetailbyid($orderCode);
+        $tongTien = 0;
+        foreach ($orderDetail as   $value) {
+            $thanhTien = $value["Price"] * $value["Number"];
+            $tongTien += $thanhTien;
+        }
+        $order = $this->orderbyid($orderCode)[0];
+        // var_dump("_____");
+        // var_dump($order);
+        // var_dump("_____");
+        $order["TotalPrice"] = $tongTien; 
+        return $this->updateOrder($order);
+    }
+
+    function Status($idStatus = null)
     {
         $a = $this->listStatus();
-        return $a[$this->Status];
+        if ($idStatus == null)
+            return $a[$this->Status];
+        return $a[$idStatus];
     }
 
     function createOrder($Order)
@@ -79,6 +97,7 @@ class Order extends \Model\Database
 
     function updateOrder($Order)
     {
+        // var_dump($Order);
         return $this->update(table_prefix . "order", $Order, "`CodeOrder` = '{$Order["CodeOrder"]}'");
     }
     function updateOrderStatus($CodeOrder, $status)
@@ -133,7 +152,7 @@ class Order extends \Model\Database
 
     function orderbyid($id)
     {
-        return $this->select(table_prefix . "order", [], "`CodeOrder` = '{$id}'");
+        return $this->select(table_prefix . "order", [], " `Id` = '{$id}' or `CodeOrder` = '{$id}'");
     }
 
     function orderDetailbyid($id)
@@ -193,12 +212,12 @@ class Order extends \Model\Database
         $order["Id"] = $this->Id;
         $order["Name"] = $this->Name;
         $order["TotalPrice"] = intval($this->TotalPrice);
-        $order["statusName"] = $this->Status();
         $order["TotalPriceVND"] = \lib\Common::MoneyFomat($this->TotalPrice);
         $order["CodeOrder"] = $this->CodeOrder;
         $order["Email"] = $this->Email;
         $order["Phone"] = $this->Phone;
         $order["Status"] = $this->Status;
+        $order["statusName"] = $this->Status();
         $order["Note"] = $this->Note;
         $order["Address"] = strip_tags($this->DiaChi());
         $order["Tinh"] = $this->Tinh;
@@ -219,10 +238,10 @@ class Order extends \Model\Database
     {
         return [
             ["Id" => self::MoiDat, "Name" => "Mới Đặt"],
-            ["Id" => self::XacNhanDonHang, "Name" => "Xác Nhận Đơn Hàng"],
-            ["Id" => self::DangXuLy, "Name" => "Đang xử lý"],
+            // ["Id" => self::XacNhanDonHang, "Name" => "Xác Nhận Đơn Hàng"],
+            // ["Id" => self::DangXuLy, "Name" => "Đang xử lý"],
             ["Id" => self::DaThuTien, "Name" => "Đã Thu Tiền"],
-            ["Id" => self::DaNopTienVeCty, "Name" => "Đã Nộp Tiền Về Công Ty"], ["Id" => self::Huy, "Name" => "Hủy"]
+            // ["Id" => self::DaNopTienVeCty, "Name" => "Đã Nộp Tiền Về Công Ty"], ["Id" => self::Huy, "Name" => "Hủy"]
         ];
     }
 
@@ -260,9 +279,9 @@ class Order extends \Model\Database
     {
         $order["Id"] = $this->Id;
         $order["Name"] = $this->Name;
-        $order["TotalPrice"] = intval($this->TotalPrice);
+       
         $order["statusName"] = $this->Status();
-        $order["TotalPriceVND"] = \lib\Common::MoneyFomat($this->TotalPrice);
+       
         $order["CodeOrder"] = $this->CodeOrder;
         $order["Email"] = $this->Email;
         $order["Phone"] = $this->Phone;
@@ -275,16 +294,21 @@ class Order extends \Model\Database
         $order["Saler"] = $this->Saler;
         $order["SalerInfor"] = $this->Saler()->ToArray();
         $orderDetail = $this->orderDetailbyid($this->CodeOrder);
+        $tongTien = 0;
+        
         $orderDetail = array_map(function ($item) {
             $idproduct = $item["IdProduct"];
             $ps = new \Model\Products($idproduct);
             $item["Number"] = intval($item["Number"]);
             $item["Price"] = intval($item["Price"]);
+            $item["PriceVND"] = \Common\Common::MoneyFomat($item["Price"]);
             $item["ThanhTien"] = $item["Price"] * $item["Number"];
             $item["ThanhTienVND"] = \Common\Common::MoneyFomat($item["Price"] * $item["Number"]);
             $item["Product"] = $ps->Obj2Api();
             return $item;
         }, $orderDetail);
+        $order["TotalPrice"] = intval($this->TotalPrice);
+        $order["TotalPriceVND"] = \lib\Common::MoneyFomat($this->TotalPrice);
         $order["OrderDetail"] = $orderDetail;
         return $order;
     }
