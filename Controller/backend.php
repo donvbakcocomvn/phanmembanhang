@@ -138,10 +138,11 @@ class Controller_backend extends Application
             if (isset($_GET["fromDate"]) && isset($_GET["toDate"])) {
                 $fromDate = $_REQUEST["fromDate"] ?? "";
                 $toDate = $_REQUEST["toDate"] ?? "";
+ 
                 $thongKe = new ThongKe();
                 $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate);
                 $resultData = [];
-                if ($result){
+                if ($result) {
                     foreach ($result as $index => $row) {
                         $p = new Products($row["Code"]);
 
@@ -157,7 +158,6 @@ class Controller_backend extends Application
                         $resultData[] = $dong;
                     }
                 }
-                    
             }
         }
         if (isset($_GET["btnExport"])) {
@@ -165,6 +165,11 @@ class Controller_backend extends Application
                 $fromDate = $_GET["fromDate"] ?? "";
                 $toDate = $_GET["toDate"] ?? "";
                 $thongKe = new ThongKe();
+
+                // $TuNgay = date("Y-m-d 00:00:00", strtotime($fromDate));
+                // $DenNgay = date("Y-m-d 23:59:59", strtotime($toDate));
+                // var_dump($TuNgay);
+                // var_dump($DenNgay);
                 $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate);
 
                 $tuNgay = date("d-m-Y", strtotime($fromDate));
@@ -184,6 +189,7 @@ class Controller_backend extends Application
                 ];
                 $resultData[] = [
                     "STT",
+                    "Hàng hóa",
                     "Danh mục",
                     "ĐVT",
                     "Mã hàng hóa",
@@ -195,8 +201,10 @@ class Controller_backend extends Application
                 $tongTien = 0;
                 $indexBoder = 5;
                 foreach ($result as $index => $row) {
+                    $p = new Products($row["Code"]);
                     $dong["index"] = $index + 1;
                     $dong["TenHangHoa"] = $row["nameProduct"];
+                    $dong["DanhMuc"] = $p->Category()->Code;
                     $dong["DVT"] = $row["unitPrice"];
                     $dong["MaHang"] = $row["Code"];
                     $dong["GiaBan"] = Common::NumberFomat($row["Price"]);
@@ -211,6 +219,7 @@ class Controller_backend extends Application
 
                 $resultData[] = [
                     "Tổng tiền",
+                    "",
                     "",
                     "",
                     "",

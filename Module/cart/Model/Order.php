@@ -105,6 +105,11 @@ class Order extends \Model\Database
         $Order = ["Status" => $status];
         return $this->update(table_prefix . "order", $Order, "`CodeOrder` = '{$CodeOrder}'");
     }
+    function updateKhachHang($CodeOrder, $MaThe)
+    {
+        $Order = ["Name" => $MaThe];
+        return $this->update(table_prefix . "order", $Order, "`CodeOrder` = '{$CodeOrder}'");
+    }
 
     function createOrderDetail($OrderDetail)
     {

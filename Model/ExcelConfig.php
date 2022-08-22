@@ -92,6 +92,7 @@ class ExcelConfig
 
         // setBold 
         $sheet0->getColumnDimension('C')->setAutoSize(true);
+        $sheet0->getColumnDimension('B')->setAutoSize(true);
         $sheet0->getColumnDimension('D')->setAutoSize(true);
         $sheet0->getColumnDimension('E')->setAutoSize(true);
         $sheet0->getColumnDimension('F')->setAutoSize(true);
@@ -105,12 +106,12 @@ class ExcelConfig
 
         $alignment_center = \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER;
         $sheet0->getStyle('A4:H4')->getAlignment()->setHorizontal($alignment_center);
-        $sheet0->mergeCells('A1:C1');
-        $sheet0->mergeCells('A2:C2');
-        $sheet0->mergeCells('A3:H3');
-        $sheet0->mergeCells('A4:H4');
-        $sheet0->getStyle('A5:H5')->getFont()->setBold(true);
-        $sheet0->getStyle('A3:H3')->getFont()->setBold(true);
+        $sheet0->mergeCells('A1:D1');
+        $sheet0->mergeCells('A2:D2');
+        $sheet0->mergeCells('A3:I3');
+        $sheet0->mergeCells('A4:I4');
+        $sheet0->getStyle('A5:I5')->getFont()->setBold(true);
+        $sheet0->getStyle('A3:I3')->getFont()->setBold(true);
         foreach ($data as $row => $colums) {
             $colIndex = 0;
             foreach ($colums as  $value) {
@@ -135,6 +136,7 @@ class ExcelConfig
         }
         $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
         $writer->save($fileName);
-        Common::toUrl("/{$fileName}");
+        $time = time();
+        Common::toUrl("/{$fileName}?v={$time}");
     }
 }

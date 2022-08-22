@@ -92,7 +92,9 @@
 use Common\Common;
 use Model\Products;
 use Model\ThanhToan;
+use Model\ThanhToan\BenhNhan;
 use Module\cart\Model\Order;
+use Module\duser\KhachHang\KhachHang;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 
 $generator = new BarcodeGeneratorPNG();
@@ -103,6 +105,7 @@ $thanhToan = new ThanhToan();
 $orderDetail = $order->orderDetailbyid($id);
 $thongTinKhachHang = $thanhToan->GetTTBenhnhan($order->Name);
 $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
+ 
 
 ?>
 
@@ -150,7 +153,7 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
                 </tr>
                 <tr>
                     <td class="temporary-title">Mã bệnh nhân:</td>
-                    <td class="temporary-title"><?php echo $thongTinKhachHang["MaBN"] ?? "N/A"; ?></td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["Nhommau"] ?? "N/A"; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Tình Trạng:</td>
@@ -172,11 +175,11 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
         <div class="content" style="padding: 0 5px;">
             <table style="width: 100%">
                 <tr>
-                    <td class="temporary-title">Mã</td>
-                    <td>Tên hàng hóa</td>
-                    <td>SL</td>
-                    <td style="text-align: center;">Đơn giá</td>
-                    <td style="text-align: right;">Thành tiền</td>
+                    <th class="temporary-title"><b>Mã</b></th>
+                    <th><b>Tên hàng hóa</b></th>
+                    <th><b>SL</b></th>
+                    <th style="text-align: center;"><b>Đơn giá</b></th>
+                    <th style="text-align: right;"><b>Thành tiền</b></th>
                 </tr>
                 <?php
                 foreach ($orderDetail as $key => $value) {

@@ -12,8 +12,8 @@ function CheckAuthentication() {
 
 // LicenseKey : Paste your license key here. If left blank, CKFinder will be
 // fully functional, in demo mode.
-$config['LicenseName'] = 'bachhoagiadinh';
-$config['LicenseKey'] = 'A6ACGNE1MXHVHUWMKHVG4WTFKG3JD4JF';
+$config['LicenseName'] = 'BenhVienNhanAi';
+$config['LicenseKey'] = '5Y7NCJG297RDM89YWG5R6MW5F8FNW8GP';
 $baseUrl = '/public/img/'; //duong dan
 $baseDir = resolveUrl($baseUrl);
 $config['Thumbnails'] = Array(

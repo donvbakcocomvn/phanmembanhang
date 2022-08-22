@@ -342,7 +342,7 @@ class functionLayout
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-3 hidden-sm hidden-xs">
                             <div class="footer-social">
                                 <ul>
                                     <li><a class="facebook" href="__linkFacebook___"><i class="fa fa-facebook"></i></a></li>
@@ -357,7 +357,7 @@ class functionLayout
                 </div>
             </div>
             <!-- footer paralax-->
-            <div class="footer-paralax ">
+            <div class="footer-paralax hidden-sm hidden-xs ">
                 <div class="footer-bottom">
                     <div class="container">
                         <div class=" ">

@@ -121,7 +121,8 @@ class Common
         return $string;
     }
     static function toUrl($url = null)
-    {
+    { 
+        header_remove(); 
         if ($url == null) {
             $url = $_SERVER["HTTP_REFERER"];
         }

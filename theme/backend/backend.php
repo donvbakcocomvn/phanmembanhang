@@ -376,11 +376,11 @@ class backend extends \Model\Database
                                             <i class="fa fa-image"></i> <span>Thư Viện Hình</span>
                                         </a>
                                     </li>
-                                    <li class="treeview">
+                                    <!-- <li class="treeview">
                                         <a href="/brand/index">
                                             <i class="fa fa-image"></i> <span>Thương Hiệu</span>
                                         </a>
-                                    </li>
+                                    </li> -->
 
                                 <?php
                                 }
@@ -394,7 +394,7 @@ class backend extends \Model\Database
                                 <?php
                                 }
                                 ?>
-                                <li class="treeview  <?php echo \Model\menuactive::SetActive('mnews'); ?> ">
+                                <li class="treeview hidden <?php echo \Model\menuactive::SetActive('mnews'); ?> ">
                                     <a href="/mpage/index">
                                         <i class="fa fa-list-alt"></i> <span>Quản Lý Bài Viết</span>
                                         <i class="fa fa-angle-right pull-right"></i>
@@ -406,7 +406,7 @@ class backend extends \Model\Database
                                         <li><a href="/mnews/addnews"><i class="fa fa-circle-o"></i> Thêm Bài viết</a></li>
                                     </ul>
                                 </li>
-                                <li class="treeview">
+                                <li class="treeview hidden">
                                     <a href="/mtheme/">
                                         <i class="fa fa-list-alt"></i> <span>Quản Lý Giao Diện</span>
 
@@ -418,7 +418,7 @@ class backend extends \Model\Database
                                         <span>Thông tin công ty</span>
                                     </a>
                                 </li>
-                                <li class="treeview <?php echo \Model\menuactive::SetActive('madv'); ?>">
+                                <li class="treeview hidden <?php echo \Model\menuactive::SetActive('madv'); ?>">
                                     <a href="#">
                                         <i class="fa fa-share"></i>
                                         <span>Quản Lý Quảng Cáo</span>
@@ -451,7 +451,7 @@ class backend extends \Model\Database
                                     </a>
                                 </li>
 
-                                <li>
+                                <li class="hidden" >
                                     <a href="/mail/index/index/MaiThongBaoDonHang">
                                         <i class="fa fa-envelope"></i>
                                         <span>Cài Đặt Mail Đơn Hàng</span>

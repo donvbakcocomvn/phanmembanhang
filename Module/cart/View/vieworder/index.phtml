@@ -56,6 +56,9 @@
                             <div class="form-group pull-left">
                                 <!-- <button type="button" class="btn btn-success" ng-click="XacNhanDonHang(_OrderDetail.CodeOrder)">Đã Xác Minh <i class="fa  fa-check"></i></button>
                                 <button type="button" class="btn btn-primary" ng-click="ShowChuyenNhanVienAction()">Chuyển Nhân Viên <i class="fa  fa-arrow-right"></i></button> -->
+                                <a target="_blank" href="/cart/thanhcong/print/{{_OrderDetail.CodeOrder}}" class="btn btn-success">
+                                    In lại hóa đơn
+                                </a>
                                 <button ng-show="_OrderDetail.Status == '4'" type="button" class="btn btn-danger" ng-click="ShowLyDoAction()">Hủy Đơn Hàng <i class="fa  fa-times"></i></button>
                                 <a ng-show="_OrderDetail.Status == '4'" target="_blank" href="/index/thanhtoan/{{_OrderDetail.CodeOrder}}" class="btn btn-success">Thanh Toán</a>
                             </div>

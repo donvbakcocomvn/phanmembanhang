@@ -11,6 +11,9 @@ class ThongKe extends Database
         if ($TuNgay == "" || $DenNgay == "") {
             return [];
         }
+
+        $TuNgay = date("Y-m-d 00:00:00",strtotime($TuNgay));
+        $DenNgay = date("Y-m-d 23:59:59",strtotime($DenNgay));
         // BẢNG KÊ BÁN HÀNG CĂN TIN
          $sql = "SELECT od.IdProduct
         ,p.nameProduct
