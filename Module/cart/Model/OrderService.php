@@ -29,7 +29,7 @@ class OrderService extends \Model\DB implements \Model\IModelStatic
             $sqlStatus = " and `Status` = '{$Status}'";
         }
         if ($Keyword) {
-            $sqlKeyword = " and (`Id` like '%{$Keyword}%' or `Email` like '%{$Keyword}%' or `Phone` like '%{$Keyword}%')";
+            $sqlKeyword = " and (`Name` like '%{$Keyword}%' or `Id` like '%{$Keyword}%' or `Email` like '%{$Keyword}%' or `Phone` like '%{$Keyword}%')";
         }
         $salerSql = " 1 = 1";
         if ($saler) {

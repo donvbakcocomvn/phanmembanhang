@@ -14,9 +14,11 @@
                         $maThe = $_POST["mathe"] ?? "";
                         $thanhToan = new ThanhToan();
                         $benhNhan = null;
+                        $LichSuGiaoDich = [];
                         $thongTin = [];
                         if ($maThe != "") {
                             $thongTin =  $thanhToan->GetTTBenhnhan($maThe);
+                            $LichSuGiaoDich =  $thanhToan->GetLichsuGD($maThe);
                             if ($thongTin) {
                                 $benhNhan = new BenhNhan($thongTin);
                             }
@@ -56,7 +58,40 @@
                          </tbody>
                      </table>
 
+
+
                  </div>
+                 <table class="table table-border table-hover" style="margin-top: 10px;">
+                 <tr style="white-space: nowrap;" >
+                    <td>STT</td>
+                    <td>Mã Thẻ</td>
+                    <td>Giá trị giao dịch</td>
+                    <td>Loại giao dịch</td>
+                    <td>Nội dung</td>
+                    <td>Thời gian</td>
+                    <td></td> 
+                    <td>Số Dư</td>
+                 </tr>
+                     <?php
+                        if ($LichSuGiaoDich) {
+                            foreach ($LichSuGiaoDich as $key => $value) {
+                        ?>
+                             <tr>
+                                 <?php
+                                    foreach ($value as $key1 => $item1) {
+                                    ?>
+                                     <td><?php echo $item1;  ?></td>
+                                 <?php
+                                    }
+                                    ?>
+                             </tr>
+                     <?php
+                            }
+                        }
+                        ?>
+
+
+                 </table>
              </div>
          </div>
      </section>

@@ -121,45 +121,44 @@ class Controller_index extends Application
         try {
 
             $thanhToan = new ThanhToan();
+
             if (isset($_POST["thanhToan"])) {
                 $modelThanhToan = $_POST["thanhToan"];
                 $thonTinBenhNhan = $thanhToan->GetTTBenhnhan($modelThanhToan["MaThe"]);
-                $MaDonHang =  $modelThanhToan["MaDonHang"] ?? "";
-
-               
+                $MaDonHang =  $modelThanhToan["MaDonHang"] ?? ""; 
                 // var_dump($thonTinBenhNhan);
                 $BenhNhan = new BenhNhan($thonTinBenhNhan);
                 // var_dump($BenhNhan);
                 if ($modelThanhToan["MaThe"] == "") {
                     throw new Exception("Không có mã thẻ");
-                }
+                } 
                 if ($MaDonHang == "") {
                     $donhang = $this->taodonhang($modelThanhToan["MaThe"], $BenhNhan);
                     $MaDonHang =  $donhang["CodeOrder"];
-                }   
-                if($MaDonHang ==""){
-                    throw new Exception("Không tạo được đơn hàng");
                 }
-                var_dump($MaDonHang); 
-                
+                if ($MaDonHang == "") {
+                    throw new Exception("Không tạo được đơn hàng");
+                } 
+                  
+                $modelOrder = new Order($MaDonHang);
+ 
                 $cart = new Cart();
-                $TongTien = $cart->TotalPrice();
+                $TongTien = $cart->TotalPrice(); 
                 $resul =  $thanhToan->InsertLSGiaodich(
                     $modelThanhToan["MaThe"],
                     $TongTien,
-                    $MaDonHang,
-                );
- 
-                if ($resul) {
+                    $modelOrder->Id,
+                ); 
+                var_dump($resul);
+                 if ($resul) {
                     // var_dump($resul);
-                    //$resul->InsertLSGiaodichResult;
+                    $resul->InsertLSGiaodichResult;
                     if ($resul->InsertLSGiaodichResult == 1) {
                         Cart::clearAllCart();
                         $order = new Order();
                         $order->updateOrderStatus($MaDonHang, Order::DaThuTien);
                         $order->updateKhachHang($MaDonHang, $modelThanhToan["MaThe"]);
                         sleep(1);
-                       
                         Common::ToUrl("/cart/thanhcong/index/" . $MaDonHang . "/");
                         exit();
                     } else {
@@ -167,6 +166,10 @@ class Controller_index extends Application
                         Common::ToUrl("/cart/thanhcong/fail/{$resul->InsertLSGiaodichResult}/");
                         exit();
                     }
+                } else {
+                    // Số dư không đủ để thanh toán
+                    Common::ToUrl("/cart/thanhcong/fail/{$resul->InsertLSGiaodichResult}/");
+                    exit();
                 }
             }
         } catch (\Exception $th) {

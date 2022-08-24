@@ -137,6 +137,17 @@ app.controller("usersCotroller", function ($http, $scope) {
     $scope._GroupsUser = res.data;
     console.log($scope._GroupsUser);
   });
+
+  $scope.typePasswod = "password";
+  $scope.SetTypePassword = ()=>{
+    $scope.typePasswod = $scope.typePasswod == "password"?"text":"password";
+  }
+  $scope.SetPassword = ()=>{
+    var randomstring = Math.random().toString(36).slice(-8);
+    $scope.Matkhau = randomstring;
+  }
+
+
 });
 app.controller("giohangCotroller", function ($http, $scope) {
   $scope.TimKiemNhanVien = function (key) {

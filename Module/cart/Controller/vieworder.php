@@ -2,10 +2,15 @@
 
 namespace Module\cart\Controller;
 
+use Common\Common;
+use Model\Breadcrumb;
+use Model\ThanhToan;
+use Module\cart\Model\Cart;
 use Module\cart\Model\Order;
 use Module\duser\Model\Duser;
 
-class vieworder extends \Controller_backend {
+class vieworder extends \Controller_backend
+{
 
     public $Product;
     public $Cart;
@@ -13,13 +18,16 @@ class vieworder extends \Controller_backend {
     public $Order;
     public $Breadcrumb;
 
-    function __construct() {
+    function __construct()
+    {
 
-        if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::QuanLyDonHang]) == FALSE) {
-            return;
+        if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien, Duser::Superadmin, Duser::QuanLy]) == FALSE) {
+            exit("Bạn không có quyền");
+            // return;
         }
         parent::__construct();
-        $this->Breadcrumb = new \Model\Breadcrumb();
+
+        $this->Breadcrumb = new Breadcrumb();
         $this->Param = $this->getParam();
         $this->Order = new \Module\cart\Model\Order();
         $this->Bread[] = [
@@ -30,17 +38,20 @@ class vieworder extends \Controller_backend {
         $this->Cart = new \Module\cart\Model\Cart();
     }
 
-    function index() {
+    function index()
+    {
         $this->Breadcrumb->setBreadcrumb($this->Bread);
         $this->ViewThemeModule("", "", "");
     }
 
-    function googleform() {
+    function googleform()
+    {
         $this->Breadcrumb->setBreadcrumb($this->Bread);
         $this->ViewThemeModule("", "", "");
     }
 
-    function dsorderstatus() {
+    function dsorderstatus()
+    {
         $this->param[0] = intval($this->param[0]);
         $this->param[0] = max(1, $this->param[0]);
         $this->param[1] = intval($this->param[1]);
@@ -53,7 +64,8 @@ class vieworder extends \Controller_backend {
         echo "[]";
     }
 
-    function dsorder() {
+    function dsorder()
+    {
         $sum = 0;
         $this->param[0] = intval($this->param[0]);
         $this->param[0] = max(1, $this->param[0]);
@@ -61,11 +73,13 @@ class vieworder extends \Controller_backend {
         echo $this->Order->_encode($a);
     }
 
-    function dsorderifame() {
+    function dsorderifame()
+    {
         $this->ViewThemeModule("", "", "ifame");
     }
 
-    function orderdetail() {
+    function orderdetail()
+    {
         if (isset($_POST["delete"])) {
             if ($_POST["huy"] == "HUY") {
                 $_Order = $this->Order->orderbyid($_POST["CodeOrder"]);
@@ -92,16 +106,19 @@ class vieworder extends \Controller_backend {
         $this->ViewThemeModule("", "", "ifame");
     }
 
-    function viewordersearch($param) {
+    function viewordersearch($param)
+    {
         $a = $this->Order->ordersByKey($this->param[0]);
         echo $this->Order->_encode($a);
     }
 
-    function orderbystatus() {
+    function orderbystatus()
+    {
         $this->ViewThemeModule("", "", "ifame");
     }
 
-    function resetSLSPdonhang() {
+    function resetSLSPdonhang()
+    {
         $idorder = $this->getParam()[0];
         $order = new Order($idorder);
         $_Product = new \Model\Products();
@@ -114,6 +131,40 @@ class vieworder extends \Controller_backend {
         \lib\Common::ToUrl($_SERVER["HTTP_REFERER"]);
     }
 
-}
 
-?>
+    public function thanhtoan()
+    {
+
+        if (isset($_POST["thanhToan"])) {
+            $thanhToan = $_POST["thanhToan"];
+            $_order = new Order($thanhToan["MaDonHang"]);
+            $MaDonHang = $thanhToan["MaDonHang"];
+            $modelThanhToan = new ThanhToan();
+            $id = $_order->Id;
+            $result = $modelThanhToan->InsertLSGiaodich($thanhToan["MaThe"], $_order->TotalPrice, "{$id}");
+            if ($result) {
+                // var_dump($resul);
+                $result->InsertLSGiaodichResult;
+                if ($result->InsertLSGiaodichResult == 1) {
+
+                    $order = new Order();
+                    $order->updateOrderStatus($MaDonHang, Order::DaThuTien);
+                    $order->updateKhachHang($MaDonHang, $thanhToan["MaThe"]);
+                    sleep(1);
+                    Common::ToUrl("/cart/thanhcong/index/" . $MaDonHang . "/");
+                    exit();
+                } else {
+                    // Số dư không đủ để thanh toán
+                    Common::ToUrl("/cart/thanhcong/fail/{$result->InsertLSGiaodichResult}/");
+                    exit();
+                }
+            } else {
+                // Số dư không đủ để thanh toán
+                Common::ToUrl("/cart/thanhcong/fail/{$result->InsertLSGiaodichResult}/");
+                exit();
+            }
+        }
+
+        $this->ViewThemeModule("", "", "");
+    }
+}

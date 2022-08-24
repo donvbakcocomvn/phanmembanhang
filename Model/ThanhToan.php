@@ -165,7 +165,7 @@ class ThanhToan
                 "Sothe" => $sothe,
                 "Sotien" =>  $sotien,
                 "LoaiGD" => 1,
-                "NoidungGD" => $noidungGD,
+                "NoidungGD" =>  "TTDH: {$noidungGD}",
                 "taikhoan" =>  "vankkhang",
             ];
             // $response = $client->__soapCall("InsertLSGiaodich", $params, null, $this->Header());

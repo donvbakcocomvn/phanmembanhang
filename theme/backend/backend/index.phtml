@@ -1,33 +1,44 @@
+<?php
+use Module\duser\Model\Duser; 
+?>
 <!-- Small boxes (Stat box) -->
 <div class="row ">
     <section class="col-md-12 ">
         <div class="box box-solid ">
             <div class="box-body">
                 <ul class="bs-glyphicons">
-                    <li>
-                        <a href="/">
-                            <span class="glyphicon glyphicon-shopping-cart"></span>
-                            <span class="glyphicon-class">Trang bán hàng</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/backend/thongke/">
-                            <span class="glyphicon glyphicon-equalizer"></span>
-                            <span class="glyphicon-class">Thống Kê</span>
-                        </a>
-                    </li> 
-                    <li>
-                        <a href="/backend/thongtinthe/">
-                            <span class="glyphicon glyphicon-euro"></span>
-                            <span class="glyphicon-class">Tra cứu thông tin thẻ</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/cart/mcart/suadonhang/">
-                            <span class="glyphicon glyphicon-shopping-cart"></span>
-                            <span class="glyphicon-class">Tra cứu đơn hàng</span>
-                        </a>
-                    </li>
+                    <?php 
+                    if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien,  Duser::Superadmin])) {
+                    ?>
+                        <li>
+                            <a href="/">
+                                <span class="glyphicon glyphicon-shopping-cart"></span>
+                                <span class="glyphicon-class">Trang bán hàng</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/backend/thongke/">
+                                <span class="glyphicon glyphicon-equalizer"></span>
+                                <span class="glyphicon-class">Thống Kê</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/backend/thongtinthe/">
+                                <span class="glyphicon glyphicon-euro"></span>
+                                <span class="glyphicon-class">Tra cứu thông tin thẻ</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/cart/mcart/suadonhang/">
+                                <span class="glyphicon glyphicon-shopping-cart"></span>
+                                <span class="glyphicon-class">Tra cứu đơn hàng</span>
+                            </a>
+                        </li>
+                    <?php
+                    }
+                    ?>
+
+
                 </ul>
             </div>
         </div>

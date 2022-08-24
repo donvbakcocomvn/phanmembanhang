@@ -1,3 +1,10 @@
+<?php
+
+use Module\duser\Model\Duser;
+
+?>
+
+
 <div ng-controller="giohangCotroller" ng-init='DanhSachAllDonHang({"Status": "all", "Keyword":""}, 1, 10)' class="box box-primary">
     <div ng-init="TimKiemNhanVien('')">
         <div class="box-header">
@@ -14,17 +21,20 @@
             <button ng-class="_DanhSachDonHang.Params.Status == 'all'?'btn-primary':'btn-default'" class="btn btn-sm " ng-click='DanhSachAllDonHang({"Status": "all", "Keyword":keyword}, 1, 10)'>Tất Cả</button>
             <button ng-class="_DanhSachDonHang.Params.Status == item.Id?'btn-primary':'btn-default'" ng-repeat="item in _OrderStatus" ng-click='DanhSachAllDonHang({"Status": item.Id, "Keyword":keyword}, 1, 10)' class="btn btn-sm ">{{item.Name}}</button>
             <div class="clearfix"></div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Nhân viên</label>
-                    <select ng-change='DanhSachAllDonHang(
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Nhân viên</label>
+                        <select ng-change='DanhSachAllDonHang(
                         {"Saler": _nhanvien,"Status": _DanhSachDonHang.Params.Status, "Keyword":keyword}
                         , 1, 10)' class="form-control" ng-model="_nhanvien">
-                        <option value="">Chọn Nhân viên</option>
-                        <option ng-repeat="item in _NhanViens.data" value="{{item.Username}}">{{item.Name}}</option>
-                    </select>
+                            <option value="">Chọn Nhân viên</option>
+                            <option ng-repeat="item in _NhanViens.data" value="{{item.Username}}">{{item.Name}}</option>
+                        </select>
+                    </div>
                 </div>
             </div>
+
             <table class="table table-bordered table-hover" style="margin-top: 10px;">
                 <tr class="bg-blue">
                     <td style="width: 150px;">Ngày Đặt</td>
@@ -43,7 +53,13 @@
                     <td>{{item.statusName}}</td>
                     <td>{{item.TotalPriceVND}}</td>
                     <td>
-                        <button class="btn btn-primary" ng-click="GetOrderDetail(item.CodeOrder)" data-toggle="modal" data-target='#DonHangChiTiet'>Xem</button>
+                        <?php
+                        if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien,  Duser::Superadmin])) {
+                        ?>
+                            <button class="btn btn-primary" ng-click="GetOrderDetail(item.CodeOrder)" data-toggle="modal" data-target='#DonHangChiTiet'>Xem</button>
+                        <?php
+                        }
+                        ?>
                     </td>
                 </tr>
             </table>
@@ -59,10 +75,19 @@
                                 <a target="_blank" href="/cart/thanhcong/print/{{_OrderDetail.CodeOrder}}" class="btn btn-success">
                                     In lại hóa đơn
                                 </a>
-                                <button ng-show="_OrderDetail.Status == '4'" type="button" class="btn btn-danger" ng-click="ShowLyDoAction()">Hủy Đơn Hàng <i class="fa  fa-times"></i></button>
-                                <a ng-show="_OrderDetail.Status == '4'" target="_blank" href="/index/thanhtoan/{{_OrderDetail.CodeOrder}}" class="btn btn-success">Thanh Toán</a>
+                                <?php
+
+                                if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien,  Duser::Superadmin])) {
+                                ?>
+                                    <button ng-show="_OrderDetail.Status == '4'" type="button" class="btn btn-danger" ng-click="ShowLyDoAction()">Hủy Đơn Hàng <i class="fa  fa-times"></i></button>
+                                    <a ng-show="_OrderDetail.Status == '4'" target="_blank" href="/cart/vieworder/thanhtoan/{{_OrderDetail.CodeOrder}}" class="btn btn-success">Thanh Toán</a>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+                                <?php
+                                }
+                                ?>
+
                             </div>
-                            <button  type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+
                         </div>
                         <div class="col-md-12" ng-show="ShowLyDo" style="margin-bottom: 15px;">
                             <div class="form-group">

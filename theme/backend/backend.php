@@ -299,18 +299,13 @@ class backend extends \Model\Database
                 </div>
                 <ul class="sidebar-menu ">
                     <li class="header text-center text-uppercase " style="color: #ddd;"><b>Danh Mục Chức Năng</b></li>
-                    <!-- <li class="treeview  ">
-                        <a href="/cart/mcart/index">
-                            <i class="fa fa-shopping-cart"></i> <span>Tạo Đơn Hàng</span>
-                        </a>
-                    </li> -->
                     <li class="treeview hidden">
                         <a href="/cart/mcart/donhangcuatoi">
                             <i class="fa fa-list"></i> <span>Đơn Hàng Của Tôi</span>
                         </a>
                     </li>
                     <?php
-                    if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::QuanLyThanhToan])) {
+                    if (Duser::KiemTraQuyen([Duser::admin,Duser::NhanVien,  Duser::Superadmin])) {
                     ?>
                         <!-- <li class="treeview">
                             <a href="/cart/xacnhandonhang/index/">
@@ -320,13 +315,13 @@ class backend extends \Model\Database
                     <?php
                     }
 
-                    if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::QuanLyDonHang])) {
+                    if (Duser::KiemTraQuyen([Duser::admin,Duser::NhanVien,Duser::QuanLy, Duser::Superadmin])) {
                     ?>
                         <li><a href="/cart/vieworder"><i class="fa fa-shopping-cart"></i> <span>Quản Lý Đơn Hàng</span></a></li>
 
                     <?php
                     }
-                    if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::QuanLySanPham])) {
+                    if (Duser::KiemTraQuyen([Duser::admin,Duser::NhanVien,Duser::QuanLy, Duser::Superadmin])) {
                     ?>
                         <li class="treeview <?php echo \Model\menuactive::SetActive('mproduct'); ?>">
                             <a href="/mproduct/index">
@@ -349,13 +344,13 @@ class backend extends \Model\Database
                         </li>
                     <?php
                     }
-                    if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::ChinhSuaNoiDung])) {
+                    if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien,Duser::QuanLy,Duser::Superadmin])) {
                     ?>
 
                     <?php
                     }
 
-                    if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin])) {
+                    if (Duser::KiemTraQuyen([Duser::admin,Duser::NhanVien,Duser::QuanLy, Duser::Superadmin])) {
                     ?>
 
                     <?php
@@ -369,7 +364,7 @@ class backend extends \Model\Database
                             </a>
                             <ul class="treeview-menu">
                                 <?php
-                                if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin, Duser::QuanLySanPham])) {
+                                if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin])) {
                                 ?>
                                     <li class="treeview">
                                         <a href="/backend/hinhanh">
@@ -418,26 +413,6 @@ class backend extends \Model\Database
                                         <span>Thông tin công ty</span>
                                     </a>
                                 </li>
-                                <li class="treeview hidden <?php echo \Model\menuactive::SetActive('madv'); ?>">
-                                    <a href="#">
-                                        <i class="fa fa-share"></i>
-                                        <span>Quản Lý Quảng Cáo</span>
-                                        <i class="fa fa-angle-right pull-right"></i>
-                                    </a>
-                                    <ul class="treeview-menu">
-                                        <li>
-                                            <a href="/madv/index">
-                                                <i class="fa fa-circle-o"></i> Quản Lý Quảng Cáo
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="/madv/video">
-                                                <i class="fa fa-circle-o"></i>
-                                                Quản Lý Video
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
                                 <li>
                                     <a href="/cart/mcart/trangnoidung/">
                                         <i class="fa fa-gear"></i>
@@ -450,8 +425,7 @@ class backend extends \Model\Database
                                         <span>Trang đặt hàng thất bại</span>
                                     </a>
                                 </li>
-
-                                <li class="hidden" >
+                                <li class="hidden">
                                     <a href="/mail/index/index/MaiThongBaoDonHang">
                                         <i class="fa fa-envelope"></i>
                                         <span>Cài Đặt Mail Đơn Hàng</span>
@@ -460,8 +434,7 @@ class backend extends \Model\Database
                             </ul>
                         </li>
                     <?php
-                    }
-
+                    } 
                     ?>
                 </ul>
 

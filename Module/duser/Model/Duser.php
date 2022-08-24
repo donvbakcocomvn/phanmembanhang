@@ -6,11 +6,15 @@ class Duser extends \Model\Admin {
 
     const Superadmin = -1;
     const admin = 0;
-    const ChinhSuaNoiDung = 1;
-    const QuanLySanPham = 2;
-    const QuanLyDonHang = 3;
+    const QuanLy = 2;
+    const QuanLySanPham = 8;
+    const NhanVien = 3;
     const QuanLyThanhToan = 4;
-    const CongTacVien = 5;
+    const QuanLyDonHang = 5;
+    const ChinhSuaNoiDung = 6;
+    const CongTacVien = 7;
+    
+  
 
 //    const ChinhSuaNoiDung = 1;
 
@@ -118,22 +122,16 @@ class Duser extends \Model\Admin {
 
     function getGroups() {
         return [-1 => "SuperAdmin",
-            "Admin",
-            "Sửa Nội Dung",
-            "Quản Lý Sản Phẩm",
-            "Quản Lý Đơn Hàng",
-            "Quản Lý Thanh Toán",
-            "Cộng Tác Viên"];
+        self::admin => "Admin",
+        self::QuanLy => "Quản Lý",
+        self::NhanVien => "Nhân viên"];
     }
 
     function getGroupsAll() {
-        return [
-            ["Id" => 0, "Name" => "Admin"],
-            ["Id" => 1, "Name" => "Sửa Nội Dung"],
-            ["Id" => 2, "Name" => "Quản Lý Sản Phẩm"],
-            ["Id" => 3, "Name" => "Quản Lý Đơn Hàng"],
-            ["Id" => 4, "Name" => "Quản Lý Thanh Toán"],
-            ["Id" => 5, "Name" => "Cộng Tác Viên"]
+        return [ 
+            ["Id" =>  self::admin, "Name" => "Admin"],
+            ["Id" => self::QuanLy, "Name" => "Quản Lý"],
+            ["Id" => self::NhanVien, "Name" => "Nhân viên"]
         ];
     }
 

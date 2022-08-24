@@ -6,7 +6,6 @@ class Breadcrumb {
 
     public static $List;
     public static $Title;
-
     function setBreadcrumb($array) {
         self::$List = $array;
     }
