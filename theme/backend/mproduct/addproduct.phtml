@@ -1,31 +1,54 @@
-<div class="box box-solid " ng-controller="addproductController" >
+<?php
+
+use Model\FormRender;
+use PFBC\Element\Select;
+
+$sp = new Model\Products();
+$donViTinh = $sp->GetDonViTinh();
+$options = [];
+foreach ($donViTinh as $key => $value) {
+    $options[$value["unitPrice"]] = $value["unitPrice"];
+}
+$prop["class"] = "form-control";
+$prop["ng-model"] = "_Product.unitPrice";
+
+$DonViTinhInput = new FormRender(new Select("Đơn vị tính", "unitPrice", $options, $prop));
+
+?>
+<div class="box box-solid " ng-controller="addproductController">
     <div class="box-header ">
-        <a class="btn btn-primary" href="/mproduct/index/"><i class="fa fa-angle-left" ></i></a>
+        <a class="btn btn-primary" href="/mproduct/index/"><i class="fa fa-angle-left"></i></a>
         <h3 class="box-title">Danh Mục Sản Phẩm</h3>
         <!-- tools box -->
     </div><!-- /.box-header -->
     <div class="box-body">
-        <form action="" method="POST" enctype="multipart/form-data" >
-            <div class="col-md-9" >
+        <form action="" method="POST" enctype="multipart/form-data">
+            <div class="col-md-9">
                 <div class="form-group">
-                    <label >Tên Sản Phẩm</label>
-                    <input ng-model="Name" type="text" value="" required="required" class="form-control" name="nameProduct" >
-                    <input type="hidden" value="vi" class="form-control" name="lang" >
+                    <label>Tên Sản Phẩm</label>
+                    <input ng-model="Name" type="text" value="" required="required" class="form-control" name="nameProduct">
+                    <input type="hidden" value="vi" class="form-control" name="lang">
                 </div>
-                <div class="row" >
-                    <div class="col-md-6" >
+                <div class="row">
+                    <div class="col-md-4">
                         <div class="form-group">
-                            <label >Giá Bán: {{_Product.Price|number:0}}</label>
-                            <input required="required" type="number" ng-model="_Product.Price" class="form-control"  >
-                            <input type="hidden" value="{{_Product.Price}}" class="form-control" name="Price" >
-
+                            <label>Giá Bán: {{_Product.Price|number:0}}</label>
+                            <input required="required" type="number" ng-model="_Product.Price" class="form-control">
+                            <input type="hidden" value="{{_Product.Price}}" class="form-control" name="Price">
                         </div>
                     </div>
-                    <div class="col-md-6" >
+                    <div class="col-md-4">
                         <div class="form-group">
-                            <label >Giá Cũ: {{_Product.oldPrice|number:0}}</label>
-                            <input required="required" type="number" ng-model="_Product.oldPrice" class="form-control"  >
-                            <input type="hidden" value="{{_Product.oldPrice}}" class="form-control" name="oldPrice" >
+                            <label>Giá Cũ: {{_Product.oldPrice|number:0}}</label>
+                            <input type="number" ng-model="_Product.oldPrice" class="form-control">
+                            <input type="hidden" value="{{_Product.oldPrice}}" class="form-control" name="oldPrice">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group"> 
+                            <?php
+                            $DonViTinhInput->renderHTML();
+                            ?> 
                         </div>
                     </div>
                 </div>
@@ -48,41 +71,41 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="home">
                             <div class="form-group">
-                                <label >Mô Tả Ngắn</label>
-                                <textarea name="Summary" class="editor" id="Summary" >{{_Product.Summary}}</textarea>
+                                <label>Mô Tả Ngắn</label>
+                                <textarea name="Summary" class="editor" id="Summary">{{_Product.Summary}}</textarea>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="tab">
                             <div class="form-group">
-                                <label >Thông tin Chính</label>
-                                <textarea name="Content" class="editor" id="Content" >{{_Product.Content}}</textarea>
+                                <label>Thông tin Chính</label>
+                                <textarea name="Content" class="editor" id="Content">{{_Product.Content}}</textarea>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="GhiChu">
                             <div class="form-group">
-                                <label >Ghi Chú</label>
-                                <textarea name="Note" class="form-control" id="Note" >{{_Product.Note}}</textarea>
+                                <label>Ghi Chú</label>
+                                <textarea name="Note" class="form-control" id="Note">{{_Product.Note}}</textarea>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="HinhAnh">
                             <div>
                                 Hình Ảnh
-                                <label style="border: 1px solid #000;background-color: rgba(0, 0, 0, 0.34);color: #fff;text-align: center;position: relative;height: 105px;display: block;z-index: 2" >
+                                <label style="border: 1px solid #000;background-color: rgba(0, 0, 0, 0.34);color: #fff;text-align: center;position: relative;height: 105px;display: block;z-index: 2">
                                     Chọn Hình
-                                    <input style="display: none" onclick="BrowseServer('Images:/sanpham/', 'UrlHinh')"  type="button" name="btnChonFile" id="btnChonFile" value="Chọn File" >
-                                    <div class="HinhChon" style="position: absolute;top: 0px;z-index: 1" >
-                                        <img id="HinhQuanCao" src="" style="height: 100px;max-width: 200px"  >
+                                    <input style="display: none" onclick="BrowseServer('Images:/sanpham/', 'UrlHinh')" type="button" name="btnChonFile" id="btnChonFile" value="Chọn File">
+                                    <div class="HinhChon" style="position: absolute;top: 0px;z-index: 1">
+                                        <img id="HinhQuanCao" src="" style="height: 100px;max-width: 200px">
                                     </div>
-                                    <input style="display: none;" readonly="" type="text"   class="form-control" id="UrlHinh" name="UrlHinh" >
+                                    <input style="display: none;" readonly="" type="text" class="form-control" id="UrlHinh" name="UrlHinh">
                                 </label>
                                 <div style="clear: both"></div>
 
                             </div>
-                            <label >Hình Sản Phẩm</label>
+                            <label>Hình Sản Phẩm</label>
                             <div class="form-group hidden">
-                                <label >Hình Sản Phẩm</label>
+                                <label>Hình Sản Phẩm</label>
                                 <div class="form-group">
-                                    <input type="file" name="fileImages[]" multiple="multiple" >
+                                    <input type="file" name="fileImages[]" multiple="multiple">
                                 </div>
                             </div>
                         </div>
@@ -90,26 +113,26 @@
                 </div>
 
             </div>
-            <div class="col-md-3" >
+            <div class="col-md-3">
                 <div class="form-group">
                     <label></label>
-                    <button name="ThemSanPham" class="btn btn-block btn-primary" type="submit" >Thêm Sản Phẩm</button>
+                    <button name="ThemSanPham" class="btn btn-block btn-primary" type="submit">Thêm Sản Phẩm</button>
                 </div>
                 <div class="form-group">
-                    <label >Danh Mục : </label>
-                    <select class="form-control "  name="catID" >
-                        <option  ng-repeat="cat in _ListCategory" ng-selected="cat.catID == '<?php echo $_Param[0] ?>'" value="{{cat.catID}}" >
+                    <label>Danh Mục : </label>
+                    <select class="form-control " name="catID">
+                        <option ng-repeat="cat in _ListCategory" ng-selected="cat.catID == '<?php echo $_Param[0] ?>'" value="{{cat.catID}}">
                             {{cat.catName}}
                         </option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label >Mã Sản Phẩm</label>
-                    <input type="text" class="form-control" required="required" value="{{Name}}"  name="ID" >
+                    <label>Mã Sản Phẩm</label>
+                    <input type="text" class="form-control" required="required" value="{{Name}}" name="ID">
                 </div>
                 <div class="form-group">
-                    <label >Ẩn Hiện
-                        <input type="checkbox"  value="1" ng-checked="_Product.isShow == 1" name="isShow" >
+                    <label>Ẩn Hiện
+                        <input type="checkbox" value="1" ng-checked="_Product.isShow == 1" name="isShow">
                     </label>
                 </div>
 

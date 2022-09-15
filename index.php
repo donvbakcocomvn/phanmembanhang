@@ -1,6 +1,14 @@
 <?php
 
+//phpinfo();
+
+ini_set('memory_limit', '1024M');
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(1);
+
 session_start();
+//session_save_path("c:/wamp64/tmp");
 ob_start();
 session_regenerate_id(false);
 if (session_id() == false) {
@@ -9,18 +17,10 @@ if (session_id() == false) {
     ini_set('session.use_only_cookies', 1);
     ini_set('session.cookie_lifetime', 0);
 }
-ini_set('memory_limit', '1024M');
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-
-
 
 include "./vendor/autoload.php";
 
-function minify_output($buffer)
-{
+function minify_output($buffer) {
     $search = array(
         '/\>[^\S ]+/s',
         '/[^\S ]+\</s',

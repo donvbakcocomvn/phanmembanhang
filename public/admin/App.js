@@ -139,10 +139,10 @@ app.controller("usersCotroller", function ($http, $scope) {
   });
 
   $scope.typePasswod = "password";
-  $scope.SetTypePassword = ()=>{
-    $scope.typePasswod = $scope.typePasswod == "password"?"text":"password";
+  $scope.SetTypePassword = () => {
+    $scope.typePasswod = $scope.typePasswod == "password" ? "text" : "password";
   }
-  $scope.SetPassword = ()=>{
+  $scope.SetPassword = () => {
     var randomstring = Math.random().toString(36).slice(-8);
     $scope.Matkhau = randomstring;
   }
@@ -150,6 +150,9 @@ app.controller("usersCotroller", function ($http, $scope) {
 
 });
 app.controller("giohangCotroller", function ($http, $scope) {
+  $http.get("/apibe/DSKhoaBenh/").then(function (res) {
+    $scope._KhoaBenhs = res.data;
+  });
   $scope.TimKiemNhanVien = function (key) {
     $http.get("/apibe/timnhanvien/" + key).then(function (res) {
       $scope._NhanViens = res.data;

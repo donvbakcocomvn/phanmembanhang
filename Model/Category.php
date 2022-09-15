@@ -220,7 +220,15 @@ class Category extends \Model\Database
         $sum = 0;
         return $p->ProductsByCatID($this->catID, 1, 15, $sum);
     }
-
+    public function GetCategoriesToSelect($key = null)
+    {
+        $sql = "SELECT * FROM `" . table_prefix . "categories` WHERE `Public` = 1";
+        $this->Query($sql);
+        if ($key == null) {
+            $key = "catID";
+        }
+        return $this->fetch2Option($key, "catName");
+    }
     function obj2Api()
     {
         $Cat["catID"] = $this->catID;

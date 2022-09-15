@@ -4,8 +4,8 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
 
 define("DEFAULT_CONTROLLER", "index");
 define("DEFAULT_ACTION", "index");
-define("BASE_URL", "https://bachhoagiadinh.vn/");
-define("DOMAIN", ".bachhoagiadinh.vn/");
+define("BASE_URL", "https://cantinnhanai.vkhealth.vn/");
+define("DOMAIN", ".vkhealth.vn/");
 define("BASE_DIR", "/");
 define("ROOT_DIR", __DIR__);
 define("NgonNgu", "NgonNgu");
@@ -14,8 +14,7 @@ define("Password", "@NguyenVanDo1");
 define("QuanTri", "QuanTri_PGV");
 define("table_prefix", "bakcodt_");
 $_SESSION['TenHienThi'] = 0;
-global $INI;
-
+global $INI; 
 $INI['host'] = "localhost";
 $INI['username'] = "root";
 $INI['password'] = "";

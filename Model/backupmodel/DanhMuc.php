@@ -61,9 +61,10 @@ class Model_DanhMuc extends Model_TinhThanh
         parent::__construct();
     }
 
-    public static function DanhMucs($CapCha = 0)
+    public   function DanhMucs($CapCha = 0)
     {
         $sql = "SELECT * FROM `" . table_prefix . "danhmuc` where `CapCha` = '{$CapCha}' ORDER BY `STT` ASC";
+
         $this->Query($sql);
         return $this->fetchAll();
     }
@@ -73,7 +74,7 @@ class Model_DanhMuc extends Model_TinhThanh
         return self::$DanhMucTinTuc;
     }
 
-    public static function DanhMucTinTuc()
+    public function DanhMucTinTuc()
     {
         $sql = "SELECT * FROM `" . table_prefix . "danhmuc` where `LoaiDanhMuc` = '{$this->LoaiDanhMuc}' ORDER BY `STT` ASC";
         $this->Query($sql);
@@ -335,7 +336,12 @@ class Model_DanhMuc extends Model_TinhThanh
             return $DSDanhMuc;
         }
     }
-
+    public function GetCategoriesToSelect()
+    {
+        $sql = "SELECT * FROM `" . table_prefix . "categories` WHERE `Public` = 1";
+        $this->Query($sql);
+        return $this->fetch2Option("catID", "catName");
+    }
     function TaoTenKhongDau($TenDanhMuc)
     {
         return strtolower(bodautv($TenDanhMuc));

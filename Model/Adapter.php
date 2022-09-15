@@ -160,9 +160,9 @@ class Model_Adapter
             if (self::$_result) {
                 return self::$_result;
             } else {
-                //                 mysqli_error(self::$_conn);
+                die(mysqli_error(self::$_conn));
                 //            echo self::$_Query;
-                header("Location: " . $_SERVER["HTTP_REFERER"]);
+                // header("Location: " . $_SERVER["HTTP_REFERER"]);
                 //                die();
             }
             return FALSE;
@@ -177,11 +177,12 @@ class Model_Adapter
             if (self::$_result) {
                 return mysqli_insert_id(self::$_conn);
             } else {
-                echo self::$_Query;
-                echo mysqli_error(self::$_conn);
+                // echo self::$_Query;
+                // echo mysqli_error(self::$_conn);
                 //            echo self::$_Query;
                 //                header("Location: " . $_SERVER["HTTP_REFERER"]);
-                die();
+                // die();
+                return FALSE;
             }
             return FALSE;
         }

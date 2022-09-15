@@ -1,4 +1,7 @@
 <?php
+
+use Module\duser\Model\FormUser;
+
 $Model_Duser = new Module\duser\Model\Duser();
 $DSOption = $Model_Duser->Admins(FALSE);
 $User = new \Module\duser\Model\Duser($User);
@@ -50,21 +53,23 @@ if (\Module\duser\Model\Duser::KiemTraQuyen([
                         <label for="">SĐT</label>
                         <input type="text" value="<?php echo $User->Phone; ?>" class="form-control" name="user[Phone]" placeholder="SĐT">
                     </div>
-                    <div class="form-group  ">
-                        <label for="">Nhóm</label>
-                        <select class="form-control" name="user[Groups]">
-                            <option ng-selected="'<?php echo $User->Groups; ?>' == item.Id" ng-repeat="item in _GroupsUser" ng-value="item.Id">{{item.Name}}</option>
-                        </select>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php
+                            FormUser::Groups($User->Groups)->renderHTML();
+                            ?>
 
+                        </div>
+                        <div class="col-md-6">
+                            <?php
+                            FormUser::KhoaBenh($User->KhoaBenh)->renderHTML();
+                            ?>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="">Địa Chỉ</label>
-                        <textarea class="form-control" name="user[Address]"><?php echo $User->Address; ?></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Chi Chú</label>
-                        <textarea class="form-control" name="user[Note]"><?php echo $User->Note; ?></textarea>
-                    </div>
+                    <?php
+                    FormUser::Address($User->Address)->renderHTML();
+                    FormUser::Note($User->Note)->renderHTML();
+                    ?> 
                     <div class="form-group">
                         <label for=""></label>
                         <?php
@@ -81,7 +86,7 @@ if (\Module\duser\Model\Duser::KiemTraQuyen([
         </form>
     </div>
     <?php
-    if (\Module\duser\Model\Duser::KiemTraQuyen([\Module\duser\Model\Duser::Superadmin,\Module\duser\Model\Duser::admin]) == true) {
+    if (\Module\duser\Model\Duser::KiemTraQuyen([\Module\duser\Model\Duser::Superadmin, \Module\duser\Model\Duser::admin]) == true) {
     ?>
         <div class="col-md-6">
             <div class="box box-primary">

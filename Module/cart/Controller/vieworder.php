@@ -44,6 +44,30 @@ class vieworder extends \Controller_backend
         $this->ViewThemeModule("", "", "");
     }
 
+    public function dongbo()
+    {
+        $_order = new Order();
+        $_order->orders();
+        $tong = 0;
+        $item =  $_order->ordersStatusPt(1, 300, Order::DaThuTien, $tong);
+        $thanhToan = new ThanhToan();
+        $DanhSachBenhNhan = [];
+        foreach ($item as $key => $value) {
+            $_order = new Order($value);
+            if (isset($DanhSachBenhNhan[$value["MaThe"]]) == false) {
+                $benhNhan = $thanhToan->GetTTBenhnhan($value["MaThe"]);
+                $DanhSachBenhNhan[$value["MaThe"]] = $benhNhan;
+            }
+            $benhNhan = $DanhSachBenhNhan[$value["MaThe"]];
+            if ($benhNhan) {
+                $DanhSachBenhNhan[$value["MaThe"]] = $benhNhan;
+                $value["KhoaBenh"] = $benhNhan["Tiensubenh"];
+                $value["NgaySinh"] = $benhNhan["Ngaysinh"] ?? date("Y-m-d", time());
+                $_order->updateOrder($value);
+            }
+        }
+    }
+
     function googleform()
     {
         $this->Breadcrumb->setBreadcrumb($this->Bread);

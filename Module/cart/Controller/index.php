@@ -79,7 +79,13 @@ class index extends \Controller_index
         $this->Cart->plusNumberProduct($id);
         $this->Cart->_header($_SERVER["HTTP_REFERER"]);
     }
-
+    function updateNumberProduct()
+    {
+        $id = $this->param[0];
+        $number = $this->param[1];
+        $this->Cart->UpdateNumberProduct($id, $number);
+        $this->Cart->_header($_SERVER["HTTP_REFERER"]);
+    }
     function minuNumberProduct()
     {
         $id = $this->param[0];
@@ -93,7 +99,7 @@ class index extends \Controller_index
     }
     function donhang()
     {
-       
-        $this->ViewThemeModule("", "", "");        
+
+        $this->ViewThemeModule("", "", "");
     }
 }

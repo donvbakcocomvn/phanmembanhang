@@ -1,13 +1,16 @@
 <?php
 
 namespace Module\duser\Controller;
+use PhpOffice\PhpSpreadsheet\Exception;
 
-class index extends \Controller_backend {
+class index extends \Controller_backend
+{
 
     public $infor;
     public $Breadcrumb;
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
@@ -23,7 +26,8 @@ class index extends \Controller_backend {
         ob_start();
     }
 
-    function index() {
+    function index()
+    {
         $this->Bread[] = [
             "title" => "Danh Sách Tài Khoản",
             "link" => "#"
@@ -32,7 +36,8 @@ class index extends \Controller_backend {
         $this->ViewThemeModule();
     }
 
-    function create() {
+    function create()
+    {
         if (isset($_POST["ThemAdmin"])) {
             try {
                 $user = $_POST["user"];
@@ -41,7 +46,9 @@ class index extends \Controller_backend {
                 $random = substr($random, 0, 29);
                 $user["Password"] = $Duser->CreatePassword($user["Password"], $random);
                 $user["Random"] = $random;
-                $Duser->ThemUser($user);
+                if ($Duser->ThemUser($user) == false) {
+                    throw new Exception("Đã có tài khoản.");
+                }
                 new \Model\Error(["type" => "success", "content" => "Đã thêm tài khoản."]);
             } catch (\Exception $exc) {
                 new \Model\Error(["type" => "danger", "content" => $exc->getMessage()]);
@@ -57,7 +64,8 @@ class index extends \Controller_backend {
         $this->ViewThemeModule();
     }
 
-    public function delete() {
+    public function delete()
+    {
         $this->Bread[] = [
             "title" => "Thêm Tài Khoản",
             "link" => "#"
@@ -66,7 +74,8 @@ class index extends \Controller_backend {
         $this->ViewThemeModule();
     }
 
-    public function detail() {
+    public function detail()
+    {
         $this->Bread[] = [
             "title" => "Thêm Tài Khoản",
             "link" => "#"
@@ -75,7 +84,8 @@ class index extends \Controller_backend {
         $this->ViewThemeModule();
     }
 
-    public function update() {
+    public function update()
+    {
         $Duser = new \Module\duser\Model\Duser();
         $this->resetpassword();
         if (isset($_POST["SaveAdmin"])) {
@@ -85,6 +95,7 @@ class index extends \Controller_backend {
             $_user["Phone"] = $userInfor["Phone"];
             $_user["Email"] = $userInfor["Email"];
             $_user["Groups"] = $userInfor["Groups"];
+            $_user["KhoaBenh"] = $userInfor["KhoaBenh"];
             $_user["Address"] = $userInfor["Address"];
             $_user["Note"] = $userInfor["Note"];
             $Duser->UpdateInfor($_user);
@@ -103,7 +114,8 @@ class index extends \Controller_backend {
         $this->ViewThemeModule($data);
     }
 
-    public function resetpassword() {
+    public function resetpassword()
+    {
 
         try {
             if (isset($_POST["ResetPassword"])) {
@@ -131,7 +143,8 @@ class index extends \Controller_backend {
         }
     }
 
-    function __destruct() {
+    function __destruct()
+    {
         $str = ob_get_clean();
         $filename = __DIR__ . "/../Lang/vi.ini";
         $a = parse_ini_file($filename);
@@ -142,7 +155,4 @@ class index extends \Controller_backend {
         }
         echo $str;
     }
-
 }
-
-?>

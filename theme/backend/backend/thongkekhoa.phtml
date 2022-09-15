@@ -1,0 +1,91 @@
+<?php
+
+use Model\FormRender;
+use Module\cart\Model\Order;
+use PFBC\Element\Select;
+
+$order = new Order();
+$KhoaBenh = $order->GetKhaoBenh();
+$options[""] = "Tất cả";
+foreach ($KhoaBenh as $key => $value) {
+    if ($value["KhoaBenh"] != "")
+        $options[$value["KhoaBenh"]] = $value["KhoaBenh"];
+}
+$prop["class"] = "form-control";
+$prop["value"] = $_GET["KhoaBenh"] ?? "";
+
+$Danhmuc = new FormRender(new Select("Khoa bệnh", "KhoaBenh", $options, $prop));
+?>
+<div class="row ">
+    <section class="col-md-12 ">
+        <div class="box box-solid ">
+            <div class="box-header">
+                <h3 class="box-title">Thống kê</h3>
+                <a href="/backend/thongke/" class="btn btn-success pull-right" >Thống kê sản phẩm</a>
+            </div>
+            <div class="box-body">
+                <form action="" method="get">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Từ ngày</label>
+                            <input value="<?php echo $_GET["fromDate"] ?? ""; ?>" required class="form-control" type="date" name="fromDate" id="fromDate">
+                        </div>
+                        <div class="col-md-3">
+                            <label>Đến ngày</label>
+                            <input value="<?php echo $_GET["toDate"] ?? ""; ?>" required class="form-control" type="date" name="toDate" id="toDate">
+                        </div>
+                        <div class="col-md-3">
+                            <?php
+                            $Danhmuc->renderHTML();
+                            ?>
+
+                        </div>
+                        <div class="col-md-3">
+                            <button name="btnLoc" style=" margin-top: 24px;" class="btn btn-success">
+                                Lọc
+                            </button>
+                            <button name="btnExport" style=" margin-top: 24px;" class="btn btn-success">
+                                Export
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <table style="margin-top: 10px;" class="table table-border">
+                    <tr>
+                        <th>STT</th>
+                        <th>Hàng Hóa</th>
+                        <th>Mã Danh Mục</th>
+                        <th>ĐVT</th>
+                        <th>Mã Hàng Hóa</th>
+                        <th>Gia bán</th>
+                        <th>Khoa</th>
+                        <th>Số Lượng</th>
+                        <th>Thành Tiền</th>
+                        <th>Ghi Chú</th>
+                    </tr>
+                    <?php
+                    if ($data) {
+
+                        foreach ($data as $index => $row) {
+                            ?>
+                            <tr>
+                                <?php
+                                foreach ($row as $k => $v) {
+                                    ?>
+                                    <td><?php echo $v; ?></td>
+                                    <?php
+                                }
+                                ?>
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+
+                </table>
+
+            </div>
+        </div>
+    </section>
+
+</div>

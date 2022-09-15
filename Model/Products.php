@@ -77,6 +77,14 @@ class Products extends \Model\Database
         }
     }
 
+    function GetDonViTinh()
+    {
+        $sql = "SELECT * FROM `" . table_prefix . "product` where 1 = 1 Group by `unitPrice`";
+        $this->Query($sql);
+        $a = $this->fetchAll();
+        return $a;
+    }
+
     function Products()
     {
         return parent::ProductsAll();
@@ -193,6 +201,7 @@ class Products extends \Model\Database
     {
         return parent::ProductsByID($Id, $isobj);
     }
+
     function ProductsByCode($code)
     {
         $sql = "SELECT * FROM `" . table_prefix . "product` where `Code` = '{$code}'";
@@ -298,7 +307,7 @@ class Products extends \Model\Database
 ?>
         <!-- <a class="<?php echo $class; ?>" ng-click="addProductCart('<?php echo $this->ID; ?>')" class="<?php echo $class; ?>">
             <i class="fa fa-plus"></i>
-        </a> --> 
+        </a> -->
         <div class="pull-right">
             <a class="btn btn-success" ng-click="addProductCart('<?php echo $this->ID; ?>')" class="<?php echo $class; ?>">
                 <i class="fa fa-plus"></i>
@@ -310,6 +319,7 @@ class Products extends \Model\Database
 
     <?php
     }
+
     public function btnGioHangMinus($class = "")
     {
         if ($this->Number == 0) {
@@ -321,6 +331,7 @@ class Products extends \Model\Database
         </a>
     <?php
     }
+
     public function btnMuaNgay($class = "")
     {
         if ($this->Number == 0) {

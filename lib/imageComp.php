@@ -2,6 +2,8 @@
 
 namespace lib;
 
+use Exception;
+
 class imageComp {
 
     static public $imagesDefault = "";

@@ -22,7 +22,13 @@
         ?>
         <h2>Thông Tin Khách Hàng</h2>
         <p style="margin: 5px 0;">Khách Hàng:
-            <b> <?php echo $thongTinBenhNhan["HotenBN"] ?? "NA"; ?></b>
+            <b> <?php echo $thongTinBenhNhan["HotenBN"] ?? $order->Name; ?></b>
+        </p>
+        <p style="margin: 5px 0;">Khoa:
+            <b> <?php echo $thongTinBenhNhan["Tiensubenh"] ?? $order->KhoaBenh()->Name; ?></b>
+        </p>
+        <p style="margin: 5px 0;">Ngày Sinh:
+            <b> <?php echo $thongTinBenhNhan["Ngaysinh"] ?? $order->NgaySinh; ?></b>
         </p>
         <p style="margin: 5px 0;">Tình Trạng:
             <label style="padding: 0px;font-weight: bold;" class=""><?php echo $order->Status(); ?></label>
@@ -68,6 +74,6 @@
             </tbody>
             </thead>
         </table>
-        <a class="btn btn-primary pull-right" href="/cart/thanhcong/print/<?php echo $_Param[0];  ?>/">In phiếu</a>
+        <a class="btn btn-primary pull-right" href="/cart/thanhcong/inphieu/<?php echo $_Param[0]; ?>/">In phiếu</a>
     </div>
 </div>

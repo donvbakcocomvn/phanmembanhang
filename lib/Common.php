@@ -156,7 +156,7 @@ class Common {
     public static function MoneyFomat($a) {
         if ($a > 0)
             return number_format($a, 0, '.', ',') . " đ";
-        return "Liên Hệ";
+        return "0";
     }
 
     public static function NumberFomat($a) {

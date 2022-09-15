@@ -8,6 +8,7 @@ use Module\cart\Model\OrderService;
 use Module\cart\Model\Order;
 use Module\cart\Model\OrderDetail;
 
+
 class Controller_apibe extends Controller_backend
 {
 
@@ -373,6 +374,14 @@ class Controller_apibe extends Controller_backend
         return str_pad(92, 4, '0', STR_PAD_LEFT);
     }
 
+    public function DSKhoaBenh()
+    {
+        $Model_OptionsService =  new Model_OptionsService();
+        $total = 0;
+        $options = $Model_OptionsService->GetItems(["GroupsId" => "khoa"], 1, 100, $total);
+        echo lib\APIs::Json_Encode($options);
+    }
+
     function resetCode()
     {
         $product = new Model\Products();
@@ -418,13 +427,16 @@ class Controller_apibe extends Controller_backend
         $indexPage = isset($this->getParam()[0]) ? intval($this->getParam()[0]) : 1;
         $pageNumber = isset($this->getParam()[1]) ? intval($this->getParam()[1]) : 10;
         $data["Params"]["Status"] = $_POST["Status"] ?? 4;
+        $data["Params"]["KhoaBenh"] = $_POST["KhoaBenh"] ?? "";
+        $data["Params"]["KhoaBenh"] = $data["Params"]["KhoaBenh"] == "" ? null : $data["Params"]["KhoaBenh"];
         $data["Params"]["Saler"] = $_POST["Saler"] ?? null;
         // $saler = isset($params["Saler"]) ? $params["Saler"] : null;
         $data["Params"]["Keyword"] = \Model\CheckInput::Input($_POST["Keyword"] ?? "");
         $orderBySaler = $order->GetBySale($data["Params"], $total, $indexPage, $pageNumber);
         if ($orderBySaler)
             foreach ($orderBySaler as $k => $order) {
-                $_order = new Module\cart\Model\Order($order["CodeOrder"]);
+                // var_dump($order);
+                $_order = new Module\cart\Model\Order($order["Id"]);
                 $order = $_order->ToArray();
                 $orderBySaler[$k] = $order;
             }

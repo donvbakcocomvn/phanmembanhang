@@ -2,6 +2,9 @@
 
 namespace Module\cart\Model;
 
+use Model\ThanhToan;
+use Model_OptionsService;
+
 /**
  * Description of Order
  *
@@ -14,16 +17,19 @@ class Order extends \Model\Database
 
     public $Id;
     public $Name;
+    public $MaBenhNhan;
     public $TotalPrice;
     public $CodeOrder;
     public $Email;
     public $Phone;
+    public $KhoaBenh;
     public $Status;
     public $Note;
     public $Tinh;
     public $Huyen;
     public $Address;
     public $NgayTao;
+    public $NgaySinh;
     public $Saler;
 
     const Huy = 0;
@@ -46,10 +52,12 @@ class Order extends \Model\Database
             if ($order) {
                 $this->Id = $order["Id"];
                 $this->Name = $order["Name"];
+                $this->MaBenhNhan = $order["MaBenhNhan"];
                 $this->TotalPrice = $order["TotalPrice"];
                 $this->CodeOrder = $order["CodeOrder"];
                 $this->Email = $order["Email"];
                 $this->Phone = $order["Phone"];
+                $this->KhoaBenh = $order["KhoaBenh"];
                 $this->Status = $order["Status"];
                 $this->Note = $order["Note"];
                 $this->Tinh = $order["Tinh"];
@@ -57,10 +65,16 @@ class Order extends \Model\Database
                 $this->Address = $order["Address"];
                 $this->NgayTao = $order["NgayTao"];
                 $this->Saler = $order["Saler"];
+                $this->NgaySinh = $order["NgaySinh"];
             }
         }
     }
 
+    public function KhoaBenh()
+    {
+        $modelOption = new  Model_OptionsService();
+        return new  Model_OptionsService($modelOption->GetByKeyValue($this->KhoaBenh, "khoa"));
+    }
     function NgayDat()
     {
         return date("d-m-Y H:i", strtotime($this->NgayTao));
@@ -78,7 +92,7 @@ class Order extends \Model\Database
         // var_dump("_____");
         // var_dump($order);
         // var_dump("_____");
-        $order["TotalPrice"] = $tongTien; 
+        $order["TotalPrice"] = $tongTien;
         return $this->updateOrder($order);
     }
 
@@ -95,6 +109,11 @@ class Order extends \Model\Database
         $this->insert(table_prefix . "order", $Order);
     }
 
+    public function GetKhaoBenh()
+    {
+        return $this->select(table_prefix . "order", [], '1 Group by `KhoaBenh`');
+    }
+
     function updateOrder($Order)
     {
         // var_dump($Order);
@@ -107,7 +126,11 @@ class Order extends \Model\Database
     }
     function updateKhachHang($CodeOrder, $MaThe)
     {
+        $thanhToan = new ThanhToan();
+        $ThongTinBenhNhan =  $thanhToan->GetTTBenhnhan($MaThe);
         $Order = ["Name" => $MaThe];
+        $Order["MaBenhNhan"] = $ThongTinBenhNhan["Nhommau"];
+        $Order["KhoaBenh"] = $ThongTinBenhNhan["Tiensubenh"];
         return $this->update(table_prefix . "order", $Order, "`CodeOrder` = '{$CodeOrder}'");
     }
 
@@ -216,6 +239,8 @@ class Order extends \Model\Database
     {
         $order["Id"] = $this->Id;
         $order["Name"] = $this->Name;
+        $order["KhoaBenh"] = $this->KhoaBenh()->Name;
+        $order["MaBenhNhan"] = $this->MaBenhNhan;
         $order["TotalPrice"] = intval($this->TotalPrice);
         $order["TotalPriceVND"] = \lib\Common::MoneyFomat($this->TotalPrice);
         $order["CodeOrder"] = $this->CodeOrder;
@@ -284,9 +309,9 @@ class Order extends \Model\Database
     {
         $order["Id"] = $this->Id;
         $order["Name"] = $this->Name;
-       
+
         $order["statusName"] = $this->Status();
-       
+
         $order["CodeOrder"] = $this->CodeOrder;
         $order["Email"] = $this->Email;
         $order["Phone"] = $this->Phone;
@@ -300,7 +325,7 @@ class Order extends \Model\Database
         $order["SalerInfor"] = $this->Saler()->ToArray();
         $orderDetail = $this->orderDetailbyid($this->CodeOrder);
         $tongTien = 0;
-        
+
         $orderDetail = array_map(function ($item) {
             $idproduct = $item["IdProduct"];
             $ps = new \Model\Products($idproduct);

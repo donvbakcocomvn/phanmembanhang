@@ -300,7 +300,6 @@ class Database extends \Model\iDatabase
             . "`Serial`='{$Product["Serial"]}',"
             . "`lang`= '{$Product["lang"]}'";
         $this->Query($sql);
-
         return $this->Luu();
     }
 

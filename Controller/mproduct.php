@@ -92,6 +92,7 @@ class Controller_mproduct extends Controller_backend
             $editP['Alias'] = $this->Product->bodautv($_POST["nameProduct"]);
             $editP['Username'] = $_POST["Username"];
             $editP['catID'] = $_POST["catID"];
+            $editP['unitPrice'] = $_POST["unitPrice"];
             $editP['Price'] = $_POST["Price"];
             $editP['brand'] = $formProduct["brand"];
             $editP['oldPrice'] = $_POST["oldPrice"];
@@ -176,19 +177,22 @@ class Controller_mproduct extends Controller_backend
     {
         if (isset($_POST["ThemSanPham"])) {
             $_POST['ID'] = $this->Product->bodautv($_POST['ID']);
-            $editP = $this->Product->ProductsByID(intval($_POST['ID']), FALSE);
-            if (!$editP) {
-                $editP['ID'] = $_POST["ID"];
+            $editP = $this->Product->ProductsByID($_POST['ID'], FALSE);
+            if (!$editP) { 
+                $editP['Code'] = $_POST["ID"];
                 $editP['nameProduct'] = $_POST["nameProduct"];
                 $editP['Alias'] = $this->Product->bodautv($_POST["nameProduct"]);
                 $editP['Username'] = $_SESSION[QuanTri]["Username"];
                 $editP['catID'] = $_POST["catID"];
-                $editP['Price'] = $_POST["Price"];
-                $editP['oldPrice'] = $_POST["oldPrice"];
+                $editP['unitPrice'] = $_POST["unitPrice"];
+                $editP['Price'] = intval($_POST["Price"]);
+                $editP['oldPrice'] = intval($_POST["oldPrice"]);
+                $editP['Serial'] = 0;
                 $editP['Summary'] = $_POST["Summary"];
+                $editP['Views'] = 0;
                 $editP['Content'] = $_POST["Content"];
-                $img = explode("/images/sanpham/", $_POST["UrlHinh"]);
-                $editP['UrlHinh'] = end($img);
+                // $img = explode("/images/sanpham/", $_POST["UrlHinh"]);
+                $editP['UrlHinh'] = $_POST["UrlHinh"];
                 $editP['DateCreate'] = date("Y-m-d H:i:s", time());
                 $editP['Number'] = 1;
                 $editP['Note'] = $_POST["Note"];
@@ -197,13 +201,14 @@ class Controller_mproduct extends Controller_backend
                 $editP['lang'] = "vi";
                 if (isset($_FILES["fileImages"])) {
                     if ($_FILES["fileImages"]["error"][0] == 0) {
-                        $img = $this->Product->upload_multi_image($_FILES["fileImages"], "public/img/images/sanpham/" . $editP["ID"] . "/", $editP["ID"] . "-");
+                        $img = $this->Product->upload_multi_image($_FILES["fileImages"], "public/img/images/sanpham/" . $editP["Code"] . "/", $editP["ID"] . "-");
                         $img = "/" . $img;
                     }
                 }
                 $this->Product->AddProducts($editP);
             }
-            $this->Product->_header("/mproduct/detailproduct/" . $editP["ID"]);
+            $sp =  $this->Product->ProductsByCode($editP["Code"]);
+            $this->Product->_header("/mproduct/detailproduct/" . $sp["ID"]);
         }
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "mproduct");
     }

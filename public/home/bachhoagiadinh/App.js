@@ -141,6 +141,15 @@ app.controller(
           $scope.getcarts();
         });
     };
+    $scope.updateNumberProduct = async function (id,number) {
+      console.log(id);
+      console.log(number);
+      await $http
+        .get("/cart/index/updateNumberProduct/" + id+"/"+number)
+        .then(function (res) {
+          $scope.getcarts();
+        });
+    };
     $scope.addProductCart = async function (id) {
       await $http.get("/cart/index/addproduct/" + id).then(function (res) {
         $scope.getcarts();

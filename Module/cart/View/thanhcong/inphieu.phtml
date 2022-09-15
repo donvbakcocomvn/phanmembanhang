@@ -7,15 +7,22 @@
         }
     }
 
+
+    .content-orderdetail {
+        font-size: 18px;
+    }
+
     .main {
+        font-size: 18px;
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
 
     .salesslip {
-        width: 400px;
+        width: 380px;
         margin: auto;
+        padding: 5px;
     }
 
     .shop {
@@ -105,25 +112,19 @@ $thanhToan = new ThanhToan();
 $orderDetail = $order->orderDetailbyid($id);
 $thongTinKhachHang = $thanhToan->GetTTBenhnhan($order->Name);
 $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
- 
+
 
 ?>
 
-<div class="main">
+<div class="main ">
     <div class="salesslip">
-        <div class="shop"><br>
-
-
+        <div class="shop"><br>  
             <h2 style="font-weight: bold;">PHIẾU BÁN HÀNG</h2>
             <h4 style="font-style: italic; font-weight: 300; margin: 10px 0;">
                 Ngày <span style="border-bottom: 2px dotted #aaa;"><?php echo date("d", time()) ?></span>
                 tháng <span style="border-bottom: 2px dotted #aaa;"> <?php echo date("m", time()) ?> </span>
                 năm <span style="border-bottom: 2px dotted #aaa;"><?php echo date("Y", time()) ?> </span>
-            </h4>
-            <!-- <span class="shop-add">523 Nguyễn Văn Khối, Phường 8 <br>
-                    Quận Gò Vấp, Thành Phố Hồ Chí Minh, 7000
-                </span><br>
-                <span class="shop-tel">SĐT : 0949797755</span><br><br> -->
+            </h4> 
             <?php
             $string = $order->Id;
             echo '<img style="height:50px;
@@ -137,7 +138,7 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
             <table style="width:100%;">
                 <tr>
                     <td class="temporary-title">Họ và tên:</td>
-                    <td class="temporary-title"><?php echo $thongTinKhachHang["HotenBN"] ?? "Khách Vãng Lai"; ?></td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["HotenBN"] ?? $order->Name; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Nhân viên phục vụ:</td>
@@ -145,15 +146,15 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
                 </tr>
                 <tr>
                     <td class="temporary-title">Năm sinh:</td>
-                    <td class="temporary-title"><?php echo $thongTinKhachHang["Ngaysinh"] ?? "N/A"; ?></td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["Ngaysinh"] ?? $order->NgaySinh; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Khoa:</td>
-                    <td class="temporary-title"><?php echo $thongTinKhachHang["Tiensubenh"] ?? "N/A"; ?></td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["Tiensubenh"] ?? $order->KhoaBenh; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Mã bệnh nhân:</td>
-                    <td class="temporary-title"><?php echo $thongTinKhachHang["Nhommau"] ?? "N/A"; ?></td>
+                    <td class="temporary-title"><?php echo $thongTinKhachHang["Nhommau"] ?? ""; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Tình Trạng:</td>
@@ -172,7 +173,7 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
             </table>
         </div>
         <hr style="border-bottom: 1px dashed #aaa;margin: 0px;">
-        <div class="content" style="padding: 0 5px;">
+        <div class="content content-orderdetail" style="padding: 0 5px;">
             <table style="width: 100%">
                 <tr>
                     <th class="temporary-title"><b>Mã</b></th>

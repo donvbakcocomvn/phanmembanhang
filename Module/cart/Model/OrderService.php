@@ -19,6 +19,7 @@ class OrderService extends \Model\DB implements \Model\IModelStatic
 
     public function GetOrderBySaler($params, &$total, $indexPage = 1, $pageNumber = 10)
     {
+        $KhoaBenh = $params["KhoaBenh"] ??  null;
         $saler = isset($params["Saler"]) ? $params["Saler"] : null;
         $Status = isset($params["Status"]) ? $params["Status"] : null;
         $Keyword = isset($params["Keyword"]) ? $params["Keyword"] : null;
@@ -28,6 +29,10 @@ class OrderService extends \Model\DB implements \Model\IModelStatic
             $Status = intval($Status);
             $sqlStatus = " and `Status` = '{$Status}'";
         }
+        $sqlKhoaBenh = "";
+        if ($KhoaBenh != null || $KhoaBenh != "") {
+            $sqlKhoaBenh = " and `KhoaBenh` = '{$KhoaBenh}'";
+        }
         if ($Keyword) {
             $sqlKeyword = " and (`Name` like '%{$Keyword}%' or `Id` like '%{$Keyword}%' or `Email` like '%{$Keyword}%' or `Phone` like '%{$Keyword}%')";
         }
@@ -35,7 +40,7 @@ class OrderService extends \Model\DB implements \Model\IModelStatic
         if ($saler) {
             $salerSql = "`Saler` = '{$saler}'";
         }
-         $where = " $salerSql $sqlStatus $sqlKeyword order by `NgayTao` desc";
+        $where = " {$salerSql} {$sqlStatus} {$sqlKeyword} {$sqlKhoaBenh} order by `NgayTao` desc";
         return $this->SelectPT($where, $indexPage, $pageNumber, $total);
     }
 

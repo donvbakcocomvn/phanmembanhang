@@ -21,7 +21,6 @@ class Controller_index extends Application
 
     function __construct()
     {
-
         $this->param = $this->getParam();
         $this->Pages = new \Model\pages();
         $this->News = new \Model\news();
@@ -33,10 +32,13 @@ class Controller_index extends Application
         Model_Seo::$Title = "__Title___";
         Model_Seo::$des = "__Des___";
         Model_Seo::$key = "__Keyword___";
+        // var_dump(guid::guidV4());
+        // var_dump(guid::GUIDv4_1());
+         
+        // var_dump(mt_rand(0, time()));
+        // var_dump(guid::create_guid()); 
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "");
     }
-
-
 
     function sanpham()
     {
@@ -72,9 +74,13 @@ class Controller_index extends Application
         Model_Seo::$key = $p->Summary;
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "product");
     }
-    public function php()
+
+    public function phpinfo()
     {
+        session_save_path("c:/wamp64/tmp");
+        phpinfo();
     }
+
     function syspage($url)
     {
         $Category = new Model\Category();
@@ -92,9 +98,10 @@ class Controller_index extends Application
         $modelOrder = new \Module\cart\Model\Order();
         $Order["Name"] = $id;
         $Order["TotalPrice"] = $cart->TotalPrice();
-        $Order["CodeOrder"] =  guid::guidV4();
+        $Order["CodeOrder"] = guid::guidV4();
         $Order["Email"] = $BenhNhan->Email;
         $Order["MaBenhNhan"] = $BenhNhan->MaBN;
+        $Order["KhoaBenh"] = $BenhNhan->Tiensubenh;
         $Order["MaThe"] = $BenhNhan->Sothe;
         $Order["Status"] = 4;
         $Order["Saler"] = $_SESSION[QuanTri]["Username"];
@@ -115,7 +122,38 @@ class Controller_index extends Application
         }
         return $Order;
     }
-
+    function taodonhangKhachVangLai($HoTen, $Khoa, $NgaySinh)
+    {
+        $tt = new ThanhToan();
+        $cart = new Cart();
+        $modelOrder = new \Module\cart\Model\Order();
+        $Order["Name"] = $HoTen;
+        $Order["TotalPrice"] = $cart->TotalPrice();
+        $Order["CodeOrder"] = guid::guidV4();
+        $Order["Email"] = "";
+        $Order["MaBenhNhan"] = $HoTen;
+        $Order["KhoaBenh"] = $Khoa;
+        $Order["MaThe"] = "";
+        $Order["Status"] = 4;
+        $Order["Saler"] = $_SESSION[QuanTri]["Username"];
+        $Order["Note"] = "";
+        $Order["Tinh"] = 0;
+        $Order["Huyen"] = 0;
+        $Order["Phone"] = "";
+        $Order["NgayTao"] = date("Y-m-d H:i:s", time());
+        $Order["Address"] = "";
+        $Order["NgaySinh"] = $NgaySinh;
+        $modelOrder->createOrder($Order);
+        foreach ($cart->Products() as $P) {
+            $OD["Name"] = "Chi Tiết Đơn Hàng " . $Order["CodeOrder"];
+            $OD["Price"] = $P["Price"];
+            $OD["CodeOrder"] = $Order["CodeOrder"];
+            $OD["IdProduct"] = $P["Code"];
+            $OD["Number"] = $P["Number"];
+            $modelOrder->createOrderDetail($OD);
+        }
+        return $Order;
+    }
     public function thanhtoan()
     {
         try {
@@ -125,32 +163,32 @@ class Controller_index extends Application
             if (isset($_POST["thanhToan"])) {
                 $modelThanhToan = $_POST["thanhToan"];
                 $thonTinBenhNhan = $thanhToan->GetTTBenhnhan($modelThanhToan["MaThe"]);
-                $MaDonHang =  $modelThanhToan["MaDonHang"] ?? ""; 
+                $MaDonHang = $modelThanhToan["MaDonHang"] ?? "";
                 // var_dump($thonTinBenhNhan);
                 $BenhNhan = new BenhNhan($thonTinBenhNhan);
                 // var_dump($BenhNhan);
                 if ($modelThanhToan["MaThe"] == "") {
                     throw new Exception("Không có mã thẻ");
-                } 
+                }
                 if ($MaDonHang == "") {
                     $donhang = $this->taodonhang($modelThanhToan["MaThe"], $BenhNhan);
-                    $MaDonHang =  $donhang["CodeOrder"];
+                    $MaDonHang = $donhang["CodeOrder"];
                 }
                 if ($MaDonHang == "") {
                     throw new Exception("Không tạo được đơn hàng");
-                } 
-                  
+                }
+
                 $modelOrder = new Order($MaDonHang);
- 
+
                 $cart = new Cart();
-                $TongTien = $cart->TotalPrice(); 
-                $resul =  $thanhToan->InsertLSGiaodich(
+                $TongTien = $cart->TotalPrice();
+                $resul = $thanhToan->InsertLSGiaodich(
                     $modelThanhToan["MaThe"],
                     $TongTien,
-                    $modelOrder->Id,
-                ); 
-                var_dump($resul);
-                 if ($resul) {
+                    $modelOrder->Id
+                );
+
+                if ($resul) {
                     // var_dump($resul);
                     $resul->InsertLSGiaodichResult;
                     if ($resul->InsertLSGiaodichResult == 1) {
@@ -177,6 +215,7 @@ class Controller_index extends Application
         }
         $this->ViewTheme([], Model_ViewTheme::get_viewthene());
     }
+
     function category($url)
     {
 
@@ -262,6 +301,11 @@ class Controller_index extends Application
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "product");
     }
 
+    function dathang()
+    {
+        $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "");
+    }
+
     function pagesdetail($url)
     {
 
@@ -287,11 +331,17 @@ class Controller_index extends Application
 
     public function taophieu()
     {
-        $taoPhieu = new BenhNhan();
-        $taoPhieu->MaBN = null;
-
-        $donhang = $this->taodonhang("KhachHangVangLai", $taoPhieu);
-        Common::ToUrl("/cart/thanhcong/index/" . $donhang['CodeOrder'] . "/");
+        try {
+            $HoTen = $_POST["HoTen"] ?? "";
+            $Khoa = $_POST["Khoa"] ?? "";
+            $NgaySinh = $_POST["NgaySinh"] ?? "";
+            $taoPhieu = new BenhNhan();
+            $taoPhieu->MaBN = null;
+            $donhang = $this->taodonhangKhachVangLai($HoTen, $Khoa, $NgaySinh);
+            Common::ToUrl("/cart/thanhcong/index/" . $donhang['CodeOrder'] . "/");
+        } catch (Exception $ex) {
+            Common::ToUrl("/index/dathang");
+        }
     }
 
     // function syspagedetail($Url)
@@ -303,10 +353,8 @@ class Controller_index extends Application
     //     Model_Seo::$key = $p->Keyword;
     //     $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
     // }
-
     // function login()
     // {
-
     //     $_SESSION[UserLogin] = isset($_SESSION[UserLogin]) ? $_SESSION[UserLogin] : null;
     //     if ($_SESSION[UserLogin]) {
     //         Common\Common::toUrl("/profile/");
@@ -335,7 +383,6 @@ class Controller_index extends Application
     //     $abre = $bre->setBreadcrumb([["title" => "Đăng Nhập", "link" => "#"]]);
     //     $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "login");
     // }
-
     // function logout()
     // {
     //     $_SESSION[UserLogin] = null;

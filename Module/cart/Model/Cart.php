@@ -34,7 +34,11 @@ class Cart extends \Model\Database
         if ($_SESSION[GioHang][$id]["Number"] >= self::MaxNumber)
             $_SESSION[GioHang][$id]["Number"] = self::MaxNumber;
     }
-
+    function UpdateNumberProduct($id,$number)
+    {
+        $number = max($number,1);
+        $_SESSION[GioHang][$id]["Number"] = $number; 
+    }
     function minuNumberProduct($id)
     {
         if ($_SESSION[GioHang][$id]["Number"] > 1)

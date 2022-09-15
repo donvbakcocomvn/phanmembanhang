@@ -33,7 +33,8 @@
                                         <p><span ng-bind-html="items.priceVnd"></span></p>
                                     </div>
                                     <div class="qty" style="min-width: 76px;">
-                                        <input style="" class="inputcartnumber form-control input-sm" type="text" ng-value="items.Number">
+                                        <input ng-change="updateNumberProduct(items.ID,items.Number)" class="inputcartnumber form-control input-sm" 
+                                        type="text" ng-model="items.Number">
                                         <div class=" btn-group-xs">
                                             <a ng-click="minuNumberProduct(items.ID)" class="btn-block btn-cart btn-primary">
                                                 <i class="fa fa-minus"></i>
@@ -53,7 +54,7 @@
                             <td>
                                 <p class="text-right">Tổng Tiền: <b ng-bind-html="_Cart.TotalPriceVND"></b></p>
                             </td>
-                        </tr> 
+                        </tr>
                     </tbody>
                 </table>
                 <div class="cart_navigation">

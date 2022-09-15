@@ -2,7 +2,10 @@
 
 namespace Module\duser\Model;
 
-class Duser extends \Model\Admin {
+use Model_OptionsService;
+
+class Duser extends \Model\Admin
+{
 
     const Superadmin = -1;
     const admin = 0;
@@ -13,10 +16,10 @@ class Duser extends \Model\Admin {
     const QuanLyDonHang = 5;
     const ChinhSuaNoiDung = 6;
     const CongTacVien = 7;
-    
-  
 
-//    const ChinhSuaNoiDung = 1;
+
+
+    //    const ChinhSuaNoiDung = 1;
 
     public static $TableName = table_prefix . "admin";
     public $Username;
@@ -28,8 +31,10 @@ class Duser extends \Model\Admin {
     public $Address;
     public $Note;
     public $Groups;
+    public $KhoaBenh;
 
-    function __construct($NhanVien = NULL) {
+    function __construct($NhanVien = NULL)
+    {
         parent::__construct();
         if ($NhanVien) {
             if (!is_array($NhanVien)) {
@@ -45,74 +50,104 @@ class Duser extends \Model\Admin {
             $this->Address = isset($NhanVien['Address']) ? $NhanVien['Address'] : "";
             $this->Note = isset($NhanVien['Note']) ? $NhanVien['Note'] : "";
             $this->Groups = isset($NhanVien['Groups']) ? $NhanVien['Groups'] : "";
+            $this->KhoaBenh = isset($NhanVien['KhoaBenh']) ? $NhanVien['KhoaBenh'] : "";
         }
     }
 
-    function CheckLogin($Username, $Password, $isobj = true) {
+    function KhoaBenh()
+    {
+        return  new Model_OptionsService(Model_OptionsService::GetByValueGroups($this->KhoaBenh, "khoa"));
+    }
+    function CheckLogin($Username, $Password, $isobj = true)
+    {
         return parent::CheckLogin($Username, $Password, $isobj);
     }
 
-    public function CreatePassword($pass, $random) {
+    public function CreatePassword($pass, $random)
+    {
         return sha1($pass . $random);
     }
 
-    function Admins($isobj = true) {
+    function Admins($isobj = true)
+    {
         return parent::Admins($isobj);
     }
 
-    static function CurentUsernameAdmin($isobj = true) {
+    static function CurentUsernameAdmin($isobj = true)
+    {
         if ($isobj)
             return new \Module\duser\Model\Duser($_SESSION[QuanTri]);
         return $_SESSION[QuanTri];
     }
 
-    public function CreateUser($user) {
-        $sql = sprintf("INSERT INTO `" . table_prefix . "admin`"
+    public function CreateUser($user)
+    {
+        $sql = sprintf(
+            "INSERT INTO `" . table_prefix . "admin`"
                 . "(`Username`, `Password`, `Random`, `Name`, `Email`, `Phone`, `Address`, `Note`, `Groups`, `Urlimages`) VALUES"
-                . " ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", $user["Username"], $user["Password"], $user["Random"], $user["Name"], $user["Email"], $user["Phone"], $user["Address"], $user["Note"], $user["Groups"], $user["Urlimages"]
+                . " ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+            $user["Username"],
+            $user["Password"],
+            $user["Random"],
+            $user["Name"],
+            $user["Email"],
+            $user["Phone"],
+            $user["Address"],
+            $user["Note"],
+            $user["Groups"],
+            $user["Urlimages"]
         );
         $this->Query($sql);
         return $this->SaveInsert();
     }
 
-    public function MapArray($POST) {
-
+    public function MapArray($POST)
+    {
     }
 
-    public function UpdateInfor($username) {
-        $sql = sprintf("UPDATE `" . table_prefix . "admin` SET "
+    public function UpdateInfor($username)
+    {
+        $sql = sprintf(
+            "UPDATE `" . table_prefix . "admin` SET "
                 . "`Name` = '%s', "
                 . "`Email` = '%s', "
                 . "`Phone` = '%s', "
+                . "`KhoaBenh` = '%s', "
                 . "`Address` = '%s', "
                 . "`Note` = '%s', "
                 . "`Groups` = '%s', "
-                . "`Urlimages` = '%s' WHERE `Username` = '%s'", $username["Name"]
-                , $username["Email"]
-                , $username["Phone"]
-                , $username["Address"]
-                , $username["Note"]
-                , $username["Groups"]
-                , $username["Urlimages"]
-                , $username["Username"]
+                . "`Urlimages` = '%s' WHERE `Username` = '%s'",
+            $username["Name"],
+            $username["Email"],
+            $username["Phone"],
+            $username["KhoaBenh"],
+            $username["Address"],
+            $username["Note"],
+            $username["Groups"],
+            $username["Urlimages"],
+            $username["Username"]
         );
         $this->Query($sql);
         return $this->SaveInsert();
     }
 
-    public static function SetUsernameAdmin($username) {
+    public static function SetUsernameAdmin($username)
+    {
         $_SESSION[QuanTri] = $username;
     }
 
-    public function UpdatePassword($username) {
+    public function UpdatePassword($username)
+    {
         return $this->update(table_prefix . "admin", $username, "`Username` = '{$username["Username"]}'");
     }
 
-    public function ThemUser($user) {
+    public function ThemUser($user)
+    {
         return $this->insert(self::$TableName, $user);
     }
 
-    public function GetByUsername($Username) {
+    public function GetByUsername($Username)
+    {
         $users = $this->select(self::$TableName, null, "`Username` = '{$Username}'");
         if ($users) {
             return $users[0];
@@ -120,33 +155,48 @@ class Duser extends \Model\Admin {
         return NULL;
     }
 
-    function getGroups() {
-        return [-1 => "SuperAdmin",
-        self::admin => "Admin",
-        self::QuanLy => "Quản Lý",
-        self::NhanVien => "Nhân viên"];
+    function getGroups()
+    {
+        return [
+            -1 => "SuperAdmin",
+            self::admin => "Admin",
+            self::QuanLy => "Quản Lý",
+            self::NhanVien => "Nhân viên"
+        ];
+    }
+    function getGroupsUser()
+    {
+        return [
+            self::admin => "Admin",
+            self::QuanLy => "Quản Lý",
+            self::NhanVien => "Nhân viên"
+        ];
     }
 
-    function getGroupsAll() {
-        return [ 
+    function getGroupsAll()
+    {
+        return [
             ["Id" =>  self::admin, "Name" => "Admin"],
             ["Id" => self::QuanLy, "Name" => "Quản Lý"],
             ["Id" => self::NhanVien, "Name" => "Nhân viên"]
         ];
     }
 
-    public function Groups() {
+    public function Groups()
+    {
         $a = $this->getGroups();
         if (isset($a[$this->Groups]))
             return $a[$this->Groups];
         return "N/a";
     }
 
-    public static function KiemTraQuyen($param = []) {
+    public static function KiemTraQuyen($param = [])
+    {
         return in_array($_SESSION[QuanTri]["Groups"], $param);
     }
 
-    function ToArray() {
+    function ToArray()
+    {
         $NhanVien['Username'] = $this->Username;
         $NhanVien['Name'] = $this->Name;
         $NhanVien['Email'] = $this->Email;
@@ -155,7 +205,4 @@ class Duser extends \Model\Admin {
         $NhanVien['Groups'] = $this->Groups;
         return $NhanVien;
     }
-
 }
-
-?>

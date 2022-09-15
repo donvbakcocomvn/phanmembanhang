@@ -138,14 +138,15 @@ class Controller_backend extends Application
             if (isset($_GET["fromDate"]) && isset($_GET["toDate"])) {
                 $fromDate = $_REQUEST["fromDate"] ?? "";
                 $toDate = $_REQUEST["toDate"] ?? "";
- 
+                $KhoaBenh = $_REQUEST["KhoaBenh"] ?? null;
+                $DanhMuc = $_REQUEST["DanhMuc"] ?? null;
+                $DanhMuc = $DanhMuc == "" ? null : $DanhMuc;
                 $thongKe = new ThongKe();
-                $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate);
+                $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate, $KhoaBenh,$DanhMuc);
                 $resultData = [];
                 if ($result) {
                     foreach ($result as $index => $row) {
                         $p = new Products($row["Code"]);
-
                         $dong["index"] = $index + 1;
                         $dong["TenHangHoa"] = $row["nameProduct"];
                         $dong["DanhMuc"] = $p->Category()->Code;
@@ -164,13 +165,15 @@ class Controller_backend extends Application
             if (isset($_GET["fromDate"]) && isset($_GET["toDate"])) {
                 $fromDate = $_GET["fromDate"] ?? "";
                 $toDate = $_GET["toDate"] ?? "";
+                $KhoaBenh = $_REQUEST["KhoaBenh"] ?? null;
+                $DanhMuc = $_REQUEST["DanhMuc"] ?? null;
                 $thongKe = new ThongKe();
 
                 // $TuNgay = date("Y-m-d 00:00:00", strtotime($fromDate));
                 // $DenNgay = date("Y-m-d 23:59:59", strtotime($toDate));
                 // var_dump($TuNgay);
                 // var_dump($DenNgay);
-                $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate);
+                $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate, $KhoaBenh,$DanhMuc);
 
                 $tuNgay = date("d-m-Y", strtotime($fromDate));
                 $denNgay = date("d-m-Y", strtotime($toDate));
@@ -210,7 +213,7 @@ class Controller_backend extends Application
                     $dong["GiaBan"] = Common::NumberFomat($row["Price"]);
                     $dong["SoLuong"] = $row["SoLuong"];
                     $thanhTien = $row["Price"] * $row["SoLuong"];
-                    $dong["ThanhTien"] = Common::NumberFomat($thanhTien);
+                    $dong["ThanhTien"] = $thanhTien;
                     $tongTien += $thanhTien;
                     $dong["GhiChu"] = "";
                     $resultData[] = $dong;
@@ -266,6 +269,126 @@ class Controller_backend extends Application
                 $resultData[] = [];
                 $resultData[] = [
                     "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ];
+                $fileName = "public/excel/baocao.xlsx";
+                if (is_dir("public/excel")) {
+                    mkdir("public/excel", 0777);
+                }
+                ExcelConfig::BangThongKeHangCangTin($resultData, $fileName, $indexBoder);
+            }
+        }
+
+        if (isset($_GET["btnExport1"])) {  
+            if (isset($_GET["fromDate"]) && isset($_GET["toDate"])) {
+                $fromDate = $_GET["fromDate"] ?? "";
+                $toDate = $_GET["toDate"] ?? "";
+                $KhoaBenh = $_REQUEST["KhoaBenh"] ?? null;
+                $DanhMuc = $_REQUEST["DanhMuc"] ?? null;
+                $thongKe = new ThongKe();
+ 
+                $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate, $KhoaBenh,$DanhMuc);
+
+                $tuNgay = date("d-m-Y", strtotime($fromDate));
+                $denNgay = date("d-m-Y", strtotime($toDate));
+                $resultData = [];
+                $resultData[] = [
+                    "SỞ Y TẾ THÀNH PHỐ HỒ CHÍ MINH",
+                ];
+                $resultData[] = [
+                    "BỆNH VIỆN NHÂN ÁI",
+                ];
+                $resultData[] = [
+                    "PHIẾU ĐỀ XUẤT HÀNG HÓA CĂN TIN",
+                ];
+                $resultData[] = [
+                    "Từ ngày: {$tuNgay} đến ngày: {$denNgay}",
+                ];
+                $resultData[] = [
+                    "STT",
+                    "Hàng hóa",
+                    "Danh mục", 
+                    "ĐVT",
+                    "Mã hàng hóa",
+                    "Giá Bán",
+                    "Số lượng",
+                    "Thành tiền",
+                    "Ghi Chú"
+                ];
+                $tongTien = 0;
+                $indexBoder = 5;
+                foreach ($result as $index => $row) {
+                    $p = new Products($row["Code"]);
+                    $dong["index"] = $index + 1;
+                    $dong["TenHangHoa"] = $row["nameProduct"];
+                    $dong["DanhMuc"] = $p->Category()->Code; 
+                    $dong["DVT"] = $row["unitPrice"];
+                    $dong["MaHang"] = $row["Code"];
+                    $dong["GiaBan"] = Common::NumberFomat($row["Price"]);
+                    $dong["SoLuong"] = $row["SoLuong"];
+                    $thanhTien = $row["Price"] * $row["SoLuong"];
+                    $dong["ThanhTien"] = $thanhTien;
+                    $tongTien += $thanhTien;
+                    $dong["GhiChu"] = "";
+                    $resultData[] = $dong;
+                    $indexBoder++;
+                }
+
+                $resultData[] = [
+                    "Tổng tiền",
+                    "",
+                    "", 
+                    "",
+                    "",
+                    "",
+                    "",
+                    Common::NumberFomat($tongTien),
+                    ""
+                ];
+                $resultData[] = [
+                    "Số tiền viết bằng chữ:",
+                    Common::Number2words($tongTien) . " đồng",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ];
+                $ngayLap = date("d", time());
+                $thangLap = date("m", time());
+                $namLap = date("Y", time());
+                $resultData[] = [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "ngày {$ngayLap} tháng {$thangLap} năm {$namLap}",
+                    ""
+                ];
+                $resultData[] = [
+                    "",
+                    "Người lập",
+                    "",
+                    "PT Bộ Phận",
+                    "",
+                    "",
+                    "kế toán",
+                    ""
+                ];
+                $resultData[] = [];
+                $resultData[] = [];
+                $resultData[] = [];
+                $resultData[] = [
+                    "",
                     "Lê Thị Hồng",
                     "",
                     "",
@@ -283,6 +406,293 @@ class Controller_backend extends Application
         }
         $this->ViewTheme(["data" => $resultData], Model_ViewTheme::get_viewthene(), "");
     }
+
+    public function thongkekhoa()
+    {
+        $resultData = [];
+        if (isset($_GET["btnLoc"])) {
+            if (isset($_GET["fromDate"]) && isset($_GET["toDate"])) {
+                $fromDate = $_REQUEST["fromDate"] ?? "";
+                $toDate = $_REQUEST["toDate"] ?? "";
+                $KhoaBenh = $_REQUEST["KhoaBenh"] ?? null;
+
+                $thongKe = new ThongKe();
+                $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate, $KhoaBenh);
+                $resultData = [];
+                if ($result) {
+                    foreach ($result as $index => $row) {
+                        $p = new Products($row["Code"]);
+                        $dong["index"] = $index + 1;
+                        $dong["TenHangHoa"] = $row["nameProduct"];
+                        $dong["DanhMuc"] = $p->Category()->Code;
+                        $dong["DVT"] = $row["unitPrice"];
+                        $dong["MaHang"] = $row["Code"];
+                        $dong["GiaBan"] = Common::MoneyFomat($row["Price"]);
+                        $dong["KhoaBenh"] = $row["KhoaBenh"];
+                        $dong["SoLuong"] = $row["SoLuong"];
+                        $dong["ThanhTien"] = Common::MoneyFomat($row["Price"] * $row["SoLuong"]);
+                        $dong["GhiChu"] = "";
+                        $resultData[] = $dong;
+                    }
+                }
+            }
+        }
+        if (isset($_GET["btnExport"])) {
+            if (isset($_GET["fromDate"]) && isset($_GET["toDate"])) {
+                $fromDate = $_GET["fromDate"] ?? "";
+                $toDate = $_GET["toDate"] ?? "";
+                $KhoaBenh = $_REQUEST["KhoaBenh"] ?? null;
+                $thongKe = new ThongKe();
+
+                // $TuNgay = date("Y-m-d 00:00:00", strtotime($fromDate));
+                // $DenNgay = date("Y-m-d 23:59:59", strtotime($toDate));
+                // var_dump($TuNgay);
+                // var_dump($DenNgay);
+                $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate, $KhoaBenh);
+
+                $tuNgay = date("d-m-Y", strtotime($fromDate));
+                $denNgay = date("d-m-Y", strtotime($toDate));
+                $resultData = [];
+                $resultData[] = [
+                    "SỞ Y TẾ THÀNH PHỐ HỒ CHÍ MINH",
+                ];
+                $resultData[] = [
+                    "BỆNH VIỆN NHÂN ÁI",
+                ];
+                $resultData[] = [
+                    "BẢNG KÊ BÁN HÀNG CĂN TIN",
+                ];
+                $resultData[] = [
+                    "Từ ngày: {$tuNgay} đến ngày: {$denNgay}",
+                ];
+                $resultData[] = [
+                    "STT",
+                    "Hàng hóa",
+                    "Danh mục",
+                    "Khoa",
+                    "ĐVT",
+                    "Mã hàng hóa",
+                    "Giá Bán",
+                    "Số lượng",
+                    "Thành tiền",
+                    "Ghi Chú"
+                ];
+                $tongTien = 0;
+                $indexBoder = 5;
+                foreach ($result as $index => $row) {
+                    $p = new Products($row["Code"]);
+                    $dong["index"] = $index + 1;
+                    $dong["TenHangHoa"] = $row["nameProduct"];
+                    $dong["DanhMuc"] = $p->Category()->Code;
+                    $dong["KhoaBenh"] = $row["KhoaBenh"];
+                    $dong["DVT"] = $row["unitPrice"];
+                    $dong["MaHang"] = $row["Code"];
+                    $dong["GiaBan"] = Common::NumberFomat($row["Price"]);
+                    $dong["SoLuong"] = $row["SoLuong"];
+                    $thanhTien = $row["Price"] * $row["SoLuong"];
+                    $dong["ThanhTien"] = $thanhTien;
+                    $tongTien += $thanhTien;
+                    $dong["GhiChu"] = "";
+                    $resultData[] = $dong;
+                    $indexBoder++;
+                }
+
+                $resultData[] = [
+                    "Tổng tiền",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    Common::NumberFomat($tongTien),
+                    ""
+                ];
+                $resultData[] = [
+                    "Số tiền viết bằng chữ:",
+                    Common::Number2words($tongTien) . " đồng",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ];
+                $ngayLap = date("d", time());
+                $thangLap = date("m", time());
+                $namLap = date("Y", time());
+                $resultData[] = [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "Ngày {$ngayLap} tháng {$thangLap} năm {$namLap}",
+                    ""
+                ];
+                $resultData[] = [
+                    "",
+                    "Người lập",
+                    "",
+                    "PT Bộ Phận",
+                    "",
+                    "",
+                    "kế toán",
+                    ""
+                ];
+                $resultData[] = [];
+                $resultData[] = [];
+                $resultData[] = [];
+                $resultData[] = [
+                    "",
+                    "Lê Thị Hồng",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "Hoàng Thị Huệ",
+                    ""
+                ];
+                $fileName = "public/excel/baocao.xlsx";
+                if (is_dir("public/excel")) {
+                    mkdir("public/excel", 0777);
+                }
+                ExcelConfig::BangThongKeHangCangTin($resultData, $fileName, $indexBoder);
+            }
+        }
+        if (isset($_GET["btnExport1"])) {
+            var_dump($_GET["btnExport1"]."___");
+
+            if (isset($_GET["fromDate"]) && isset($_GET["toDate"])) {
+                $fromDate = $_GET["fromDate"] ?? "";
+                $toDate = $_GET["toDate"] ?? "";
+                $KhoaBenh = $_REQUEST["KhoaBenh"] ?? null;
+                $DanhMuc = $_REQUEST["DanhMuc"] ?? null;
+                $thongKe = new ThongKe();
+
+                // $TuNgay = date("Y-m-d 00:00:00", strtotime($fromDate));
+                // $DenNgay = date("Y-m-d 23:59:59", strtotime($toDate));
+                // var_dump($TuNgay);
+                // var_dump($DenNgay);
+                $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate, $KhoaBenh,$DanhMuc);
+
+                $tuNgay = date("d-m-Y", strtotime($fromDate));
+                $denNgay = date("d-m-Y", strtotime($toDate));
+                $resultData = [];
+                $resultData[] = [
+                    "SỞ Y TẾ THÀNH PHỐ HỒ CHÍ MINH",
+                ];
+                $resultData[] = [
+                    "BỆNH VIỆN NHÂN ÁI",
+                ];
+                $resultData[] = [
+                    "PHIẾU ĐỀ XUẤT HÀNG HÓA CĂN TIN",
+                ];
+                $resultData[] = [
+                    "Từ ngày: {$tuNgay} đến ngày: {$denNgay}",
+                ];
+                $resultData[] = [
+                    "STT",
+                    "Hàng hóa",
+                    "Danh mục",
+                    "Khoa",
+                    "ĐVT",
+                    "Mã hàng hóa",
+                    "Giá Bán",
+                    "Số lượng",
+                    "Thành tiền",
+                    "Ghi Chú"
+                ];
+                $tongTien = 0;
+                $indexBoder = 5;
+                foreach ($result as $index => $row) {
+                    $p = new Products($row["Code"]);
+                    $dong["index"] = $index + 1;
+                    $dong["TenHangHoa"] = $row["nameProduct"];
+                    $dong["DanhMuc"] = $p->Category()->Code;
+                    $dong["KhoaBenh"] = $row["KhoaBenh"];
+                    $dong["DVT"] = $row["unitPrice"];
+                    $dong["MaHang"] = $row["Code"];
+                    $dong["GiaBan"] = Common::NumberFomat($row["Price"]);
+                    $dong["SoLuong"] = $row["SoLuong"];
+                    $thanhTien = $row["Price"] * $row["SoLuong"];
+                    $dong["ThanhTien"] = $thanhTien;
+                    $tongTien += $thanhTien;
+                    $dong["GhiChu"] = "";
+                    $resultData[] = $dong;
+                    $indexBoder++;
+                }
+
+                $resultData[] = [
+                    "Tổng tiền",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    Common::NumberFomat($tongTien),
+                    ""
+                ];
+                $resultData[] = [
+                    "Số tiền viết bằng chữ:",
+                    Common::Number2words($tongTien) . " đồng",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ];
+                $ngayLap = date("d", time());
+                $thangLap = date("m", time());
+                $namLap = date("Y", time());
+                $resultData[] = [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "ngày {$ngayLap} tháng {$thangLap} năm {$namLap}",
+                    ""
+                ];
+                $resultData[] = [
+                    "",
+                    "Người lập",
+                    "",
+                    "PT Bộ Phận",
+                    "",
+                    "",
+                    "kế toán",
+                    ""
+                ];
+                $resultData[] = [];
+                $resultData[] = [];
+                $resultData[] = [];
+                $resultData[] = [
+                    "",
+                    "Lê Thị Hồng",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "Hoàng Thị Huệ",
+                    ""
+                ];
+                $fileName = "public/excel/baocao.xlsx";
+                if (is_dir("public/excel")) {
+                    mkdir("public/excel", 0777);
+                }
+                ExcelConfig::BangThongKeHangCangTin($resultData, $fileName, $indexBoder);
+            }
+        }
+        $this->ViewTheme(["data" => $resultData], Model_ViewTheme::get_viewthene(), "");
+    }
+
     public function thongtinthe()
     {
         if (isset($_POST["mathe"])) {

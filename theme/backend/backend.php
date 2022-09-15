@@ -75,7 +75,7 @@ class backend extends \Model\Database
                                             <!-- start message -->
                                             <a href="#">
                                                 <div class="pull-left">
-                                                    <img src="/public/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                                    <img src="/public/user_no_photo.png" class="img-circle" alt="User Image">
                                                 </div>
                                                 <h4>
                                                     Support Team
@@ -87,7 +87,7 @@ class backend extends \Model\Database
                                         <li>
                                             <a href="#">
                                                 <div class="pull-left">
-                                                    <img src="/public/admin/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
+                                                    <img src="/public/user_no_photo.png" class="img-circle" alt="User Image">
                                                 </div>
                                                 <h4>
                                                     AdminLTE Design Team
@@ -255,13 +255,13 @@ class backend extends \Model\Database
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="/public/admin/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                <img src="/public/user_no_photo.png" class="user-image" alt="User Image">
                                 <span class="hidden-xs"><?php echo $user->Name ?></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
-                                    <img src="/public/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                    <img src="/public/user_no_photo.png" class="img-circle" alt="User Image">
                                     <p>
                                         <?php echo $user->Name ?>
                                         <small><?php echo $user->Username ?></small>
@@ -290,7 +290,7 @@ class backend extends \Model\Database
                 <!-- Sidebar user panel -->
                 <div class="user-panel">
                     <div class="pull-left image">
-                        <img src="/public/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                        <img src="/public/user_no_photo.png" class="img-circle" alt="User Image">
                     </div>
                     <div class="pull-left info">
                         <p>{{DangNhap.Name}}</p>
@@ -305,7 +305,7 @@ class backend extends \Model\Database
                         </a>
                     </li>
                     <?php
-                    if (Duser::KiemTraQuyen([Duser::admin,Duser::NhanVien,  Duser::Superadmin])) {
+                    if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien,  Duser::Superadmin])) {
                     ?>
                         <!-- <li class="treeview">
                             <a href="/cart/xacnhandonhang/index/">
@@ -315,13 +315,13 @@ class backend extends \Model\Database
                     <?php
                     }
 
-                    if (Duser::KiemTraQuyen([Duser::admin,Duser::NhanVien,Duser::QuanLy, Duser::Superadmin])) {
+                    if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien, Duser::QuanLy, Duser::Superadmin])) {
                     ?>
                         <li><a href="/cart/vieworder"><i class="fa fa-shopping-cart"></i> <span>Quản Lý Đơn Hàng</span></a></li>
 
                     <?php
                     }
-                    if (Duser::KiemTraQuyen([Duser::admin,Duser::NhanVien,Duser::QuanLy, Duser::Superadmin])) {
+                    if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien, Duser::QuanLy, Duser::Superadmin])) {
                     ?>
                         <li class="treeview <?php echo \Model\menuactive::SetActive('mproduct'); ?>">
                             <a href="/mproduct/index">
@@ -344,13 +344,13 @@ class backend extends \Model\Database
                         </li>
                     <?php
                     }
-                    if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien,Duser::QuanLy,Duser::Superadmin])) {
+                    if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien, Duser::QuanLy, Duser::Superadmin])) {
                     ?>
 
                     <?php
                     }
 
-                    if (Duser::KiemTraQuyen([Duser::admin,Duser::NhanVien,Duser::QuanLy, Duser::Superadmin])) {
+                    if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien, Duser::QuanLy, Duser::Superadmin])) {
                     ?>
 
                     <?php
@@ -363,6 +363,12 @@ class backend extends \Model\Database
                                 <i class="fa fa-angle-right pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
+                                <li class="treeview">
+                                    <a href="/options/khoa/">
+                                        <i class="fa fa-list-alt"></i> <span>Danh Sách Khoa</span>
+                                    </a>
+                                </li>
+
                                 <?php
                                 if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin])) {
                                 ?>
@@ -401,7 +407,7 @@ class backend extends \Model\Database
                                         <li><a href="/mnews/addnews"><i class="fa fa-circle-o"></i> Thêm Bài viết</a></li>
                                     </ul>
                                 </li>
-                                <li class="treeview hidden">
+                                <li class="treeview ">
                                     <a href="/mtheme/">
                                         <i class="fa fa-list-alt"></i> <span>Quản Lý Giao Diện</span>
 
@@ -434,7 +440,7 @@ class backend extends \Model\Database
                             </ul>
                         </li>
                     <?php
-                    } 
+                    }
                     ?>
                 </ul>
 
