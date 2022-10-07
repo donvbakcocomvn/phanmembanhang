@@ -2,8 +2,10 @@
 
 namespace Module\cart\Model;
 
+use Common\Common;
 use Model\ThanhToan;
 use Model_OptionsService;
+
 
 /**
  * Description of Order
@@ -43,11 +45,15 @@ class Order extends \Model\Database
 
     function __construct($order = null)
     {
+        parent::$Tablename  = table_prefix . "order";
         parent::__construct();
         if ($order) {
             if (!is_array($order)) {
                 $id = $order;
-                $order = $this->orderbyid($id)[0];
+                $order = $this->orderbyid($id)[0] ?? null;
+                if ($order == null) {
+                    $order = $this->orderbycode($id)[0] ?? null;
+                }
             }
             if ($order) {
                 $this->Id = $order["Id"];
@@ -70,6 +76,20 @@ class Order extends \Model\Database
         }
     }
 
+    public function GetIdCard()
+    {
+        $sql = "SELECT `Name` FROM `" . table_prefix . "order` WHERE 1=1 GROUP BY `Name`";
+        $this->Query($sql);
+        return $this->fetchAssoc();
+    }
+
+    static public function CreateCode()
+    {
+        $date = date("Y-m-d");
+        $Order  = new Order();
+        $count = $Order->SelectCount("where `NgayTao` LIKE '{$date}%'");
+        return date("ymd", time()) . Common::NumberToStringFomatZero($count + 1, 4);
+    }
     public function KhoaBenh()
     {
         $modelOption = new  Model_OptionsService();
@@ -89,9 +109,6 @@ class Order extends \Model\Database
             $tongTien += $thanhTien;
         }
         $order = $this->orderbyid($orderCode)[0];
-        // var_dump("_____");
-        // var_dump($order);
-        // var_dump("_____");
         $order["TotalPrice"] = $tongTien;
         return $this->updateOrder($order);
     }
@@ -180,7 +197,14 @@ class Order extends \Model\Database
 
     function orderbyid($id)
     {
-        return $this->select(table_prefix . "order", [], " `Id` = '{$id}' or `CodeOrder` = '{$id}'");
+        if (is_numeric($id)) {
+            return $this->select(table_prefix . "order", [], " `Id` = '{$id}' ");
+        }
+        return null;
+    }
+    function orderbycode($id)
+    {
+        return $this->select(table_prefix . "order", [], "`CodeOrder` = '{$id}'");
     }
 
     function orderDetailbyid($id)
@@ -237,8 +261,24 @@ class Order extends \Model\Database
 
     function ToArray()
     {
+        if ($this->Status == self::DaThuTien) {
+            $tt =  new ThanhToan();
+            $benhNhan =  new BenhNhan($this->Name);
+            // them the moi
+            if ($benhNhan->MaBN == null) {
+                $tt =  new ThanhToan();
+                $ttbn = $tt->GetTTBenhnhan($this->Name);
+                if ($ttbn) {
+                    $name = $ttbn;
+                    $benhNhan =  new BenhNhan();
+                    $benhNhan->Post($ttbn);
+                }
+            } else {
+                $name = $benhNhan->ToArray();
+            }
+        }
         $order["Id"] = $this->Id;
-        $order["Name"] = $this->Name;
+        $order["Name"] = $name["HotenBN"] ?? $this->Name;
         $order["KhoaBenh"] = $this->KhoaBenh()->Name;
         $order["MaBenhNhan"] = $this->MaBenhNhan;
         $order["TotalPrice"] = intval($this->TotalPrice);
@@ -341,5 +381,10 @@ class Order extends \Model\Database
         $order["TotalPriceVND"] = \lib\Common::MoneyFomat($this->TotalPrice);
         $order["OrderDetail"] = $orderDetail;
         return $order;
+    }
+
+    public function BenhNhan()
+    {
+        return new BenhNhan($this->MaBenhNhan);
     }
 }

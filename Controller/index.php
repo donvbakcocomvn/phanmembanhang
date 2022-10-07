@@ -34,7 +34,7 @@ class Controller_index extends Application
         Model_Seo::$key = "__Keyword___";
         // var_dump(guid::guidV4());
         // var_dump(guid::GUIDv4_1());
-         
+
         // var_dump(mt_rand(0, time()));
         // var_dump(guid::create_guid()); 
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "");
@@ -129,7 +129,7 @@ class Controller_index extends Application
         $modelOrder = new \Module\cart\Model\Order();
         $Order["Name"] = $HoTen;
         $Order["TotalPrice"] = $cart->TotalPrice();
-        $Order["CodeOrder"] = guid::guidV4();
+        $Order["CodeOrder"] = Order::CreateCode();
         $Order["Email"] = "";
         $Order["MaBenhNhan"] = $HoTen;
         $Order["KhoaBenh"] = $Khoa;

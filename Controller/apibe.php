@@ -2,6 +2,7 @@
 
 use lib\APIs;
 use Model\AdminService;
+use Model\Database;
 use Model\Products;
 use Module\duser\Model\Duser;
 use Module\cart\Model\OrderService;
@@ -194,8 +195,8 @@ class Controller_apibe extends Controller_backend
             $_Order = $Order->orderbyid($_POST["Id"]);
             $_Order = $_Order[0];
             $LyDo = \Model\CheckInput::Input($_POST["LyDo"]);
-            if ($_Order["Status"] == \Module\cart\Model\Order::DaThuTien || $_Order["Status"] == \Module\cart\Model\Order::DaNopTienVeCty) {
-                throw new Exception("Đơn Hàng Đã Nhận Tiền Không Thể Hủy");
+            if (Duser::KiemTraQuyen([Duser::admin, Duser::QuanLy, Duser::Superadmin]) == false) {
+                throw new Exception("Không có quyền hủy đơn hàng này");
             }
             $_Order["Status"] = \Module\cart\Model\Order::Huy;
             $_Order["Note"] = "[" . $_SESSION[QuanTri]["Username"] . "] Hủy đơn hàng :" . date("Y-m-d H:i:s") . " <br>" . $LyDo . "<br>_______<br>" . $_Order["Note"];
@@ -212,18 +213,19 @@ class Controller_apibe extends Controller_backend
     {
         $orderId = $this->getParam()[0];
         $order = new \Module\cart\Model\Order();
-        $orderDetail = $order->orderbyid($orderId);
+        // Database::$Debug = 1;
+        $orderDetail = $order->orderbycode($orderId);
         if ($orderDetail == FALSE) {
             return null;
         }
         $orderDetail = $orderDetail[0];
+
         $_order = new \Module\cart\Model\Order($orderDetail);
         $orderDetail = $_order->ToArray();
         $orderDetail["StatusName"] = $_order->Status();
         $dsSanPham = $_order->ProductsByDonHang();
         if ($dsSanPham) {
             foreach ($dsSanPham as $k => $value) {
-                // var_dump($value["IdProduct"]);
                 $prod = new \Model\Products($value["IdProduct"]);
                 $value["Number"] = intval($value["Number"]);
                 $value["ThanhTien"] = $value["Number"] * $value["Price"];
@@ -435,7 +437,6 @@ class Controller_apibe extends Controller_backend
         $orderBySaler = $order->GetBySale($data["Params"], $total, $indexPage, $pageNumber);
         if ($orderBySaler)
             foreach ($orderBySaler as $k => $order) {
-                // var_dump($order);
                 $_order = new Module\cart\Model\Order($order["Id"]);
                 $order = $_order->ToArray();
                 $orderBySaler[$k] = $order;

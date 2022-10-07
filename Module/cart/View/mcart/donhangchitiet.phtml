@@ -1,4 +1,11 @@
 <div class="" ng-show="_OrderDetail">
+    <?php
+
+    use Module\duser\Model\Duser;
+
+
+
+    ?>
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Thông Tin Đơn Hàng</h3>
@@ -61,9 +68,9 @@
                 <h3 class="text-center" style="margin: 0px;color: #000;font-size: 14px;">
                     <b>Danh Sách Sản Phẩm</b>
                 </h3>
-                <div class="d-flex" ng-show="_OrderDetail.Status==4" >
-                    <input  ng-model="CodeSanPham" placeholder="Mã Sản Phẩm" >
-                    <button ng-click="ThemSanPhamDonHang(CodeSanPham,_OrderDetail.CodeOrder)" type="button" class="btn btn-success" >Thêm</button>
+                <div class="d-flex" ng-show="_OrderDetail.Status==4">
+                    <input ng-model="CodeSanPham" placeholder="Mã Sản Phẩm">
+                    <button ng-click="ThemSanPhamDonHang(CodeSanPham,_OrderDetail.CodeOrder)" type="button" class="btn btn-success">Thêm</button>
                 </div>
 
                 <table class="table table-bordered">

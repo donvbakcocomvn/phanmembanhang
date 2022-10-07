@@ -26,9 +26,8 @@ class OrderDetail extends \Model\Database
     }
     public function deleteOrderDetail($id)
     {
+
         $oddt = $this->GetByOrderDetailById($id);
-        // var_dump($oddt);
-        // $oddt["CodeOrder"]; 
         $this->delete(table_prefix . "orderdetail", "`Id` ='{$id}'");
         $oder  = new Order();
         return $oder->UpdateTongTien($oddt["CodeOrder"]);

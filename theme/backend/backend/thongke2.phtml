@@ -1,59 +1,58 @@
 <?php
 
+use Model\Category;
 use Model\FormRender;
 use Module\cart\Model\Order;
-use Module\duser\Model\Duser;
 use PFBC\Element\Select;
 
 $order = new Order();
 $KhoaBenh = $order->GetKhaoBenh();
-$options[""] = "Tất cả";
-foreach ($KhoaBenh as $key => $value) {
-    if ($value["KhoaBenh"] != "")
-        $options[$value["KhoaBenh"]] = $value["KhoaBenh"];
-}
+$options = Model_OptionsService::GetGroupsToSelect("khoa");
+$options = ["" => "Tất Cả"] + $options;
 $prop["class"] = "form-control";
-$duser = Duser::CurentUsernameAdmin(true);
-$prop["value"] = $duser->Groups;
+$propSP["value"] = $_GET["KhoaBenh"] ?? "";
 $Danhmuc = new FormRender(new Select("Khoa bệnh", "KhoaBenh", $options, $prop));
+$propSP["class"] = "form-control";
+$propSP["value"] = $_GET["DanhMuc"] ?? "";
+$Model_Category = new Category();
+$options = $Model_Category->GetCategoriesToSelect();
+$options = ["" => "Tất Cả"] + $options;
 
-if ($duser->Groups ==  Duser::NhanVien) {
-    $prop[FormRender::Disabled] = "true";
-    $prop["value"] = $duser->KhoaBenh;
-    $Danhmuc = new FormRender(new Select("Khoa bệnh", "KhoaBenh", $options, $prop));
-}
-
+$DanhmucSP = new FormRender(new Select("Danh mục", "DanhMuc", $options, $propSP));
 ?>
+
 <div class="row ">
     <section class="col-md-12 ">
         <div class="box box-solid ">
             <div class="box-header">
-                <h3 class="box-title">Thống kê Theo Khoa</h3>
+                <h3 class="box-title">BẢNG KÊ BÁN HÀNG</h3>
             </div>
             <div class="box-body">
                 <form action="" method="get">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label>Từ ngày</label>
                             <input value="<?php echo $_GET["fromDate"] ?? ""; ?>" required class="form-control" type="date" name="fromDate" id="fromDate">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label>Đến ngày</label>
                             <input value="<?php echo $_GET["toDate"] ?? ""; ?>" required class="form-control" type="date" name="toDate" id="toDate">
                         </div>
-                        <div class="col-md-3">
-                            <?php
-                            $Danhmuc->renderHTML();
+                        <!-- <div class="col-md-2">
+                            <?php //$Danhmuc->renderHTML(); 
                             ?>
-
+                        </div> -->
+                        <div class="col-md-2">
+                            <?php $DanhmucSP->renderHTML(); ?>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <button name="btnLoc" style=" margin-top: 24px;" class="btn btn-success">
                                 Lọc
+                            </button> 
+                            <button name="btnExport1" style=" margin-top: 24px;" class="btn btn-success">
+                                PHIẾU ĐỀ XUẤT HÀNG HÓA
                             </button>
-                            <button name="btnExport" style=" margin-top: 24px;" class="btn btn-success">
-                                Export
-                            </button>
+
                         </div>
                     </div>
                 </form>
@@ -65,14 +64,12 @@ if ($duser->Groups ==  Duser::NhanVien) {
                         <th>ĐVT</th>
                         <th>Mã Hàng Hóa</th>
                         <th>Gia bán</th>
-                        <th>Khoa</th>
                         <th>Số Lượng</th>
                         <th>Thành Tiền</th>
                         <th>Ghi Chú</th>
                     </tr>
                     <?php
                     if ($data) {
-
                         foreach ($data as $index => $row) {
                     ?>
                             <tr>
@@ -88,11 +85,8 @@ if ($duser->Groups ==  Duser::NhanVien) {
                         }
                     }
                     ?>
-
                 </table>
-
             </div>
         </div>
     </section>
-
 </div>

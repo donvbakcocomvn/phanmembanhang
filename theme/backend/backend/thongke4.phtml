@@ -1,0 +1,45 @@
+ <div class="row ">
+     <section class="col-md-12 ">
+         <div class="box box-solid ">
+             <div class="box-header">
+                 <h3 class="box-title">Danh sách Thống kê</h3>
+
+             </div>
+             <div class="box-body">
+                 <?php
+
+                    use Module\duser\Model\Duser;
+
+                    if (Duser::KiemTraQuyen([
+                        Duser::admin,
+                        Duser::QuanLy,
+                        Duser::Superadmin
+                    ])) {
+                    ?>
+                     <h3>Quản Lý</h3>
+                     <div class="list-group">
+                         <a href="/backend/thongke1/" class="list-group-item">BẢNG KÊ BÁN HÀNG</a>
+                         <a href="/backend/thongke2/" class="list-group-item">PHIẾU ĐỀ XUẤT HÀNG HÓA </a>
+                     </div>
+                 <?php
+
+                    }
+                    if (Duser::KiemTraQuyen([
+                        Duser::admin,
+                        Duser::NhanVien,
+                        Duser::Superadmin
+                    ])) {
+                    ?>
+                     <h3>Nhân Viên</h3>
+                     <div class="list-group">
+                         <a href="/backend/thongkekhoa/" class="list-group-item">BẢNG KÊ BÁN HÀNG Theo Khoa </a>
+                     </div>
+                 <?php
+                    }
+                    ?>
+
+
+             </div>
+         </div>
+     </section>
+ </div>

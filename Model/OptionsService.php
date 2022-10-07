@@ -57,6 +57,7 @@ class Model_OptionsService extends DB
 
     public function GetItems($params, $indexPage, $pageNumber, &$total)
     {
+        $params["keyword"] = $params["keyword"] ?? "";
         $where = "`GroupsId` = '{$params["GroupsId"]}' and `Name` like '%{$params["keyword"]}%'";
         return $this->SelectPT($where, $indexPage, $pageNumber, $total);
     }

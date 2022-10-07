@@ -1,6 +1,7 @@
 <?php
 
 namespace Module\duser\Controller;
+
 use PhpOffice\PhpSpreadsheet\Exception;
 
 class index extends \Controller_backend
@@ -129,6 +130,11 @@ class index extends \Controller_backend
                     $_user = $Duser->GetByUsername($username);
                     if ($_user) {
                         $_user["Password"] = $Duser->CreatePassword($_POST["Password"], $_user["Random"]);
+                        $_user["GioiTinh"] = $_user["GioiTinh"] ?? 0;
+                        $_user["NgaySinh"] = $_user["NgaySinh"] ?? null;
+                        if ($_user["NgaySinh"] == null) {
+                            unset($_user["NgaySinh"]);
+                        }
                         $curentUser->UpdatePassword($_user);
                         new \Model\Error(["type" => "success", "content" => "Đã Cập Nhập Mật Khẩu"]);
                     } else {

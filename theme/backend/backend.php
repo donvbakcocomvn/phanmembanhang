@@ -321,7 +321,7 @@ class backend extends \Model\Database
 
                     <?php
                     }
-                    if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien, Duser::QuanLy, Duser::Superadmin])) {
+                    if (Duser::KiemTraQuyen([Duser::admin, Duser::QuanLy, Duser::Superadmin])) {
                     ?>
                         <li class="treeview <?php echo \Model\menuactive::SetActive('mproduct'); ?>">
                             <a href="/mproduct/index">

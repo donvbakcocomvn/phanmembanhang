@@ -46,8 +46,16 @@ class vieworder extends \Controller_backend
 
     public function dongbo()
     {
+
         $_order = new Order();
-        $_order->orders();
+        $cardIds = $_order->GetIdCard();
+        foreach ($cardIds as $key => $value) {
+            $thanhToan = new ThanhToan();
+            $benhNhan = $thanhToan->GetTTBenhnhan($value["Name"]);
+            echo json_encode($benhNhan);
+            return;
+        }
+
         $tong = 0;
         $item =  $_order->ordersStatusPt(1, 300, Order::DaThuTien, $tong);
         $thanhToan = new ThanhToan();

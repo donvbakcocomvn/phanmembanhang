@@ -17,11 +17,13 @@ use Model_OptionsService;
  *
  * @author MSI
  */
-class FormThongTinBenhNhan {
+class FormThongTinBenhNhan
+{
 
     static public $properties = ["class" => "form-control"];
 
-    static function HoTen($val = "") {
+    static function HoTen($val = "")
+    {
         $properties = self::$properties;
         $properties["value"] = $val;
         $properties["class"] = "form-control text-uppercase";
@@ -32,28 +34,29 @@ class FormThongTinBenhNhan {
         return new FormRender(new Element\Textbox("Họ & Tên", "HoTen", $properties));
     }
 
-    static function NgaySinh($val = "") {
+    static function NgaySinh($val = "")
+    {
         $properties = self::$properties;
         $properties["value"] = $val;
         $properties["type"] = "date";
         $properties[FormRender::required] = "";
         $properties["oninvalid"] = "this.setCustomValidity('Bạn chưa nhập ngày sinh')";
         $properties["oninput"] = "this.setCustomValidity('')";
-        $properties["max"] = date("Y-m-d",time()-(18*24*365*3600));
+        $properties["max"] = date("Y-m-d", time() - (18 * 24 * 365 * 3600));
 
         return new FormRender(new Element\Textbox("Ngày Sinh", "NgaySinh", $properties));
     }
 
-    static function KhoaBenh($val = "") {
+    static function KhoaBenh($val = "")
+    {
         $properties = self::$properties;
         $properties["value"] = $val;
         $properties[FormRender::required] = "";
         $properties["oninvalid"] = "this.setCustomValidity('Bạn chọn nhập khoa')";
         $properties["oninput"] = "this.setCustomValidity('')";
         $options = Model_OptionsService::GetGroupsToSelect("khoa");
-        $options = [""=>"___Chọn khoa___"]+$options;
+        $options = ["" => "___Chọn khoa___"] + $options;
 
-        return new FormRender(new Element\Select("Khoa", "Khoa", $options,$properties));
+        return new FormRender(new Element\Select("Khoa", "Khoa", $options, $properties));
     }
-
 }

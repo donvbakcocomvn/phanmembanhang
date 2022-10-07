@@ -1,4 +1,4 @@
-  <div class="container" ng-init="GetOrderById('<?php echo $_Param[0]; ?>')"> 
+  <div class="container">
       <div class="row">
           <div class="col-md-3"></div>
           <div class="col-md-6">
@@ -7,54 +7,11 @@
                   <div class="form-group">
                       <label for="">Nhập thẻ</label>
                       <input ng-model="maThe" required value="" type="password" style="font-size: 2em;padding: 30px;line-height: 30px;text-align: center;" id="MaThe" type="text" autofocus name="thanhToan[MaThe]" placeholder="Nhập mã thẻ ***" class="form-control">
-                      <input value="<?php echo $_Param[0]??""; ?>" type="hidden" type="hidden" name="thanhToan[MaDonHang]" >
+                      <input value="<?php echo $_Param[0] ?? ""; ?>" type="hidden" type="hidden" name="thanhToan[MaDonHang]">
                   </div>
                   <button class="btn btn-success">Xác Nhận</button>
-              </form>
-              <table ng-show="_CartByOrder" style="margin-top: 20px;" class="table table-bordered table-responsive cart_summary">
-                  <thead>
-                      <tr style="background-color: gold;padding-bottom: 5px;padding-top: 5px;">
-                          <th class="">
-                              <h3>Sản Phẩm</h3>
-                          </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr ng-repeat="items  in _CartByOrder.OrderDetail">
-                          <td class="cart_description">
-                              <div class="d-flex giohang">
-                                  <div class="imagesSp hidden">
-                                      <a href="#">
-                                          <img style="width: 70px;margin-right: 10px" src="{{items.Product.UrlHinh}}" alt="{{items.Product.nameProduct}}">
-                                      </a>
-                                  </div>
-                                  <div class="" style="width: 100%;padding-right: 10px;">
-                                      <h2 class="product-name">
-                                          {{items.Product.nameProduct}}
-                                      </h2>
-                                      <small class="cart_ref">Id : #{{items.Product.Code}}</small><br>
-
-                                      <p> <span ng-bind-html="items.PriceVND"></span></p>
-                                  </div>
-                                  <div class="qty" style="min-width: 76px;">
-                                      <input class="inputcartnumber form-control input-sm" type="text" ng-value="items.Number">
-                                  </div>
-                                  <div class="hidden-sm hidden-xs" style="width: 120px;padding-left: 10px;">
-                                      <strong ng-bind-html="ToHtml(items.ThanhTienVND)"></strong>
-                                  </div>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td>
-                              <p class="text-right">Tổng Tiền: <b ng-bind-html="_CartByOrder.TotalPriceVND"></b></p>
-                          </td>
-                      </tr>
-
-                  </tbody>
-              </table>
-              
-              <table ng-show="!_CartByOrder" style="margin-top: 20px;" class="table table-bordered table-responsive cart_summary">
+              </form> 
+              <table style="margin-top: 20px;" class="table table-bordered table-responsive cart_summary">
                   <thead>
                       <tr style="background-color: gold;padding-bottom: 5px;padding-top: 5px;">
                           <th class="">
@@ -96,7 +53,7 @@
 
                   </tbody>
               </table>
-              
+
               <a class="btn btn-primary" href="/">
                   <i class="fa fa-arrow-left" aria-hidden="true"></i>
                   Quay lại

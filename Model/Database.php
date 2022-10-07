@@ -10,6 +10,7 @@ class Database extends \Model\iDatabase
 
     //    kết nối CSDL
     static public $Tablename;
+    static public $Debug;
 
     function __construct()
     {
@@ -29,7 +30,6 @@ class Database extends \Model\iDatabase
         $where = "{$where} limit {$indexPage},{$pageNumber}";
         return $this->select(self::$Tablename, [], $where);
     }
-
     public function Category4Id($id, $isObj = true)
     {
         $sql = "SELECT * FROM `" . table_prefix . "categories` where `catID` = '{$id}'";
@@ -774,8 +774,13 @@ class Database extends \Model\iDatabase
             }
             $select = implode(",", $fields);
         }
+
         $sql = sprintf("SELECT %s FROM `%s` WHERE %s ", $select, $tableName, $pk);
         //        echo sprintf("SELECT %s FROM `%s` WHERE %s ", $select, $tableName, $pk);
+
+        if (self::$Debug) {
+            echo $sql;
+        }
         $this->Query($sql);
         if ($className) {
             return $this->fetchAllObj($className);
@@ -956,7 +961,7 @@ class Database extends \Model\iDatabase
         $sql = "SELECT count(*) as `Tong` FROM `" . self::$Tablename . "` {$where}";
         $this->Query($sql);
         $a = $this->fetchRow();
-        return $a["Tong"];
+        return $a["Tong"] ?? 0;
     }
 
     //    public function Slides($isobj = true) {

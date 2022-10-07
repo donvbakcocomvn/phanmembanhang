@@ -97,6 +97,7 @@
 <?php
 
 use Common\Common;
+use Model\Database;
 use Model\Products;
 use Model\ThanhToan;
 use Model\ThanhToan\BenhNhan;
@@ -107,24 +108,28 @@ use Picqer\Barcode\BarcodeGeneratorPNG;
 $generator = new BarcodeGeneratorPNG();
 // $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
 $id = $_Param[0];
+// Database::$Debug = 1;
 $order = new Order($id);
+// $order = new Order($order->orderbycode($id)[0]);
 $thanhToan = new ThanhToan();
 $orderDetail = $order->orderDetailbyid($id);
+// $thongTinKhachHang = $order->BenhNhan();
+// var_dump($thongTinKhachHang);
+// echo $order->Name;
 $thongTinKhachHang = $thanhToan->GetTTBenhnhan($order->Name);
 $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
-
 
 ?>
 
 <div class="main ">
     <div class="salesslip">
-        <div class="shop"><br>  
+        <div class="shop"><br>
             <h2 style="font-weight: bold;">PHIẾU BÁN HÀNG</h2>
             <h4 style="font-style: italic; font-weight: 300; margin: 10px 0;">
                 Ngày <span style="border-bottom: 2px dotted #aaa;"><?php echo date("d", time()) ?></span>
                 tháng <span style="border-bottom: 2px dotted #aaa;"> <?php echo date("m", time()) ?> </span>
                 năm <span style="border-bottom: 2px dotted #aaa;"><?php echo date("Y", time()) ?> </span>
-            </h4> 
+            </h4>
             <?php
             $string = $order->Id;
             echo '<img style="height:50px;

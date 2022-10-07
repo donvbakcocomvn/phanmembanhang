@@ -243,7 +243,6 @@ class Model_Adapter
         //      $from_email = trim(strip_tags($NoiDungMail['emailgui']));
         //      mail gửi/
         $from_email = $NoiDungMail['FromMail'];
-
         //      Tiêu đề mail
         $tieude = $NoiDungMail['TieuDe'];
         //      nội dung mail
