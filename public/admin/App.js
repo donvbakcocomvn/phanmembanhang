@@ -251,8 +251,8 @@ app.controller("giohangCotroller", function ($http, $scope) {
     $http
       .post("/apibe/HuyDonHang/", $.param(data), headerFormData)
       .then(function (res) {
-        $scope.GetOrderDetail(id);
         window.alert(res.data.Mes);
+        window.location.reload();
       });
   };
   $scope.LuuThongTinKhachHanh = function (_Tinh, _Huyen, Order) {
@@ -467,6 +467,20 @@ app.controller("phantrang1Controller", function ($scope) {
     }
     return a;
   };
+  $scope.getArrayIntPt = function (totalPages, pagesIndex) {
+    totalPages = parseInt(totalPages);
+    var a = new Array();
+    var min = pagesIndex - 5;
+    var max = pagesIndex + 5;
+    min = Math.max(min, 1);
+    max = Math.min(max, totalPages);
+    for (var i = min; i <= max; i++) {
+      a.push(i);
+    }
+    return a;
+  };
+
+
   $scope.LinkPhanTrang = function (pagesIndex, pagesNumber) {
     if ($scope.pagesLink == null) {
       return;

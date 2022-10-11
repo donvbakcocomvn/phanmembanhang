@@ -1,4 +1,4 @@
-<ul class="no-margin  pagination "> 
+<ul class="no-margin  pagination ">
     <li><a>{{pagesIndex}}/{{pagesTotal}}</a></li>
     <li>
         <a ng-href="{{LinkPhanTrang(1, pagesNumber)}}" ng-click="onClick(seachProduct, 1, pagesNumber)">
@@ -6,13 +6,15 @@
         </a>
     </li>
 
-    <li ng-class="(pagesIndex == i) ? 'active' : ''"ng-repeat="i in  getArrayInt(pagesTotal) track by $index">
+    <li ng-class="(pagesIndex == i) ? 'active' : ''"
+        ng-repeat="i in  getArrayIntPt(pagesTotal,pagesIndex) track by $index">
         <a ng-href="{{LinkPhanTrang(i, pagesNumber)}}" ng-click="onClick(seachProduct, i, pagesNumber)">
             {{i}}
         </a>
     </li>
     <li>
-        <a ng-href="{{LinkPhanTrang(pagesTotal, pagesNumber)}}" ng-click="onClick(seachProduct, pagesTotal, pagesNumber)">
+        <a ng-href="{{LinkPhanTrang(pagesTotal, pagesNumber)}}"
+            ng-click="onClick(seachProduct, pagesTotal, pagesNumber)">
             <i class="fa fa-angle-double-right"></i>
         </a>
     </li>

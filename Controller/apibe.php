@@ -8,6 +8,7 @@ use Module\duser\Model\Duser;
 use Module\cart\Model\OrderService;
 use Module\cart\Model\Order;
 use Module\cart\Model\OrderDetail;
+use PhpOffice\PhpSpreadsheet\Exception;
 
 
 class Controller_apibe extends Controller_backend
@@ -193,6 +194,15 @@ class Controller_apibe extends Controller_backend
         try {
             $Order = new \Module\cart\Model\Order();
             $_Order = $Order->orderbyid($_POST["Id"]);
+
+            $_Order = $_Order[0] ?? null;
+            if ($_Order == null) {
+                $_Order = $Order->orderbycode($_POST["Id"]);
+            }
+            if ($_Order == null) {
+                throw new Exception("Không có đơn hàng");
+            }
+
             $_Order = $_Order[0];
             $LyDo = \Model\CheckInput::Input($_POST["LyDo"]);
             if (Duser::KiemTraQuyen([Duser::admin, Duser::QuanLy, Duser::Superadmin]) == false) {
@@ -439,6 +449,7 @@ class Controller_apibe extends Controller_backend
             foreach ($orderBySaler as $k => $order) {
                 $_order = new Module\cart\Model\Order($order["Id"]);
                 $order = $_order->ToArray();
+                $order["Note"] = "";
                 $orderBySaler[$k] = $order;
             }
         $data["total"] = intval($total);
