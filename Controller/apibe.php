@@ -191,11 +191,13 @@ class Controller_apibe extends Controller_backend
 
     function HuyDonHang()
     {
+
         try {
+
             $Order = new \Module\cart\Model\Order();
             $_Order = $Order->orderbyid($_POST["Id"]);
 
-            $_Order = $_Order[0] ?? null;
+            echo $_Order = $_Order[0] ?? null;
             if ($_Order == null) {
                 $_Order = $Order->orderbycode($_POST["Id"]);
             }
@@ -210,6 +212,11 @@ class Controller_apibe extends Controller_backend
             }
             $_Order["Status"] = \Module\cart\Model\Order::Huy;
             $_Order["Note"] = "[" . $_SESSION[QuanTri]["Username"] . "] Hủy đơn hàng :" . date("Y-m-d H:i:s") . " <br>" . $LyDo . "<br>_______<br>" . $_Order["Note"];
+            $_Order["Note"] = str_replace("\"", "", $_Order["Note"]);
+            // var_dump($_Order);
+            if ($_Order["NgaySinh"] == null) {
+                unset($_Order["NgaySinh"]);
+            }
             $Order->updateOrder($_Order);
             $data["Mes"] = "Đã Hủy Đơn Hàng";
             echo lib\APIs::Json_Encode($data);
@@ -438,7 +445,18 @@ class Controller_apibe extends Controller_backend
         $total = 0;
         $indexPage = isset($this->getParam()[0]) ? intval($this->getParam()[0]) : 1;
         $pageNumber = isset($this->getParam()[1]) ? intval($this->getParam()[1]) : 10;
+        $DenNgay = null;
+        $TuNgay = null;
+        if (isset($_POST["DenNgay"])) {
+            $DenNgay =  date("Y-m-d", strtotime($_POST["DenNgay"]));
+        }
+        if (isset($_POST["TuNgay"])) {
+            $TuNgay = date("Y-m-d", strtotime($_POST["TuNgay"]));
+        }
+
         $data["Params"]["Status"] = $_POST["Status"] ?? 4;
+        $data["Params"]["DenNgay"] = $DenNgay;
+        $data["Params"]["TuNgay"] = $TuNgay;
         $data["Params"]["KhoaBenh"] = $_POST["KhoaBenh"] ?? "";
         $data["Params"]["KhoaBenh"] = $data["Params"]["KhoaBenh"] == "" ? null : $data["Params"]["KhoaBenh"];
         $data["Params"]["Saler"] = $_POST["Saler"] ?? null;

@@ -44,6 +44,26 @@ app.directive("desktopHeader", function () {
 });
 
 app.controller("phantrang1Controller", function ($scope) {
+  $scope.getArrayIntPt = function (totalPages, pagesIndex) {
+    totalPages = parseInt(totalPages);
+    var a = new Array();
+    var min = pagesIndex - 5;
+    var max = pagesIndex + 5;
+    console.log(pagesIndex);
+    min = Math.max(min, 1);
+    min = Math.min(min, totalPages);
+ 
+    max = Math.min(max, totalPages);
+    max = Math.max(max, 1);
+    // console.log(max);
+    // console.log(min);
+    // console.log(totalPages,"totalPages");
+    // console.log(pagesIndex);
+    for (var i = min; i <= max; i++) {
+      a.push(i);
+    }
+    return a;
+  };
   $scope.getArray = function (curentIndex, totalPages) {
     curentIndex = parseInt(curentIndex);
     totalPages = parseInt(totalPages);
@@ -109,15 +129,24 @@ app.controller(
   function ($scope, $rootScope, $http, $routeParams, $sce) {
     $http.get("/api/getMenus/menu").then(function (res) {
       $scope._Menu = res.data;
-    });
-
+    }); 
     $scope.IntToArray = function (lengthArray) {
       return Array(lengthArray);
     };
     $scope.ToHtml = function (textHtml) {
       return $sce.trustAsHtml(textHtml);
     };
-    $scope.seachKeyWord = "";
+    $scope.seachKeyWord = ""; 
+    $scope.DanhSachAllDonHang = async function (Params, pagesIndex, pagesNumber) {
+      var params = {
+        keyword: Params,
+        number: pagesNumber,
+        page: pagesIndex,
+      };
+      await $http.get("/api/Product/", { params: params }).then(function (res) {
+        $scope._DanhSachSanPham = res.data;
+      });
+    } 
     $scope.TimKiemSanPham = async function () {
       var params = {
         keyword: $scope.seachKeyWord,
@@ -141,11 +170,11 @@ app.controller(
           $scope.getcarts();
         });
     };
-    $scope.updateNumberProduct = async function (id,number) {
+    $scope.updateNumberProduct = async function (id, number) {
       console.log(id);
       console.log(number);
       await $http
-        .get("/cart/index/updateNumberProduct/" + id+"/"+number)
+        .get("/cart/index/updateNumberProduct/" + id + "/" + number)
         .then(function (res) {
           $scope.getcarts();
         });

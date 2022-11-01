@@ -1,49 +1,78 @@
 <?php
+
+use Model\Products;
+
 $view_theme = new theme\home\functionLayout();
 $Category = $data["Category"];
 $cat = new \Model\Category();
 $listCatID = [$Category->catID];
 $cat->AllCategoryByParentID([$Category->catID], $listCatID);
 $product = new \Model\Products();
-//var_dump($Category);
-//var_dump($data["Pages"]);
 $Pages = intval($data["Pages"]);
-$Number = 32;
+$Number = 18;
 $DSProduct = $product->ProductsByCatID($listCatID, $Pages, $Number, $sum);
-?>
-<?php
 $view_theme->categorySlider();
 ?>
-<!-- view-product-list-->
 <div class="col-md-9">
-    <div id="view-product-list" class="view-product-list">
-        <h2 class="page-heading">
+    <div class="">
+        <h2 class="page-heading" style="margin-bottom: 10px;">
             <span class="page-heading-title"><?php echo $Category->catName; ?></span>
         </h2>
-        <!-- PRODUCT LIST -->
-        <ul class="row product-list grid">
+        <div class="row product-list grid Product-mobie">
             <?php
             if ($DSProduct)
                 foreach ($DSProduct as $_Poroduct) {
+                    $_Poroduct = new Products($_Poroduct);
             ?>
-                <li class="col-sx-12 col-sm-3">
-                    <?php
-                    $view_theme->product($_Poroduct);
-                    ?>
-                </li>
+                <div class="col-sx-12 col-sm-4 d-flex">
+                    <div class="right-block" style="width: 100%;">
+                        <div style="width: 100%;">
+                            <div class="d-flex">
+                                <div style="min-width: 90px;padding-right: 10px;margin-right: 5px;">
+                                    <img class="img" onerror="this.src='/public/no-image.jpg'" style="min-width:90px;height: 90px;" src="/public/no-image.jpg" ng-src="{{items.UrlHinh}}" alt="hình sản phẩm">
+                                </div>
+                                <div style="width: 100%;">
+                                    <h2 class="product-name">
+                                        <a style="white-space: nowrap;" href="#">
+                                            <?php echo $_Poroduct->nameProduct ?>
+                                        </a>
+                                    </h2>
+                                    <div class="content_price">
+                                        <span style="color: red;" class="price product-price"><?php echo $_Poroduct->Price(); ?></span>
+                                    </div>
+                                    <div class="">
+                                        <p style="white-space: nowrap;">Id: #<?php echo $_Poroduct->Code ?></p>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a class="btn btn-success" ng-click="addProductCart(<?php echo $_Poroduct->ID; ?>)" class="<?php echo $class; ?>">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
+                                        <a class="btn btn-danger" ng-click="removeProductCart(<?php echo $_Poroduct->ID; ?>)" class="<?php echo $class; ?>">
+                                            <i class="fa fa-minus"></i>
+                                        </a>
+                                    </div>
+                                    <div class="content_price">
+                                        <p><span class="price product-price" ng-bind-html="<?php echo $_Poroduct->Price(); ?>"></span></p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <?php
                 }
             ?>
-        </ul>
+        </div>
     </div>
     <div class="sortPagiBar  pull-left">
-        <div class="bottom-pagination">
-            <nav class="row">
+        <div class="">
+            <div class="PhanTrang-Customer">
                 <?php
                 $DuongDan = $Category->linkCurentCategory() . '/[i]';
                 echo lib\Common::PhanTrangTheoSL($sum, $Number, $Pages, $DuongDan);
                 ?>
-            </nav>
+            </div>
         </div>
     </div>
 </div>
@@ -123,4 +152,4 @@ $view_theme->categorySlider();
     </div>
 </div>
 <!-- ./view-product-list-->
-<div class="clearfix"></div> 
+<div class="clearfix"></div>

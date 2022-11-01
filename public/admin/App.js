@@ -1,3 +1,4 @@
+
 $(document).keydown(function (event) {
   if ((event.ctrlKey || event.metaKey) && event.which == 83) {
     event.preventDefault();
@@ -149,7 +150,7 @@ app.controller("usersCotroller", function ($http, $scope) {
 
 
 });
-app.controller("giohangCotroller", function ($http, $scope) {
+app.controller("giohangCotroller", function ($http, $scope, $filter) {
   $http.get("/apibe/DSKhoaBenh/").then(function (res) {
     $scope._KhoaBenhs = res.data;
   });
@@ -284,11 +285,37 @@ app.controller("giohangCotroller", function ($http, $scope) {
     }
   };
 
+
+  $scope._DanhSachDonHang = {
+    Params: {
+      DenNgay: new Date(),
+      Keyword: "",
+      KhoaBenh: "",
+      Saler: "",
+      Status: "",
+      TuNgay: new Date(),
+    }
+    , data: []
+    , indexPage: 1
+    , pageNumber: 1
+    , total: 0
+    , totalPage: 0
+
+  };
+
+  $scope.SubmitDateFomat = function (inputDate) {
+    var dateT = inputDate;
+    return `${dateT.getFullYear()}-${dateT.getMonth()}-${dateT.getDate()}`;
+  }
+
   $scope.DanhSachDonHangNhanVien = async function (
     Params,
     pagesIndex,
     pagesNumber
   ) {
+    // Params.DenNgay = $scope.SubmitDateFomat(Params.DenNgay);
+    // Params.TuNgay = $scope.SubmitDateFomat(Params.TuNgay);
+    console.log(Params);
     await $http
       .post(
         "/apibe/GetOrdersByUserName/" + pagesIndex + "/" + pagesNumber + "/",
@@ -300,6 +327,13 @@ app.controller("giohangCotroller", function ($http, $scope) {
       });
   };
   $scope.DanhSachAllDonHang = async function (Params, pagesIndex, pagesNumber) {
+
+
+    var DenNgay = moment(Params.DenNgay).format("YYYY-MM-DD");
+    var TuNgay = moment(Params.TuNgay).format("YYYY-MM-DD");
+    Params.DenNgay = DenNgay;
+    Params.TuNgay = TuNgay;
+    console.log(Params);
     await $http
       .post(
         "/apibe/GetAllOrders/" + pagesIndex + "/" + pagesNumber + "/",
@@ -307,7 +341,10 @@ app.controller("giohangCotroller", function ($http, $scope) {
         headerFormData
       )
       .then(function (res) {
+        res.data.Params.TuNgay = moment(new Date(res.data.Params.TuNgay)).format("YYYY-MM-DD");
+        res.data.Params.DenNgay = moment(new Date(res.data.Params.DenNgay)).format("YYYY-MM-DD");
         $scope._DanhSachDonHang = res.data;
+        console.log($scope._DanhSachDonHang.Params);
       });
   };
   $scope.getcarts = async function () {
@@ -472,8 +509,11 @@ app.controller("phantrang1Controller", function ($scope) {
     var a = new Array();
     var min = pagesIndex - 5;
     var max = pagesIndex + 5;
+    
     min = Math.max(min, 1);
     max = Math.min(max, totalPages);
+    console.log(max);
+    console.log(min);
     for (var i = min; i <= max; i++) {
       a.push(i);
     }

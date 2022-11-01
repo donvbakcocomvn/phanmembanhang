@@ -51,6 +51,7 @@
                              <?php
                                     }
                                 }
+                                //Soduthe
                                 $str = ob_get_clean();
                                 $str = BenhNhan::methodToLable($str);
                                 echo $str;
@@ -62,16 +63,16 @@
 
                  </div>
                  <table class="table table-border table-hover" style="margin-top: 10px;">
-                 <tr style="white-space: nowrap;" >
-                    <td>STT</td>
-                    <td>Mã Thẻ</td>
-                    <td>Giá trị giao dịch</td>
-                    <td>Loại giao dịch</td>
-                    <td>Nội dung</td>
-                    <td>Thời gian</td>
-                    <td></td> 
-                    <td>Số Dư</td>
-                 </tr>
+                     <tr style="white-space: nowrap;">
+                         <td>STT</td>
+                         <td>Mã Thẻ</td>
+                         <td>Giá trị giao dịch</td>
+                         <td>Loại giao dịch</td>
+                         <td>Nội dung</td>
+                         <td>Thời gian</td>
+                         <td></td>
+                         <td>Số Dư</td>
+                     </tr>
                      <?php
                         if ($LichSuGiaoDich) {
                             foreach ($LichSuGiaoDich as $key => $value) {
@@ -79,8 +80,9 @@
                              <tr>
                                  <?php
                                     foreach ($value as $key1 => $item1) {
+
                                     ?>
-                                     <td><?php echo $item1;  ?></td>
+                                     <td><?php echo $item1 ?? "";  ?></td>
                                  <?php
                                     }
                                     ?>
@@ -89,8 +91,6 @@
                             }
                         }
                         ?>
-
-
                  </table>
              </div>
          </div>

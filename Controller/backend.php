@@ -383,12 +383,12 @@ class Controller_backend extends Application
                 ];
                 $resultData[] = [
                     "",
-                    "Người lập",
+                    "Giám đốc",
                     "",
                     "PT Bộ Phận",
                     "",
                     "",
-                    "kế toán",
+                    "Người đề nghị",
                     ""
                 ];
                 $resultData[] = [];
@@ -396,12 +396,12 @@ class Controller_backend extends Application
                 $resultData[] = [];
                 $resultData[] = [
                     "",
-                    "Lê Thị Hồng",
                     "",
                     "",
                     "",
                     "",
-                    "Hoàng Thị Huệ",
+                    "",
+                    "",
                     ""
                 ];
                 $fileName = "public/excel/baocao.xlsx";

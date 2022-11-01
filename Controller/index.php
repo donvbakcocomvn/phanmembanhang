@@ -4,6 +4,7 @@ use Common\Common;
 use lib\APIs;
 use lib\Common as LibCommon;
 use lib\guid;
+use Model\Error;
 use Model\ThanhToan;
 use Model\ThanhToan\BenhNhan;
 use Model\UsersService;
@@ -159,13 +160,18 @@ class Controller_index extends Application
         try {
 
             $thanhToan = new ThanhToan();
-
             if (isset($_POST["thanhToan"])) {
                 $modelThanhToan = $_POST["thanhToan"];
                 $thonTinBenhNhan = $thanhToan->GetTTBenhnhan($modelThanhToan["MaThe"]);
                 $MaDonHang = $modelThanhToan["MaDonHang"] ?? "";
                 // var_dump($thonTinBenhNhan);
                 $BenhNhan = new BenhNhan($thonTinBenhNhan);
+                $cart = new Cart();
+                $TongTien = $cart->TotalPrice();
+                if ($BenhNhan->Soduthe < $TongTien) {
+                    // không đủ tiền thanh toán
+                    throw new Exception("Không đủ tiền thanh toán");
+                }
                 // var_dump($BenhNhan);
                 if ($modelThanhToan["MaThe"] == "") {
                     throw new Exception("Không có mã thẻ");
@@ -211,7 +217,8 @@ class Controller_index extends Application
                 }
             }
         } catch (\Exception $th) {
-            echo $th->getMessage();
+            Error::set($th->getMessage(), Error::Danger);
+            // echo $th->getMessage();
         }
         $this->ViewTheme([], Model_ViewTheme::get_viewthene());
     }

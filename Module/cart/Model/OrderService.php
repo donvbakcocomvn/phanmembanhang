@@ -19,6 +19,8 @@ class OrderService extends \Model\DB implements \Model\IModelStatic
 
     public function GetOrderBySaler($params, &$total, $indexPage = 1, $pageNumber = 10)
     {
+        $TuNgay = $params["TuNgay"] ??  null;
+        $DenNgay = $params["DenNgay"] ??  null;
         $KhoaBenh = $params["KhoaBenh"] ??  null;
         $saler = isset($params["Saler"]) ? $params["Saler"] : null;
         $Status = isset($params["Status"]) ? $params["Status"] : null;
@@ -40,7 +42,15 @@ class OrderService extends \Model\DB implements \Model\IModelStatic
         if ($saler) {
             $salerSql = "`Saler` = '{$saler}'";
         }
-        $where = " {$salerSql} {$sqlStatus} {$sqlKeyword} {$sqlKhoaBenh} order by `NgayTao` desc";
+        $tuNgaySql = "";
+        if ($TuNgay) {
+            $tuNgaySql = " and `NgayTao` > '{$TuNgay}'";
+        }
+        $denNgaySql = "";
+        if ($DenNgay) {
+            $denNgaySql = " and `NgayTao` < '{$DenNgay}'";
+        }
+        $where = " {$salerSql} {$sqlStatus} {$sqlKeyword} {$sqlKhoaBenh} {$tuNgaySql} {$denNgaySql} order by `NgayTao` desc";
         return $this->SelectPT($where, $indexPage, $pageNumber, $total);
     }
 

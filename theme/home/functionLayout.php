@@ -329,7 +329,7 @@ class functionLayout
     {
     ?>
         <div class="clearfix"></div>
-        <footer id="footer2">
+        <footer id="footer2" style="margin-top: 10px;">
             <div class="footer-top">
                 <div class="container">
                     <div class="row">
@@ -344,19 +344,18 @@ class functionLayout
                         </div>
                         <div class="col-sm-3 hidden-sm hidden-xs">
                             <div class="footer-social">
-                                <ul>
+                                <!-- <ul>
                                     <li><a class="facebook" href="__linkFacebook___"><i class="fa fa-facebook"></i></a></li>
                                     <li><a class="pinterest" href="__linkPinterest___"><i class="fa fa-pinterest-p"></i></a></li>
                                     <li><a class="vk" href="__linkVk___"><i class="fa fa-vk"></i></a></li>
                                     <li><a class="twitter" href="__linkTwitter___"><i class="fa fa-twitter"></i></a></li>
                                     <li><a class="google-plus" href="__linkPlus___"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
+                                </ul> -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- footer paralax-->
             <div class="footer-paralax hidden-sm hidden-xs ">
                 <div class="footer-bottom">
                     <div class="container">
@@ -367,12 +366,7 @@ class functionLayout
                                         Copyright © 2022 __WebName___. All Rights Reserved. Designed by: __WebName___
                                     </div>
 
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="footer-payment-logo">
-                                        <!--<img src="/public/home/assets/data/option3/payment-logo.png" alt="payment logo">-->
-                                    </div>
-                                </div>
+                                </div> 
                             </div>
                         </div>
                     </div>
@@ -438,21 +432,35 @@ class functionLayout
         $p = new \Model\Products();
         $images = $p->getAllImges($produc->ID);
         ?>
-        <div class="product-container">
-            <div class="right-block">
-                <h2 class="product-name"><a href="<?php echo $produc->linkProduct(); ?>"><?php echo $produc->nameProduct ?></a></h2>
-                <div class="content_price">
-                    <span style="color: red;" class="price product-price"><?php echo $produc->Price() ?></span>
+        <div class="right-block" style="width: 100%;">
+            <div style="width: 100%;">
+                <div class="d-flex">
+                    <div style="min-width: 90px;padding-right: 10px;margin-right: 5px;">
+                        <img class="img" onerror="this.src='/public/no-image.jpg'" style="min-width:90px;height: 90px;" src="/public/no-image.jpg" ng-src="{{items.UrlHinh}}" alt="hình sản phẩm">
+                    </div>
+                    <div style="width: 100%;">
+                        <h2 class="product-name">
+                            <a style="white-space: nowrap;" href="#">{{items.nameProduct}}</a>
+                        </h2>
+                        <div class="content_price">
+                            <span style="color: red;" class="price product-price">{{items.Price}}</span>
+                        </div>
+                        <div class="">
+                            <p style="white-space: nowrap;">Id: #<?php echo $produc->Code ?></p>
+                        </div>
+                        <div class="pull-right">
+                            <a class="btn btn-success" ng-click="addProductCart('<?php echo $produc->Id ?>')">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                            <a class="btn btn-danger" ng-click="removeProductCart('<?php echo $produc->Id ?>')">
+                                <i class="fa fa-minus"></i>
+                            </a>
+                        </div>
+                        <div class="content_price">
+                            <p><span class="price product-price" ng-bind-html="items.priceVnd"></span></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="">
-                    <p>Id: #<?php echo $produc->Code ?></p>
-                </div>
-                <div class=" ">
-                    <?php
-                    $produc->btnGioHang("btn btn-primary");
-                    ?>
-                </div>
-
             </div>
         </div>
     <?php

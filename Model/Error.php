@@ -2,7 +2,8 @@
 
 namespace Model;
 
-class Error {
+class Error
+{
 
     const Danger = "danger";
     const Primary = "primary";
@@ -11,7 +12,8 @@ class Error {
     static public $type;
     static public $Content;
 
-    function __construct($aContent = null) {
+    function __construct($aContent = null)
+    {
         if ($aContent) {
             $type = $aContent["type"];
             $content = $aContent["content"];
@@ -22,28 +24,32 @@ class Error {
         }
     }
 
-    static function getAllToJson() {
+    static function getAllToJson()
+    {
         $Error = self::getAllError();
         if ($Error == null)
             return null;
         echo \lib\APIs::Json_Encode_ToString($Error);
     }
 
-    function setError($content, $type) {
+    function setError($content, $type)
+    {
         self::$type = $type;
         self::$Content = $content;
         $_SESSION["Error"]["type"] = $type;
         $_SESSION["Error"]["content"] = $content;
     }
 
-    static public function set($content, $type) {
+    static public function set($content, $type)
+    {
         self::$type = $type;
         self::$Content = $content;
         $_SESSION["Error"]["type"] = $type;
         $_SESSION["Error"]["content"] = $content;
     }
 
-    static function getAllError() {
+    static function getAllError()
+    {
         $content = self::$Content;
         $type = self::$type;
         $type = isset($_SESSION["Error"]["type"]) ? $_SESSION["Error"]["type"] : "";
@@ -56,12 +62,12 @@ class Error {
         }
 
         return [
-            "Content" => $content
-            , "Type" => $type
+            "Content" => $content, "Type" => $type
         ];
     }
 
-    static function getAllToObj() {
+    static function getAllToObj()
+    {
         $Error = self::getAllError();
         if ($Error == null)
             return null;
@@ -71,7 +77,8 @@ class Error {
         return $ErrorObj;
     }
 
-    function getError() {
+    function getError()
+    {
         $content = self::$Content;
         $type = self::$type;
         $type = isset($_SESSION["Error"]["type"]) ? $_SESSION["Error"]["type"] : "";
@@ -83,10 +90,9 @@ class Error {
         self::$Content = NULL;
         self::$type = NULL;
         return [
-            "Content" => $content
-            , "Type" => $type
+            "Content" => $content, "Type" => $type
         ];
     }
 
-//put your code here
+    //put your code here
 }

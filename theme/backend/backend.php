@@ -491,6 +491,7 @@ class backend extends \Model\Database
         <!-- AdminLTE for demo purposes -->
         <script src="/public/admin/dist/js/demo.js"></script>
         <script type="text/javascript" src="/public/admin/AppTheme.js?v=<?php echo filemtime('public/admin/AppTheme.js'); ?>"></script>
+        <script src="/public/moment.js" type="text/javascript"></script>
         <script src="/public/admin/App.js?v=<?php echo filemtime('public/admin/App.js'); ?>" type="text/javascript"></script>
 <?php
     }

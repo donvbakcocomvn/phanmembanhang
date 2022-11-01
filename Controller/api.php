@@ -22,9 +22,9 @@ class Controller_api extends Application
     }
 
     public function getorderbyid()
-    { 
+    {
         $id = $this->getParam()[0];
-        $data=[];
+        $data = [];
         $order = new Order($id);
         // var_dump($order);
         // $data["Product"] = $order->Products();
@@ -210,7 +210,7 @@ class Controller_api extends Application
     {
         $keyword = $_GET["keyword"] ?? "";
         $Page = $_GET["page"] ?? 1;
-        $Number = $_GET["number"] ?? 24;
+        $Number = $_GET["number"] ?? 18;
         $Tong = 0;
         $Product = new Model\Products();
         $Ps = $Product->ProductsNameAllPTNangCao(["name" => $keyword], $Page, $Number,  $Tong);
@@ -223,8 +223,10 @@ class Controller_api extends Application
             $Ps[$key]["Link"] = $_ps->linkProduct();
         }
         $data["Product"] = $Ps;
-        $data["page"] = $Page;
-        $data["number"] = $Number;
+        $data["page"] = intval($Page);
+        $data["number"] = intval($Number);
+        $data["pagesTotal"] = ceil($Tong / $Number);
+        $data["page"] = min($data["page"], $data["pagesTotal"]);
         $data["keyword"] = $keyword;
 
         $lib = new lib\APIs();

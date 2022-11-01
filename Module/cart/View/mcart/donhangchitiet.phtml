@@ -3,8 +3,6 @@
 
     use Module\duser\Model\Duser;
 
-
-
     ?>
     <div class="box box-primary">
         <div class="box-header">
@@ -107,6 +105,12 @@
 
                     </tr>
                 </table>
+            </div>
+            <div class="col-md-12">
+                Theo dõi đơn hàng
+                <div style="height: 300px;overflow: auto;" class="">
+                    <div ng-bind-html="_OrderDetail.Note" ></div> 
+                </div>
             </div>
         </div>
     </div>
