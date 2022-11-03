@@ -56,11 +56,19 @@ class BenhNhan extends \Model\Database
         }
         return null;
     }
+
+    public function GetItems($params, $indexPage, $pageNumber, &$total)
+    {
+        $name = $params["name"] ?? "";
+        $where  = " 1 = 1 ";
+        return $this->SelectPT($where, $indexPage, $pageNumber, $total);
+    }
+
     public function ThanhToan()
     {
     }
     public function Post($item)
-    { 
+    {
         return $this->insert(self::$Tablename, $item);
     }
     public function Put($item)
@@ -75,6 +83,9 @@ class BenhNhan extends \Model\Database
             return $this->select(self::$Tablename, [], $where)[0];
         }
         return null;
+    }
+    public function GetBySotheThanhToan($maThe)
+    {
     }
 
     public function ToArray()

@@ -2,6 +2,9 @@
 
 namespace Module\cart\Model;
 
+use Common\Common;
+use Model\Products;
+
 class OrderDetail extends \Model\Database
 {
     //orderdetail
@@ -16,6 +19,26 @@ class OrderDetail extends \Model\Database
     function __construct($order = null)
     {
         parent::__construct();
+        if (!is_array($order)) {
+            $order = $this->GetByOrderDetailById($order);
+        }
+        $this->Id = $order["Id"] ?? null;
+        $this->Name = $order["Name"] ?? null;
+        $this->IdProduct = $order["IdProduct"] ?? null;
+        $this->CodeOrder = $order["CodeOrder"] ?? null;
+        $this->Price = $order["Price"] ?? null;
+        $this->Number = $order["Number"] ?? null;
+    }
+
+
+    public function ThanhTien()
+    {
+        return Common::MoneyFomat($this->Price * $this->Number);
+    }
+
+    public function Product()
+    {
+        return new Products($this->IdProduct);
     }
 
     public function GetOrderDetailByProductCodeOrder($oderId, $CodeSanPham)

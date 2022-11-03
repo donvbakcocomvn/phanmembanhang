@@ -3,6 +3,7 @@
 namespace Module\cart\Model;
 
 use Common\Common;
+use Model\Sql;
 use Model\ThanhToan;
 use Model_OptionsService;
 
@@ -161,6 +162,34 @@ class Order extends \Model\Database
         return $this->select(table_prefix . "order", [], '1');
     }
 
+    public function GetOrderByDateStatusPT($param, $pageIndex, $pageNumber, &$total)
+    {
+        $fromDate = $param["fromDate"] ?? null;
+        $toDate = $param["toDate"] ?? null;
+        $Status = $param["Status"] ?? null;
+        $pageIndex = min($pageIndex, 1);
+        $pageNumber = min($pageNumber, 20);
+        if ($fromDate == null || $toDate == null || $Status == null) {
+            return null;
+        }
+        $where = Sql::WhereEq("Status", $Status);
+        $where .= Sql::WhereAnd(Sql::WhereBigger("NgayTao", $fromDate));
+        $where .= Sql::WhereAnd(Sql::WhereLess("NgayTao", $toDate));
+        parent::SetTableName(table_prefix . "order");
+        return $this->SelectPT($where, $pageIndex, $pageNumber, $total);
+    }
+    public function GetOrderByDateStatus($fromDate, $toDate, $Status)
+    {
+        $where = Sql::WhereEq("Status", $Status);
+        $where .= Sql::WhereAnd(Sql::WhereBigger("NgayTao", $fromDate));
+        $where .= Sql::WhereAnd(Sql::WhereLess("NgayTao", $toDate));
+        // $where = " and `NgayTao` > '{$fromDate}'";
+        // $where .= " and `NgayTao` < '{$toDate}'";
+        // $where .= " and `Status` = '{$Status}'";
+        // $where .= " ORDER BY `NgayTao` DESC";
+        return $this->select(table_prefix . "order", [], $where);
+    }
+
     function ordersPt($page = 1, $number = 20, &$sun)
     {
         $sun = 10;
@@ -178,6 +207,11 @@ class Order extends \Model\Database
         return $this->select(table_prefix . "order", ["Id", 'Name', "TotalPrice", "CodeOrder", "Email", "Phone", "Status"], " `CodeOrder` like '%{$key}%' || `Email` like '%{$key}%' || `Phone` like '%{$key}%' || `Email` like '%{$key}%' ");
     }
 
+    public function GetDanhSachMaThe()
+    {
+        $where = "`Status` = 5 GROUP by `Name`";
+        return $this->select(table_prefix . "order", [], $where);
+    }
     function ordersStatusPt($page = 1, $number = 20, $status = 1, &$sun)
     {
         $sun = 0;
@@ -385,6 +419,6 @@ class Order extends \Model\Database
 
     public function BenhNhan()
     {
-        return new BenhNhan($this->MaBenhNhan);
+        return new BenhNhan($this->Name);
     }
 }

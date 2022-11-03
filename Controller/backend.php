@@ -4,6 +4,8 @@ use Common\Common;
 use Model\ExcelConfig;
 use Model\Products;
 use Model\ThongKe;
+use Module\cart\Model\Order;
+use Module\cart\Model\OrderDetail;
 
 class Controller_backend extends Application
 {
@@ -624,8 +626,6 @@ class Controller_backend extends Application
                 }
             }
         }
-
-
         if (isset($_GET["btnExport1"])) {
             if (isset($_GET["fromDate"]) && isset($_GET["toDate"])) {
                 $fromDate = $_GET["fromDate"] ?? "";
@@ -748,6 +748,180 @@ class Controller_backend extends Application
         $this->ViewTheme(["data" => $resultData], Model_ViewTheme::get_viewthene(), "");
     }
 
+    public function exportthongkekhoabenhnhan($reult, $tuNgay, $denNgay)
+    {
+        $tuNgay = date("d-m-Y", strtotime($tuNgay));
+        $denNgay = date("d-m-Y", strtotime($denNgay));
+        $resultData[] = [
+            "SỞ Y TẾ THÀNH PHỐ HỒ CHÍ MINH",
+        ];
+        $resultData[] = [
+            "BỆNH VIỆN NHÂN ÁI",
+        ];
+        $resultData[] = [
+            "Thống Kê Bán Hàng Theo Bệnh Nhân",
+        ];
+        $resultData[] = [
+            "Từ ngày: {$tuNgay} đến ngày: {$denNgay}",
+        ];
+        $data = [
+            "STT",
+            "Tên Bệnh Nhân",
+            "Hàng Hóa",
+            "Mã Danh Mục",
+            "ĐVT",
+            "Giá Bán",
+            "Khoa",
+            "Số Lượng",
+            "Thành Tiền",
+            "Ghi Chú",
+        ];
+        $indexBoder = 5;
+        $resultData[] = $data;
+        if ($reult) {
+            $stt = 1;
+            foreach ($reult as $index => $row) {
+                $p = new Order($row);
+                $orderDetail = $p->orderDetailbyid($p->CodeOrder);
+                if ($orderDetail) {
+                    $dong = [];
+                    foreach ($orderDetail as $key => $orderdetail) {
+                        $_orderdetail = new OrderDetail($orderdetail);
+                        $dong[0] = $stt++;
+                        $dong[1] = $p->BenhNhan()->HotenBN ?? $p->Name;
+                        $dong[2] = $_orderdetail->Product()->nameProduct;
+                        $dong[3] = $_orderdetail->Product()->Category()->Code;
+                        $dong[4] = $_orderdetail->Product()->unitPrice;
+                        $dong[5] = $_orderdetail->Product()->Price();
+                        $dong[6] = $p->BenhNhan()->Tiensubenh;
+                        $dong[7] = $_orderdetail->Number;
+                        $dong[8] = $_orderdetail->ThanhTien();
+                        $dong[9] = $p->Note ?? "";
+                        $resultData[] =  $dong;
+                        $indexBoder++;
+                    }
+                }
+            }
+        }
+
+        $ngayLap = date("d", time());
+        $thangLap = date("m", time());
+        $namLap = date("Y", time());
+        $resultData[] = [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        ];
+        $resultData[] = [
+            "",
+            "Người lập",
+            "",
+            "PT Bộ Phận",
+            "",
+            "",
+            "kế toán",
+            ""
+        ];
+        $resultData[] = [];
+        $resultData[] = [];
+        $resultData[] = [];
+        $resultData[] = [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        ];
+        $fileName = "public/excel/baocao1.xlsx";
+        if (is_dir("public/excel")) {
+            mkdir("public/excel", 0777);
+        }
+        ExcelConfig::BangThongKeHangCangTin($resultData, $fileName, $indexBoder);
+    }
+
+    public function thongkekhoabenhnhan()
+    {
+        $this->Bread[] = [
+            "title" => "Danh sách thống kê",
+            "link" => "/backend/thongke/"
+        ];
+        $this->Bread[] = [
+            "title" => "Thông kê bán hàng theo bệnh nhân",
+            "link" => ""
+        ];
+        $Bread = new \Model\Breadcrumb();
+        $Bread->setBreadcrumb($this->Bread);
+        $resultData = [];
+        $total = 0;
+        if (isset($_GET["btnLoc"])) {
+            $thongKe = new ThongKe();
+            $fromDate = $_GET["fromDate"] ?? null;
+            $toDate = $_GET["toDate"] ?? null;
+            $param["fromDate"] = $fromDate;
+            $param["toDate"] = $toDate;
+            $param["Status"] = Order::DaThuTien;
+
+            $pageIndex = $_GET["page"] ?? 1;
+            $pageNumber = $_GET["number"] ?? 10;
+            $result = $thongKe->ThongKeBanHangTheoBenhNhanPT($param, $pageIndex, $pageNumber, $total);
+            $data = [
+                "STT",
+                "Tên Bệnh Nhân",
+                "Hàng Hóa",
+                "Mã Danh Mục",
+                "ĐVT",
+                "Giá Bán",
+                "Khoa",
+                "Số Lượng",
+                "Thành Tiền",
+                "Ghi Chú",
+            ];
+            $resultData[] = $data;
+            if ($result) {
+                $stt = 1;
+                foreach ($result as $index => $row) {
+                    $p = new Order($row);
+                    $orderDetail = $p->orderDetailbyid($p->CodeOrder);
+                    if ($orderDetail) {
+                        $dong = [];
+                        foreach ($orderDetail as $key => $orderdetail) {
+                            $_orderdetail = new OrderDetail($orderdetail);
+                            $dong[0] = $stt++;
+                            $dong[1] = $p->BenhNhan()->HotenBN ?? $p->Name;
+                            $dong[2] = $_orderdetail->Product()->nameProduct;
+                            $dong[3] = $_orderdetail->Product()->Category()->Code;
+                            $dong[4] = $_orderdetail->Product()->unitPrice;
+                            $dong[5] = $_orderdetail->Product()->Price();
+                            $dong[6] = $p->BenhNhan()->Tiensubenh;
+                            $dong[7] = $_orderdetail->Number;
+                            $dong[8] = $_orderdetail->ThanhTien();
+                            $dong[9] = $p->Note ?? "";
+                            $resultData[] =  $dong;
+                        }
+                    }
+                }
+            }
+        }
+        if (isset($_GET["btnExport"])) {
+            $thongKe = new ThongKe();
+            $fromDate = $_GET["fromDate"] ?? "";
+            $toDate = $_GET["toDate"] ?? "";
+            $result = $thongKe->ThongKeBanHangTheoBenhNhan($fromDate, $toDate);
+            $this->exportthongkekhoabenhnhan($result, $fromDate, $toDate);
+        }
+
+
+
+        $this->ViewTheme(["data" => $resultData, "total" => $total], Model_ViewTheme::get_viewthene(), "");
+    }
     public function thongkekhoa()
     {
 

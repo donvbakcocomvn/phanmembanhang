@@ -479,4 +479,6 @@ class Model_Adapter
         $security_code = substr($md5_hash, 2, 10);
         return $security_code;
     }
+
+    
 }

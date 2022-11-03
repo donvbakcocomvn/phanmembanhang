@@ -49,10 +49,9 @@ app.controller("phantrang1Controller", function ($scope) {
     var a = new Array();
     var min = pagesIndex - 5;
     var max = pagesIndex + 5;
-    console.log(pagesIndex);
+    // console.log(pagesIndex);
     min = Math.max(min, 1);
     min = Math.min(min, totalPages);
- 
     max = Math.min(max, totalPages);
     max = Math.max(max, 1);
     // console.log(max);
@@ -129,14 +128,14 @@ app.controller(
   function ($scope, $rootScope, $http, $routeParams, $sce) {
     $http.get("/api/getMenus/menu").then(function (res) {
       $scope._Menu = res.data;
-    }); 
+    });
     $scope.IntToArray = function (lengthArray) {
       return Array(lengthArray);
     };
     $scope.ToHtml = function (textHtml) {
       return $sce.trustAsHtml(textHtml);
     };
-    $scope.seachKeyWord = ""; 
+    $scope.seachKeyWord = "";
     $scope.DanhSachAllDonHang = async function (Params, pagesIndex, pagesNumber) {
       var params = {
         keyword: Params,
@@ -146,7 +145,7 @@ app.controller(
       await $http.get("/api/Product/", { params: params }).then(function (res) {
         $scope._DanhSachSanPham = res.data;
       });
-    } 
+    }
     $scope.TimKiemSanPham = async function () {
       var params = {
         keyword: $scope.seachKeyWord,

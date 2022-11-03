@@ -2,8 +2,33 @@
 
 namespace Model;
 
+use Module\cart\Model\Order as ModelOrder;
+
+
 class ThongKe extends Database
 {
+
+
+    public function ThongKeBanHangTheoBenhNhan($TuNgay, $DenNgay)
+    {
+        if ($TuNgay == "" || $DenNgay == "") {
+            return [];
+        }
+        $TuNgay = date("Y-m-d 00:00:00", strtotime($TuNgay));
+        $DenNgay = date("Y-m-d 23:59:59", strtotime($DenNgay));
+
+        $order = new ModelOrder();
+        return $order->GetOrderByDateStatus($TuNgay, $DenNgay, ModelOrder::DaThuTien);
+    }
+
+    public function ThongKeBanHangTheoBenhNhanPT($param, $pageIndex, $pageNumber, &$total)
+    {
+        $param["fromDate"] = $param["fromDate"] ?? null;
+        $param["toDate"] = $param["toDate"] ?? null;
+        $param["Status"] = $param["Status"] ?? null;
+        $order = new ModelOrder();
+        return $order->GetOrderByDateStatusPT($param, $pageIndex, $pageNumber, $total);
+    }
 
     // BẢNG KÊ BÁN HÀNG CĂN TIN
     public function ThongKeBanHangCangTin($TuNgay, $DenNgay, $KhoaBenh = null, $DanhMuc = null)

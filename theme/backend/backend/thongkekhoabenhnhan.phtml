@@ -1,82 +1,62 @@
 <?php
 
-use Model\Category;
 use Model\FormRender;
 use Module\cart\Model\Order;
+use Module\duser\Model\Duser;
 use PFBC\Element\Select;
 
 $order = new Order();
 $KhoaBenh = $order->GetKhaoBenh();
-$options = Model_OptionsService::GetGroupsToSelect("khoa");
-$options = ["" => "Tất Cả"] + $options;
+$options[""] = "Tất cả";
+foreach ($KhoaBenh as $key => $value) {
+    if ($value["KhoaBenh"] != "")
+        $options[$value["KhoaBenh"]] = $value["KhoaBenh"];
+}
 $prop["class"] = "form-control";
-$propSP["value"] = $_GET["KhoaBenh"] ?? "";
+$duser = Duser::CurentUsernameAdmin(true);
+$prop["value"] = $duser->Groups;
 $Danhmuc = new FormRender(new Select("Khoa bệnh", "KhoaBenh", $options, $prop));
-$propSP["class"] = "form-control";
-$propSP["value"] = $_GET["DanhMuc"] ?? "";
-$Model_Category = new Category();
-$options = $Model_Category->GetCategoriesToSelect();
-$options = ["" => "Tất Cả"] + $options;
 
-$DanhmucSP = new FormRender(new Select("Danh mục", "DanhMuc", $options, $propSP));
+if ($duser->Groups ==  Duser::NhanVien) {
+    $prop[FormRender::Disabled] = "true";
+    $prop["value"] = $duser->KhoaBenh;
+    $Danhmuc = new FormRender(new Select("Khoa bệnh", "KhoaBenh", $options, $prop));
+}
+
 ?>
-
 <div class="row ">
     <section class="col-md-12 ">
         <div class="box box-solid ">
             <div class="box-header">
-                <div class="box-tools">
-                    <a class="btn btn-success " href="/backend/thongkekhoa/">Thống Kê Theo Khoa</a>
-                    <a class="btn btn-success " href="/backend/thongkekhoabenhnhan/">Thống Kê Theo Khoa Bệnh Nhân </a>
-                </div>
-
-                <h3 class="box-title">BẢNG KÊ BÁN HÀNG</h3>
+                <h3 class="box-title">Thống kê Theo Bệnh Nhân
+                    <?php echo $total; ?>
+                </h3>
             </div>
             <div class="box-body">
                 <form action="" method="get">
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <label>Từ ngày</label>
                             <input value="<?php echo $_GET["fromDate"] ?? ""; ?>" required class="form-control" type="date" name="fromDate" id="fromDate">
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <label>Đến ngày</label>
                             <input value="<?php echo $_GET["toDate"] ?? ""; ?>" required class="form-control" type="date" name="toDate" id="toDate">
                         </div>
-                        <!-- <div class="col-md-2">
-                            <?php //$Danhmuc->renderHTML(); 
-                            ?>
-                        </div> -->
-                        <div class="col-md-2">
-                            <?php $DanhmucSP->renderHTML(); ?>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <button name="btnLoc" style=" margin-top: 24px;" class="btn btn-success">
                                 Lọc
                             </button>
                             <button name="btnExport" style=" margin-top: 24px;" class="btn btn-success">
-                                BẢNG KÊ BÁN HÀNG
-                            </button>
-                            <button name="btnExport1" style=" margin-top: 24px;" class="btn btn-success">
-                                PHIẾU ĐỀ XUẤT HÀNG HÓA
+                                Export
                             </button>
                         </div>
                     </div>
                 </form>
                 <table style="margin-top: 10px;" class="table table-border">
-                    <tr>
-                        <th>STT</th>
-                        <th>Hàng Hóa</th>
-                        <th>Mã Danh Mục</th>
-                        <th>ĐVT</th>
-                        <th>Mã Hàng Hóa</th>
-                        <th>Gia bán</th>
-                        <th>Số Lượng</th>
-                        <th>Thành Tiền</th>
-                        <th>Ghi Chú</th>
-                    </tr>
                     <?php
                     if ($data) {
+
                         foreach ($data as $index => $row) {
                     ?>
                             <tr>
@@ -92,8 +72,11 @@ $DanhmucSP = new FormRender(new Select("Danh mục", "DanhMuc", $options, $propS
                         }
                     }
                     ?>
+
                 </table>
+
             </div>
         </div>
     </section>
+
 </div>

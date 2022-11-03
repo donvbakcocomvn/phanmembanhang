@@ -5,6 +5,7 @@ namespace Module\cart\Controller;
 use Common\Common;
 use Model\Breadcrumb;
 use Model\ThanhToan;
+use Module\cart\Model\BenhNhan;
 use Module\cart\Model\Cart;
 use Module\cart\Model\Order;
 use Module\duser\Model\Duser;
@@ -46,34 +47,23 @@ class vieworder extends \Controller_backend
 
     public function dongbo()
     {
-
         $_order = new Order();
-        $cardIds = $_order->GetIdCard();
+
+        $cardIds = $_order->GetDanhSachMaThe();
         foreach ($cardIds as $key => $value) {
             $thanhToan = new ThanhToan();
             $benhNhan = $thanhToan->GetTTBenhnhan($value["Name"]);
-            echo json_encode($benhNhan);
-            return;
-        }
-
-        $tong = 0;
-        $item =  $_order->ordersStatusPt(1, 300, Order::DaThuTien, $tong);
-        $thanhToan = new ThanhToan();
-        $DanhSachBenhNhan = [];
-        foreach ($item as $key => $value) {
-            $_order = new Order($value);
-            if (isset($DanhSachBenhNhan[$value["MaThe"]]) == false) {
-                $benhNhan = $thanhToan->GetTTBenhnhan($value["MaThe"]);
-                $DanhSachBenhNhan[$value["MaThe"]] = $benhNhan;
-            }
-            $benhNhan = $DanhSachBenhNhan[$value["MaThe"]];
+            $_benhNhan = new BenhNhan();
             if ($benhNhan) {
-                $DanhSachBenhNhan[$value["MaThe"]] = $benhNhan;
-                $value["KhoaBenh"] = $benhNhan["Tiensubenh"];
-                $value["NgaySinh"] = $benhNhan["Ngaysinh"] ?? date("Y-m-d", time());
-                $_order->updateOrder($value);
+                $_benhNhan->Post($benhNhan);
             }
-        }
+        } 
+        $_benhNhan = new BenhNhan();
+        $indexPage = $_GET["page"] ?? 1;
+        $pageNumber = $_GET["number"] ?? 100;
+        $items = $_benhNhan->GetItems([], $indexPage, $pageNumber, $total);
+
+        $this->ViewThemeModule(["Items" => $items], "", "");
     }
 
     function googleform()
