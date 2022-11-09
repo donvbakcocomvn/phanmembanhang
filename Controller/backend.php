@@ -4,6 +4,7 @@ use Common\Common;
 use Model\ExcelConfig;
 use Model\Products;
 use Model\ThongKe;
+use Module\cart\Model\BenhNhan;
 use Module\cart\Model\Order;
 use Module\cart\Model\OrderDetail;
 
@@ -780,27 +781,21 @@ class Controller_backend extends Application
         $resultData[] = $data;
         if ($reult) {
             $stt = 1;
-            foreach ($reult as $index => $row) {
-                $p = new Order($row);
-                $orderDetail = $p->orderDetailbyid($p->CodeOrder);
-                if ($orderDetail) {
-                    $dong = [];
-                    foreach ($orderDetail as $key => $orderdetail) {
-                        $_orderdetail = new OrderDetail($orderdetail);
-                        $dong[0] = $stt++;
-                        $dong[1] = $p->BenhNhan()->HotenBN ?? $p->Name;
-                        $dong[2] = $_orderdetail->Product()->nameProduct;
-                        $dong[3] = $_orderdetail->Product()->Category()->Code;
-                        $dong[4] = $_orderdetail->Product()->unitPrice;
-                        $dong[5] = $_orderdetail->Product()->Price();
-                        $dong[6] = $p->BenhNhan()->Tiensubenh;
-                        $dong[7] = $_orderdetail->Number;
-                        $dong[8] = $_orderdetail->ThanhTien();
-                        $dong[9] = $p->Note ?? "";
-                        $resultData[] =  $dong;
-                        $indexBoder++;
-                    }
-                }
+            foreach ($reult as $key => $orderdetail) {
+                $_orderdetail = new OrderDetail($orderdetail);
+                $dong = [];
+                $dong[] = $stt++;
+                $dong[] = $_orderdetail->Order()->BenhNhan()->HotenBN ?? "n/a";
+                $dong[] = $_orderdetail->Product()->nameProduct;
+                $dong[] = $_orderdetail->Product()->Category()->Code;
+                $dong[] = $_orderdetail->Product()->unitPrice;
+                $dong[] = $_orderdetail->Product()->Price();
+                $dong[] = $_orderdetail->Order()->BenhNhan()->Tiensubenh;
+                $dong[] = $_orderdetail->Number;
+                $dong[] = $_orderdetail->ThanhTien();
+                $dong[] = $_orderdetail->Order()->Note ?? "";
+                $resultData[] =  $dong;
+                $indexBoder++;
             }
         }
 
@@ -861,7 +856,20 @@ class Controller_backend extends Application
         $Bread->setBreadcrumb($this->Bread);
         $resultData = [];
         $total = 0;
+
+        if (isset($_GET["btnExport"])) {
+            $thongKe = new ThongKe();
+            $fromDate = $_GET["fromDate"] ?? "";
+            $toDate = $_GET["toDate"] ?? "";
+            $param["fromDate"] = $fromDate;
+            $param["toDate"] = $toDate;
+            $param["Status"] = Order::DaThuTien;
+            $result = $thongKe->ThongKeBanHangTheoBenhNhanPT($param, 1, 1, $total);
+            $this->exportthongkekhoabenhnhan($result, $fromDate, $toDate);
+        }
+
         if (isset($_GET["btnLoc"])) {
+
             $thongKe = new ThongKe();
             $fromDate = $_GET["fromDate"] ?? null;
             $toDate = $_GET["toDate"] ?? null;
@@ -871,10 +879,15 @@ class Controller_backend extends Application
 
             $pageIndex = $_GET["page"] ?? 1;
             $pageNumber = $_GET["number"] ?? 10;
+            $param["page"] = $pageIndex;
+            $param["number"] = $pageNumber;
             $result = $thongKe->ThongKeBanHangTheoBenhNhanPT($param, $pageIndex, $pageNumber, $total);
+            $param["total"] = $total;
             $data = [
                 "STT",
+                "Mã Đơn Hàng",
                 "Tên Bệnh Nhân",
+                "Mã HH",
                 "Hàng Hóa",
                 "Mã Danh Mục",
                 "ĐVT",
@@ -886,41 +899,31 @@ class Controller_backend extends Application
             ];
             $resultData[] = $data;
             if ($result) {
-                $stt = 1;
-                foreach ($result as $index => $row) {
-                    $p = new Order($row);
-                    $orderDetail = $p->orderDetailbyid($p->CodeOrder);
-                    if ($orderDetail) {
+                $orderDetail = $result;
+                if ($orderDetail) {
+                    $dong = [];
+                    $stt = 1;
+                    foreach ($orderDetail as $key => $orderdetail) {
+                        $_orderdetail = new OrderDetail($orderdetail);
                         $dong = [];
-                        foreach ($orderDetail as $key => $orderdetail) {
-                            $_orderdetail = new OrderDetail($orderdetail);
-                            $dong[0] = $stt++;
-                            $dong[1] = $p->BenhNhan()->HotenBN ?? $p->Name;
-                            $dong[2] = $_orderdetail->Product()->nameProduct;
-                            $dong[3] = $_orderdetail->Product()->Category()->Code;
-                            $dong[4] = $_orderdetail->Product()->unitPrice;
-                            $dong[5] = $_orderdetail->Product()->Price();
-                            $dong[6] = $p->BenhNhan()->Tiensubenh;
-                            $dong[7] = $_orderdetail->Number;
-                            $dong[8] = $_orderdetail->ThanhTien();
-                            $dong[9] = $p->Note ?? "";
-                            $resultData[] =  $dong;
-                        }
+                        $dong[] = $stt++;
+                        $dong[] = $_orderdetail->CodeOrder;
+                        $dong[] = $_orderdetail->Order()->BenhNhan()->HotenBN;
+                        $dong[] = $_orderdetail->Product()->Code;
+                        $dong[] = $_orderdetail->Product()->nameProduct;
+                        $dong[] = $_orderdetail->Product()->Category()->Code;
+                        $dong[] = $_orderdetail->Product()->unitPrice;
+                        $dong[] = $_orderdetail->Product()->Price();
+                        $dong[] = $_orderdetail->Order()->BenhNhan()->Tiensubenh;
+                        $dong[] = $_orderdetail->Number;
+                        $dong[] = $_orderdetail->ThanhTien();
+                        $dong[] = $_orderdetail->Order()->Note ?? "";
+                        $resultData[] =  $dong;
                     }
                 }
             }
         }
-        if (isset($_GET["btnExport"])) {
-            $thongKe = new ThongKe();
-            $fromDate = $_GET["fromDate"] ?? "";
-            $toDate = $_GET["toDate"] ?? "";
-            $result = $thongKe->ThongKeBanHangTheoBenhNhan($fromDate, $toDate);
-            $this->exportthongkekhoabenhnhan($result, $fromDate, $toDate);
-        }
-
-
-
-        $this->ViewTheme(["data" => $resultData, "total" => $total], Model_ViewTheme::get_viewthene(), "");
+        $this->ViewTheme(["data" => $resultData, "param" => $param, "total" => $total], Model_ViewTheme::get_viewthene(), "");
     }
     public function thongkekhoa()
     {

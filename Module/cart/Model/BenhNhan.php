@@ -63,6 +63,13 @@ class BenhNhan extends \Model\Database
         $where  = " 1 = 1 ";
         return $this->SelectPT($where, $indexPage, $pageNumber, $total);
     }
+    public function GetDSMaThe()
+    {
+        // self::$Debug = true;
+        $where  = " 1 = 1 ";
+        self::SetTableName(self::$Tablename);
+        return $this->select(self::$Tablename, ["Sothe"], $where);
+    }
 
     public function ThanhToan()
     {

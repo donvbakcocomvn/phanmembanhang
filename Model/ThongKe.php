@@ -2,6 +2,7 @@
 
 namespace Model;
 
+use Module\cart\Model\BenhNhan;
 use Module\cart\Model\Order as ModelOrder;
 
 
@@ -27,7 +28,20 @@ class ThongKe extends Database
         $param["toDate"] = $param["toDate"] ?? null;
         $param["Status"] = $param["Status"] ?? null;
         $order = new ModelOrder();
-        return $order->GetOrderByDateStatusPT($param, $pageIndex, $pageNumber, $total);
+        $BenhNhan = new BenhNhan();
+        $DSBenhNhan =  $BenhNhan->GetDSMaThe();
+        $data = [];
+        if ($DSBenhNhan) {
+            foreach ($DSBenhNhan as $key => $val) {
+                $DSOrderCoder = $order->ThongKeSanPhamTheoBenhNhan($val["Sothe"], $param["fromDate"], $param["toDate"]);
+                if ($DSOrderCoder) {
+                    foreach ($DSOrderCoder as  $k => $v) {
+                        $data[] = $v;
+                    }
+                }
+            }
+        }
+        return $data;
     }
 
     // BẢNG KÊ BÁN HÀNG CĂN TIN

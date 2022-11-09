@@ -157,10 +157,12 @@ class Controller_index extends Application
     }
     public function thanhtoan()
     {
-        try {
 
-            $thanhToan = new ThanhToan();
-            if (isset($_POST["thanhToan"])) {
+
+        $thanhToan = new ThanhToan();
+        if (isset($_POST["thanhToan"])) {
+            try { 
+                
                 $modelThanhToan = $_POST["thanhToan"];
                 $thonTinBenhNhan = $thanhToan->GetTTBenhnhan($modelThanhToan["MaThe"]);
                 $MaDonHang = $modelThanhToan["MaDonHang"] ?? "";
@@ -182,18 +184,15 @@ class Controller_index extends Application
                 }
                 if ($MaDonHang == "") {
                     throw new Exception("Không tạo được đơn hàng");
-                }
-
-                $modelOrder = new Order($MaDonHang);
-
+                } 
+                $modelOrder = new Order($MaDonHang); 
                 $cart = new Cart();
                 $TongTien = $cart->TotalPrice();
                 $resul = $thanhToan->InsertLSGiaodich(
                     $modelThanhToan["MaThe"],
                     $TongTien,
                     $modelOrder->Id
-                );
-
+                ); 
                 if ($resul) {
                     // var_dump($resul);
                     $resul->InsertLSGiaodichResult;
@@ -215,10 +214,10 @@ class Controller_index extends Application
                     Common::ToUrl("/cart/thanhcong/fail/{$resul->InsertLSGiaodichResult}/");
                     exit();
                 }
+            } catch (\Exception $th) {
+                Error::set($th->getMessage(), Error::Danger);
+                // echo $th->getMessage();
             }
-        } catch (\Exception $th) {
-            Error::set($th->getMessage(), Error::Danger);
-            // echo $th->getMessage();
         }
         $this->ViewTheme([], Model_ViewTheme::get_viewthene());
     }

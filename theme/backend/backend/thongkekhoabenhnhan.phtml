@@ -1,5 +1,6 @@
 <?php
 
+use Common\Common;
 use Model\FormRender;
 use Module\cart\Model\Order;
 use Module\duser\Model\Duser;
@@ -74,6 +75,15 @@ if ($duser->Groups ==  Duser::NhanVien) {
                     ?>
 
                 </table>
+                <div>
+                    <?php
+                    $fromDate = $_GET["fromDate"] ?? null;
+                    $toDate = $_GET["toDate"] ?? null;
+                    $totalPage  = ceil($param["total"] / $param["number"]);
+                    $link = "/backend/thongkekhoabenhnhan/?page=[i]&number={$param["number"]}&fromDate={$fromDate}&toDate={$toDate}&btnLoc=";
+                    echo Common::PhanTrang($totalPage, $param["page"], $link);
+                    ?>
+                </div>
 
             </div>
         </div>

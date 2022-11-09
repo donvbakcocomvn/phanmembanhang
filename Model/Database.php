@@ -26,7 +26,7 @@ class Database extends \Model\iDatabase
     {
         $indexPage = ($indexPage - 1) * $pageNumber;
         $indexPage = max($indexPage, 0);
-        $total = $this->SelectCount($where);
+        $total = $this->SelectCount("where " . $where);
         $where = "{$where} limit {$indexPage},{$pageNumber}";
         return $this->select(self::$Tablename, [], $where);
     }

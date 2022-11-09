@@ -3,6 +3,8 @@
 namespace Module\cart\Model;
 
 use Common\Common;
+use Exception;
+use Model\DB;
 use Model\Sql;
 use Model\ThanhToan;
 use Model_OptionsService;
@@ -167,8 +169,6 @@ class Order extends \Model\Database
         $fromDate = $param["fromDate"] ?? null;
         $toDate = $param["toDate"] ?? null;
         $Status = $param["Status"] ?? null;
-        $pageIndex = min($pageIndex, 1);
-        $pageNumber = min($pageNumber, 20);
         if ($fromDate == null || $toDate == null || $Status == null) {
             return null;
         }
@@ -415,6 +415,38 @@ class Order extends \Model\Database
         $order["TotalPriceVND"] = \lib\Common::MoneyFomat($this->TotalPrice);
         $order["OrderDetail"] = $orderDetail;
         return $order;
+    }
+
+    public function GetOrderByBenhNhan($MaThe, $fromDate, $toDate)
+    {
+        try {
+            if ($MaThe == "") {
+                throw new Exception("không có mã thẻ");
+            }
+            $where = Sql::WhereEq("Status", 5);
+            $where .= Sql::WhereAnd(Sql::WhereBigger("NgayTao", $fromDate));
+            $where .= Sql::WhereAnd(Sql::WhereLess("NgayTao", $toDate));
+            $where .= Sql::WhereAnd(Sql::WhereEq("Name", $MaThe));
+            return $this->select(table_prefix . "order", ["CodeOrder"], $where);
+        } catch (Exception $ex) {
+            return [];
+        }
+    }
+    public function ThongKeSanPhamTheoBenhNhan($MaThe, $fromDate, $toDate)
+    {
+        try {
+            $sql = "SELECT *,SUM(`Number`) as `Total`, (SUM(`Number`)*`Price`) as `ThanhTien` 
+            FROM `bakcodt_orderdetail` WHERE `CodeOrder` in (SELECT `CodeOrder` 
+            FROM `bakcodt_order` 
+            WHERE `Status` = '5' 
+            and `NgayTao` > '{$fromDate} 00:00:00' 
+            and `NgayTao` < '{$toDate} 23:59:59' 
+            and `Name` = '{$MaThe}') GROUP BY `IdProduct`";
+            $this->Query($sql);
+            return $this->fetchAll();
+        } catch (Exception $ex) {
+            return [];
+        }
     }
 
     public function BenhNhan()
