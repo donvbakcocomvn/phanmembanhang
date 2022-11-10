@@ -153,7 +153,29 @@ class ThanhToan
             var_dump($th);
         }
     }
-
+    public function HoanTien(
+        $sothe,
+        $sotien,
+        $noidungGD
+    ) {
+        try {
+            $client = $this->SoapClient();
+            $params = [
+                "Sothe" => $sothe,
+                "Sotien" =>  $sotien,
+                "LoaiGD" => 2,
+                "NoidungGD" =>  "HT: {$noidungGD}",
+                "taikhoan" =>  "vankkhang",
+            ];
+            // $response = $client->__soapCall("InsertLSGiaodich", $params, null, $this->Header());
+            $response = $client->InsertLSGiaodich($params);
+            // var_dump($response);
+            return $response;
+        } catch (Exception $ex) {
+            echo $ex->getMessage();
+        }
+        return null;
+    }
     public function InsertLSGiaodich(
         $sothe,
         $sotien,

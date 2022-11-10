@@ -856,7 +856,7 @@ class Controller_backend extends Application
         $Bread->setBreadcrumb($this->Bread);
         $resultData = [];
         $total = 0;
-
+        $param = [];
         if (isset($_GET["btnExport"])) {
             $thongKe = new ThongKe();
             $fromDate = $_GET["fromDate"] ?? "";
@@ -884,8 +884,7 @@ class Controller_backend extends Application
             $result = $thongKe->ThongKeBanHangTheoBenhNhanPT($param, $pageIndex, $pageNumber, $total);
             $param["total"] = $total;
             $data = [
-                "STT",
-                "Mã Đơn Hàng",
+                "STT", 
                 "Tên Bệnh Nhân",
                 "Mã HH",
                 "Hàng Hóa",
@@ -906,8 +905,7 @@ class Controller_backend extends Application
                     foreach ($orderDetail as $key => $orderdetail) {
                         $_orderdetail = new OrderDetail($orderdetail);
                         $dong = [];
-                        $dong[] = $stt++;
-                        $dong[] = $_orderdetail->CodeOrder;
+                        $dong[] = $stt++; 
                         $dong[] = $_orderdetail->Order()->BenhNhan()->HotenBN;
                         $dong[] = $_orderdetail->Product()->Code;
                         $dong[] = $_orderdetail->Product()->nameProduct;

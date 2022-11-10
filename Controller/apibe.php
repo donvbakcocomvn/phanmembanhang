@@ -4,6 +4,7 @@ use lib\APIs;
 use Model\AdminService;
 use Model\Database;
 use Model\Products;
+use Model\ThanhToan;
 use Module\duser\Model\Duser;
 use Module\cart\Model\OrderService;
 use Module\cart\Model\Order;
@@ -196,7 +197,6 @@ class Controller_apibe extends Controller_backend
 
             $Order = new \Module\cart\Model\Order();
             $_Order = $Order->orderbyid($_POST["Id"]);
-
             echo $_Order = $_Order[0] ?? null;
             if ($_Order == null) {
                 $_Order = $Order->orderbycode($_POST["Id"]);
@@ -210,6 +210,10 @@ class Controller_apibe extends Controller_backend
             if (Duser::KiemTraQuyen([Duser::admin, Duser::QuanLy, Duser::Superadmin]) == false) {
                 throw new Exception("Không có quyền hủy đơn hàng này");
             }
+            if ($_Order["Status"] == \Module\cart\Model\Order::DaThuTien) {
+                $thanhToan = new ThanhToan();
+                $thanhToan->HoanTien($_Order["Name"], $_Order["TotalPrice"], "HT Đơn Hang: {$_Order["CodeOrder"]}");
+            } 
             $_Order["Status"] = \Module\cart\Model\Order::Huy;
             $_Order["Note"] = "[" . $_SESSION[QuanTri]["Username"] . "] Hủy đơn hàng :" . date("Y-m-d H:i:s") . " <br>" . $LyDo . "<br>_______<br>" . $_Order["Note"];
             $_Order["Note"] = str_replace("\"", "", $_Order["Note"]);
