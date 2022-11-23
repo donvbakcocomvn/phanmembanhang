@@ -44,11 +44,11 @@ class OrderService extends \Model\DB implements \Model\IModelStatic
         }
         $tuNgaySql = "";
         if ($TuNgay) {
-            $tuNgaySql = " and `NgayTao` > '{$TuNgay}'";
+            $tuNgaySql = " and `NgayTao` > '{$TuNgay} 00:00:00'";
         }
         $denNgaySql = "";
         if ($DenNgay) {
-            $denNgaySql = " and `NgayTao` < '{$DenNgay}'";
+            $denNgaySql = " and `NgayTao` < '{$DenNgay} 23:59:59'";
         }
         $where = " {$salerSql} {$sqlStatus} {$sqlKeyword} {$sqlKhoaBenh} {$tuNgaySql} {$denNgaySql} order by `NgayTao` desc";
         return $this->SelectPT($where, $indexPage, $pageNumber, $total);

@@ -92,36 +92,42 @@ class Controller_index extends Application
 
     function taodonhang($id, BenhNhan $BenhNhan)
     {
-        $tt = new ThanhToan();
-        $thonTinBenhNhan = $tt->GetTTBenhnhan($id);
-
-        $cart = new Cart();
-        $modelOrder = new \Module\cart\Model\Order();
-        $Order["Name"] = $id;
-        $Order["TotalPrice"] = $cart->TotalPrice();
-        $Order["CodeOrder"] = guid::guidV4();
-        $Order["Email"] = $BenhNhan->Email;
-        $Order["MaBenhNhan"] = $BenhNhan->MaBN;
-        $Order["KhoaBenh"] = $BenhNhan->Tiensubenh;
-        $Order["MaThe"] = $BenhNhan->Sothe;
-        $Order["Status"] = 4;
-        $Order["Saler"] = $_SESSION[QuanTri]["Username"];
-        $Order["Note"] = "";
-        $Order["Tinh"] = 0;
-        $Order["Huyen"] = 0;
-        $Order["Phone"] = $BenhNhan->Sodienthoai;
-        $Order["NgayTao"] = date("Y-m-d H:i:s", time());
-        $Order["Address"] = "";
-        $modelOrder->createOrder($Order);
-        foreach ($cart->Products() as $P) {
-            $OD["Name"] = "Chi Tiết Đơn Hàng " . $Order["CodeOrder"];
-            $OD["Price"] = $P["Price"];
-            $OD["CodeOrder"] = $Order["CodeOrder"];
-            $OD["IdProduct"] = $P["Code"];
-            $OD["Number"] = $P["Number"];
-            $modelOrder->createOrderDetail($OD);
+        try {
+            $cart = new Cart();
+            $modelOrder = new \Module\cart\Model\Order();
+            $Order["Name"] = $id;
+            $Order["TotalPrice"] = $cart->TotalPrice();
+            $Order["CodeOrder"] = guid::guidV4();
+            $Order["Email"] = $BenhNhan->Email;
+            $Order["MaBenhNhan"] = $BenhNhan->MaBN;
+            $Order["KhoaBenh"] = $BenhNhan->Tiensubenh;
+            $Order["MaThe"] = $BenhNhan->Sothe;
+            $Order["Status"] = 4;
+            $Order["Saler"] = $_SESSION[QuanTri]["Username"];
+            $Order["Note"] = "";
+            $Order["Tinh"] = 0;
+            $Order["Huyen"] = 0;
+            $Order["NgaySinh"] = $BenhNhan->Ngaysinh;
+            $Order["Phone"] = $BenhNhan->Sodienthoai;
+            $Order["NgayTao"] = date("Y-m-d H:i:s", time());
+            $Order["Address"] = "";
+            $modelOrder->createOrder($Order);
+            $_order =  $modelOrder->orderbycode($Order["CodeOrder"]);
+            if ($_order == null) {
+                throw new Exception("không tao được đơn hàng");
+            }
+            foreach ($cart->Products() as $P) {
+                $OD["Name"] = "Chi Tiết Đơn Hàng " . $Order["CodeOrder"];
+                $OD["Price"] = $P["Price"];
+                $OD["CodeOrder"] = $Order["CodeOrder"];
+                $OD["IdProduct"] = $P["Code"];
+                $OD["Number"] = $P["Number"];
+                $modelOrder->createOrderDetail($OD);
+            }
+            return $Order;
+        } catch (Exception $ex) {
+            return null;
         }
-        return $Order;
     }
     function taodonhangKhachVangLai($HoTen, $Khoa, $NgaySinh)
     {
@@ -155,26 +161,25 @@ class Controller_index extends Application
         }
         return $Order;
     }
-    public function thanhtoan()
+    public function thanhtoanthe()
     {
-
-
+        $k = $_SESSION["SESSIONThanhToan"] ?? null;
+        if ($k == null) {
+            echo $k;
+            return;
+        }
         $thanhToan = new ThanhToan();
         if (isset($_POST["thanhToan"])) {
-            try { 
-                
+            try {
                 $modelThanhToan = $_POST["thanhToan"];
                 $thonTinBenhNhan = $thanhToan->GetTTBenhnhan($modelThanhToan["MaThe"]);
                 $MaDonHang = $modelThanhToan["MaDonHang"] ?? "";
-                // var_dump($thonTinBenhNhan);
                 $BenhNhan = new BenhNhan($thonTinBenhNhan);
                 $cart = new Cart();
                 $TongTien = $cart->TotalPrice();
                 if ($BenhNhan->Soduthe < $TongTien) {
-                    // không đủ tiền thanh toán
                     throw new Exception("Không đủ tiền thanh toán");
                 }
-                // var_dump($BenhNhan);
                 if ($modelThanhToan["MaThe"] == "") {
                     throw new Exception("Không có mã thẻ");
                 }
@@ -184,24 +189,80 @@ class Controller_index extends Application
                 }
                 if ($MaDonHang == "") {
                     throw new Exception("Không tạo được đơn hàng");
-                } 
-                $modelOrder = new Order($MaDonHang); 
+                }
+                $modelOrder = new Order($MaDonHang);
                 $cart = new Cart();
                 $TongTien = $cart->TotalPrice();
                 $resul = $thanhToan->InsertLSGiaodich(
                     $modelThanhToan["MaThe"],
                     $TongTien,
                     $modelOrder->Id
-                ); 
+                );
                 if ($resul) {
-                    // var_dump($resul);
-                    $resul->InsertLSGiaodichResult;
+                    // $resul->InsertLSGiaodichResult;
                     if ($resul->InsertLSGiaodichResult == 1) {
                         Cart::clearAllCart();
                         $order = new Order();
                         $order->updateOrderStatus($MaDonHang, Order::DaThuTien);
                         $order->updateKhachHang($MaDonHang, $modelThanhToan["MaThe"]);
-                        sleep(1);
+                        Common::ToUrl("/cart/thanhcong/index/" . $MaDonHang . "/");
+                        exit();
+                    } else {
+                        // Số dư không đủ để thanh toán
+                        Common::ToUrl("/cart/thanhcong/fail/{$resul->InsertLSGiaodichResult}/");
+                        exit();
+                    }
+                } else {
+                    // Số dư không đủ để thanh toán
+                    Common::ToUrl("/cart/thanhcong/fail/{$resul->InsertLSGiaodichResult}/");
+                    exit();
+                }
+            } catch (\Exception $th) {
+                Error::set($th->getMessage(), Error::Danger);
+                // echo $th->getMessage();
+            }
+        }
+    }
+    public function thanhtoan()
+    {
+        $thanhToan = new ThanhToan();
+      
+        if (isset($_POST["thanhToan"])) {
+            try {
+                $modelThanhToan = $_POST["thanhToan"];
+                $thonTinBenhNhan = $thanhToan->GetTTBenhnhan($modelThanhToan["MaThe"]);
+                $MaDonHang = $modelThanhToan["MaDonHang"] ?? "";
+                $BenhNhan = new BenhNhan($thonTinBenhNhan);
+                $cart = new Cart();
+                $TongTien = $cart->TotalPrice();
+                if ($BenhNhan->Soduthe < $TongTien) {
+                    throw new Exception("Không đủ tiền thanh toán");
+                }
+                if ($modelThanhToan["MaThe"] == "") {
+                    throw new Exception("Không có mã thẻ");
+                }
+                if ($MaDonHang == "") {
+                    $donhang = $this->taodonhang($modelThanhToan["MaThe"], $BenhNhan);
+                    $MaDonHang = $donhang["CodeOrder"];
+                }
+                if ($MaDonHang == "") {
+                    throw new Exception("Không tạo được đơn hàng");
+                }
+                $modelOrder = new Order($MaDonHang);
+                $cart = new Cart();
+                $TongTien = $cart->TotalPrice();
+                $resul = $thanhToan->InsertLSGiaodich(
+                    $modelThanhToan["MaThe"],
+                    $TongTien,
+                    $modelOrder->Id
+                );
+                if ($resul) {
+                    // $resul->InsertLSGiaodichResult;
+                    if ($resul->InsertLSGiaodichResult == 1) {
+                        Cart::clearAllCart();
+                        $order = new Order();
+                        $order->updateOrderStatus($MaDonHang, Order::DaThuTien);
+                        $order->updateKhachHang($MaDonHang, $modelThanhToan["MaThe"]);
                         Common::ToUrl("/cart/thanhcong/index/" . $MaDonHang . "/");
                         exit();
                     } else {

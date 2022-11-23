@@ -44,6 +44,13 @@ class ThongKe extends Database
         return $data;
     }
 
+    public function ClearOrderDetail()
+    {
+        $sql = "DELETE FROM `bakcodt_orderdetail` WHERE `CodeOrder` not in (SELECT `CodeOrder` FROM `bakcodt_order`)";
+        $this->Query($sql);
+        return $this->Luu();
+    }
+
     // BẢNG KÊ BÁN HÀNG CĂN TIN
     public function ThongKeBanHangCangTin($TuNgay, $DenNgay, $KhoaBenh = null, $DanhMuc = null)
     {
@@ -70,11 +77,10 @@ class ThongKe extends Database
         ,od.Price
         ,SUM(od.Number) as `SoLuong` FROM `bakcodt_orderdetail` as od,`bakcodt_order` as o,`bakcodt_product` as p
         where  o.NgayTao > '{$TuNgay}' and o.NgayTao < '{$DenNgay}'
-         and od.IdProduct = p.Code and od.CodeOrder = o.CodeOrder
-         and o.Status = 5
+         and od.IdProduct = p.Code and od.CodeOrder = o.CodeOrder and o.Status = 5
          {$KhoaBenhSql} 
          {$DanhMucSql} 
-        GROUP BY od.IdProduct ,o.KhoaBenh";
+        GROUP BY od.IdProduct";
         $this->Query($sql);
         return $this->fetchAssoc();
     }

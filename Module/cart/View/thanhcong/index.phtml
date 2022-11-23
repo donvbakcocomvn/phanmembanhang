@@ -8,6 +8,7 @@
         use Module\cart\Model\Order;
 
         $order = new Order($_Param[0]);
+        
         $Cart = new Cart();
         $thanhToan = new ThanhToan();
         $Products = $order->ProductsByDonHang();

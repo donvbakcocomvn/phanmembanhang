@@ -44,26 +44,48 @@ class vieworder extends \Controller_backend
         $this->Breadcrumb->setBreadcrumb($this->Bread);
         $this->ViewThemeModule("", "", "");
     }
-
-    public function dongbo()
+    public function install()
     {
-        $_order = new Order();
+        $modelBenhNhan = new BenhNhan();
+        $modelBenhNhan->CreateViewKhoaBenh();
+    }
+    public function DongboAjax()
+    {
 
+        $_order = new Order();
         $cardIds = $_order->GetDanhSachMaThe();
         foreach ($cardIds as $key => $value) {
             $thanhToan = new ThanhToan();
             $benhNhan = $thanhToan->GetTTBenhnhan($value["Name"]);
             $_benhNhan = new BenhNhan();
-            if ($benhNhan) {
+            $_benhNhanDetail = $_benhNhan->GetByMaBN($benhNhan["MaBN"]);
+            if ($_benhNhanDetail == null) {
                 $_benhNhan->Post($benhNhan);
+            } else {
+                $_benhNhan->Put($benhNhan);
             }
-        } 
+        }
+    }
+    public function dongbo()
+    {
+
+
         $_benhNhan = new BenhNhan();
         $indexPage = $_GET["page"] ?? 1;
-        $pageNumber = $_GET["number"] ?? 100;
-        $items = $_benhNhan->GetItems([], $indexPage, $pageNumber, $total);
+        $khoabenh = $_GET["khoabenh"] ?? "";
+        $pageNumber = $_GET["number"] ?? 20;
+        $params["page"] = $indexPage;
+        $params["khoabenh"] = $khoabenh;
+        $params["number"] = $pageNumber;
 
-        $this->ViewThemeModule(["Items" => $items], "", "");
+        $items = $_benhNhan->GetItems($params, $indexPage, $pageNumber, $total);
+        $totalPage = ceil($total / $pageNumber);
+        $this->ViewThemeModule([
+            "totalPage" => $totalPage,
+            "Items" => $items,
+            "total" => $total,
+            "params" => $params
+        ], "", "");
     }
 
     function googleform()

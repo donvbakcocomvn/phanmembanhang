@@ -419,6 +419,12 @@ class backend extends \Model\Database
                                         <span>Thông tin công ty</span>
                                     </a>
                                 </li>
+                                <li class="treeview">
+                                    <a href="/cart/vieworder/dongbo/">
+                                        <i class="fa fa-list-alt"></i>
+                                        <span>Bệnh Nhân</span>
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="/cart/mcart/trangnoidung/">
                                         <i class="fa fa-gear"></i>

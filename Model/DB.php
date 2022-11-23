@@ -46,6 +46,22 @@ class DB
             echo "Fail";
         }
     }
+    static public function runsqlConTent($query)
+    {
+        global $INI;
+        $mysql_host = $INI['host'];
+        $mysql_database = $INI['DBname'];
+        $mysql_user = $INI['username'];
+        $mysql_password = $INI['password'];
+        $db = new \PDO("mysql:host=$mysql_host;dbname=$mysql_database", $mysql_user, $mysql_password, array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+        $query = str_replace("bakcodt_", table_prefix, $query);
+        $stmt = $db->prepare($query);
+        if ($stmt->execute()) {
+            echo "Success";
+        } else {
+            echo "Fail";
+        }
+    }
 
     protected function GetRows($sql)
     {

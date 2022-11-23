@@ -5,6 +5,7 @@ use Model\AdminService;
 use Model\Database;
 use Model\Products;
 use Model\ThanhToan;
+use Module\cart\Model\BenhNhanKhoaBenh;
 use Module\duser\Model\Duser;
 use Module\cart\Model\OrderService;
 use Module\cart\Model\Order;
@@ -212,8 +213,9 @@ class Controller_apibe extends Controller_backend
             }
             if ($_Order["Status"] == \Module\cart\Model\Order::DaThuTien) {
                 $thanhToan = new ThanhToan();
-                $thanhToan->HoanTien($_Order["Name"], $_Order["TotalPrice"], "HT Đơn Hang: {$_Order["CodeOrder"]}");
-            } 
+                $thanhToan->HoanTien($_Order["Name"], $_Order["TotalPrice"], "HT Đơn Hang: {$_Order["Id"]}");
+                sleep(1);
+            }
             $_Order["Status"] = \Module\cart\Model\Order::Huy;
             $_Order["Note"] = "[" . $_SESSION[QuanTri]["Username"] . "] Hủy đơn hàng :" . date("Y-m-d H:i:s") . " <br>" . $LyDo . "<br>_______<br>" . $_Order["Note"];
             $_Order["Note"] = str_replace("\"", "", $_Order["Note"]);
@@ -235,7 +237,11 @@ class Controller_apibe extends Controller_backend
         $orderId = $this->getParam()[0];
         $order = new \Module\cart\Model\Order();
         // Database::$Debug = 1;
-        $orderDetail = $order->orderbycode($orderId);
+        $orderDetail = $order->orderbyid($orderId);
+        if ($orderDetail == null) {
+            $orderDetail = $order->orderbycode($orderId);
+        }
+
         if ($orderDetail == FALSE) {
             return null;
         }
@@ -402,6 +408,15 @@ class Controller_apibe extends Controller_backend
         $Model_OptionsService =  new Model_OptionsService();
         $total = 0;
         $options = $Model_OptionsService->GetItems(["GroupsId" => "khoa"], 1, 100, $total);
+        // $benhNhan = new BenhNhanKhoaBenh();
+        // $benhNhans = $benhNhan->GetItems([], 1, 100, $total);
+        // $a = [];
+        // foreach ($benhNhans as $k => $v) {
+        //     $item = [];
+        //     $item["Val"] = $v["Val"];
+        //     $item["Name"] = $v["Name"];
+        //     $a[] = $item;
+        // }
         echo lib\APIs::Json_Encode($options);
     }
 

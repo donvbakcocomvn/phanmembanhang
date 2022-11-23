@@ -30,7 +30,10 @@ class OrderDetail extends \Model\Database
         $this->Number = $order["Number"] ?? null;
     }
 
-
+    public function ThanhTienNoFomat()
+    {
+        return $this->Price * $this->Number;
+    }
     public function ThanhTien()
     {
         return Common::MoneyFomat($this->Price * $this->Number);

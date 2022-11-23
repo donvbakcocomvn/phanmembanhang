@@ -58,25 +58,23 @@ class Order extends \Model\Database
                     $order = $this->orderbycode($id)[0] ?? null;
                 }
             }
-            if ($order) {
-                $this->Id = $order["Id"];
-                $this->Name = $order["Name"];
-                $this->MaBenhNhan = $order["MaBenhNhan"];
-                $this->TotalPrice = $order["TotalPrice"];
-                $this->CodeOrder = $order["CodeOrder"];
-                $this->Email = $order["Email"];
-                $this->Phone = $order["Phone"];
-                $this->KhoaBenh = $order["KhoaBenh"];
-                $this->Status = $order["Status"];
-                $this->Note = $order["Note"];
-                $this->Tinh = $order["Tinh"];
-                $this->Huyen = $order["Huyen"];
-                $this->Address = $order["Address"];
-                $this->NgayTao = $order["NgayTao"];
-                $this->Saler = $order["Saler"];
-                $this->NgaySinh = $order["NgaySinh"];
-            }
         }
+        $this->Id = $order["Id"] ?? null;
+        $this->Name = $order["Name"] ?? null;
+        $this->MaBenhNhan = $order["MaBenhNhan"] ?? null;
+        $this->TotalPrice = $order["TotalPrice"] ?? null;
+        $this->CodeOrder = $order["CodeOrder"] ?? null;
+        $this->Email = $order["Email"] ?? null;
+        $this->Phone = $order["Phone"] ?? null;
+        $this->KhoaBenh = $order["KhoaBenh"] ?? null;
+        $this->Status = $order["Status"] ?? null;
+        $this->Note = $order["Note"] ?? null;
+        $this->Tinh = $order["Tinh"] ?? null;
+        $this->Huyen = $order["Huyen"] ?? null;
+        $this->Address = $order["Address"] ?? null;
+        $this->NgayTao = $order["NgayTao"] ?? null;
+        $this->Saler = $order["Saler"] ?? null;
+        $this->NgaySinh = $order["NgaySinh"] ?? null;
     }
 
     public function GetIdCard()
@@ -126,7 +124,7 @@ class Order extends \Model\Database
 
     function createOrder($Order)
     {
-        $this->insert(table_prefix . "order", $Order);
+       return $this->insert(table_prefix . "order", $Order);
     }
 
     public function GetKhaoBenh()

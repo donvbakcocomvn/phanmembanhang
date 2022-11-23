@@ -298,7 +298,7 @@ class Common
     public static function CheckId($formUser)
     {
         return self::ChekId($formUser);
-    } 
+    }
     public static function NumberToStringFomatZero($value, $numString = 6)
     {
         return str_pad($value, $numString, '0', STR_PAD_LEFT);
@@ -320,7 +320,16 @@ class Common
     {
         return "cache/" . sha1($url) . ".html";;
     }
-
+    static public function LinkPhanTrang($url, $params, $pageIndex = "page")
+    {
+        $urlsub = "";
+        unset($params[$pageIndex]);
+        foreach ($params as $k => $v) {
+            $urlsub .= "&{$k}={$v}";
+        }
+        $urlsub = substr($urlsub, 1);
+        return "{$url}?{$urlsub}&{$pageIndex}=[i]";
+    }
     public static function PhanTrang($TongTrang, $TrangHienTai, $DuongDan)
     {
         $PhanTrang = ' <ul class="pagination mt-10 mb-0">';

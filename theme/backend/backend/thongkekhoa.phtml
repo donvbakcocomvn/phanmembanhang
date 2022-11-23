@@ -6,15 +6,19 @@ use Module\duser\Model\Duser;
 use PFBC\Element\Select;
 
 $order = new Order();
-$KhoaBenh = $order->GetKhaoBenh();
-$options[""] = "Tất cả";
-foreach ($KhoaBenh as $key => $value) {
-    if ($value["KhoaBenh"] != "")
-        $options[$value["KhoaBenh"]] = $value["KhoaBenh"];
-}
+$Model_OptionsService =  new Model_OptionsService();
+$total = 0;
+// $options[""] = "Tất cả";
+// $options = $Model_OptionsService->GetItems(["GroupsId" => "khoa"], 1, 100, $total);
+$options = $Model_OptionsService->GetGroupsToSelect("khoa");
+
+// foreach ($options as $key => $value) {
+//     $options[$value["KhoaBenh"]] = $value["KhoaBenh"];
+// }
+$_GeTKhoaBenh = $_GET["KhoaBenh"] ?? "";
 $prop["class"] = "form-control";
 $duser = Duser::CurentUsernameAdmin(true);
-$prop["value"] = $duser->Groups;
+$prop["value"] = $_GeTKhoaBenh;
 $Danhmuc = new FormRender(new Select("Khoa bệnh", "KhoaBenh", $options, $prop));
 
 if ($duser->Groups ==  Duser::NhanVien) {

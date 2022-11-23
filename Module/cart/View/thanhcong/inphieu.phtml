@@ -7,7 +7,6 @@
         }
     }
 
-
     .content-orderdetail {
         font-size: 18px;
     }
@@ -114,7 +113,7 @@ $order = new Order($id);
 $thanhToan = new ThanhToan();
 $orderDetail = $order->orderDetailbyid($id);
 // $thongTinKhachHang = $order->BenhNhan();
-// var_dump($thongTinKhachHang);
+// var_dump($order->BenhNhan()->KhoaBenh()->Name);
 // echo $order->Name;
 $thongTinKhachHang = $thanhToan->GetTTBenhnhan($order->Name);
 $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
@@ -147,7 +146,7 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
                 </tr>
                 <tr>
                     <td class="temporary-title">Nhân viên phục vụ:</td>
-                    <td class="temporary-title"><?php echo $order->Saler ?? "N/A"; ?></td>
+                    <td class="temporary-title"><?php echo $order->Saler()->Name ?? "N/A"; ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Năm sinh:</td>
@@ -155,7 +154,7 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
                 </tr>
                 <tr>
                     <td class="temporary-title">Khoa:</td>
-                    <td class="temporary-title"><?php echo $thongTinKhachHang["Tiensubenh"] ?? $order->KhoaBenh; ?></td>
+                    <td class="temporary-title"><?php echo $order->BenhNhan()->KhoaBenh()->Name ?? $order->BenhNhan()->KhoaBenh ?? "N/A" ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Mã bệnh nhân:</td>

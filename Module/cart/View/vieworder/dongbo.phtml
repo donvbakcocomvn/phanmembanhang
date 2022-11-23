@@ -1,27 +1,140 @@
- <div class="panel">
-     <div class="panel-heading">
-         <h3 class="panel-title">Danh sách bệnh nhân </h3>
-     </div>
-     <div class="panel-body">
-         <table class="table table-bordered">
-             <tbody>
-                 <tr>
-                     <td>MaBN</td>
-                     <td>Sothe</td>
-                     <td>HotenBN</td>
-                     <td>Ngaysinh</td>
-                     <td>Gioitinh</td>
-                     <td>Diachi</td>
-                     <td>Sodienthoai</td>
-                     <td>SoCMT</td>
-                     <td>Ngaycap</td>
-                     <td>Noicap</td>
-                     <td>Email</td>
-                     <td>Nhommau</td>
-                     <td>Tiensubenh</td>
-                     <td>Soduthe</td>
-                 </tr>
-             </tbody>
-         </table>
-     </div>
- </div>
+<?php
+
+use Common\Common;
+use Module\cart\Model\BenhNhan;
+use Module\cart\Model\BenhNhanFilter;
+
+$_benhNhan = new BenhNhan();
+?>
+<div class="panel">
+    <div class="panel-heading">
+        <button id="btnSysn" type="button" class="pull-right btn btn-success">
+            Đồng bộ
+        </button>
+        <h3 class="panel-title">Danh sách bệnh nhân (<?php echo $total; ?>) </h3>
+
+    </div>
+    <div class="panel-body">
+
+        <div role="tabpanel">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#DanhSachBenhNhan" aria-controls="DanhSachBenhNhan" role="tab" data-toggle="tab">
+                            Danh Sách Bệnh Nhân
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#ThongKeKhoa" aria-controls="ThongKeKhoa" role="tab" data-toggle="tab">
+                            Thống Kê Khoa Bệnh
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="DanhSachBenhNhan">
+                        <div class="table-responsive">
+
+                            <form action="/cart/vieworder/dongbo/" method="get">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <?php
+                                        BenhNhanFilter::khoabenh($params["khoabenh"])->renderHTML();
+                                        ?>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button style="margin-top: 25px;" class="btn btn-success">
+                                            Lọc
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <?php
+                                        foreach ($_benhNhan->TitleData() as $key => $title) {
+                                        ?>
+                                            <td><?php echo $title; ?></td>
+                                        <?php
+                                        }
+                                        ?>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    foreach ($Items as $key => $benhnhan) {
+                                        $_benhNhan = new BenhNhan($benhnhan);
+                                        $_items = (array) $_benhNhan;
+                                    ?>
+                                        <tr>
+                                            <?php
+                                            foreach ($_items  as $key => $value) {
+                                            ?>
+                                                <td><?php 
+                                                    if (is_numeric($value)) {
+                                                        echo number_format($value, 0, ".", " ");
+                                                    } else {
+                                                        echo $value;
+                                                    } 
+                                                    ?></td>
+                                            <?php
+                                            }
+                                            ?>
+
+                                        </tr>
+                                    <?php
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?php
+                        $link = Common::LinkPhanTrang("/cart/vieworder/dongbo/", $params);
+                        echo Common::PhanTrang($totalPage,  $params["page"], $link);
+                        ?>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="ThongKeKhoa">
+                        <div class="row">
+                            <?php
+                            foreach ($_benhNhan->BenhNhanTheoKhoaBenh() as $key => $value) {
+                            ?>
+                                <div class="col-md-3">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Khoa: <?php echo $value["Name"]; ?></span>
+                                            <span class="info-box-number">Số bệnh nhân: <?php echo $value["BenhNhan"]; ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php
+                            }
+                            ?>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script>
+    $(function() {
+        $("#btnSysn").click(function() {
+            $("#btnSysn").attr("disabled", true);
+            $("#btnSysn").html("đang đồng bộ");
+            $.ajax({
+                type: "get",
+                url: "/cart/vieworder/DongboAjax/",
+                dataType: "text",
+                success: function(response) {
+                    $("#btnSysn").removeAttr("disabled");
+                    $("#btnSysn").html("đồng bộ");
+                }
+            });
+        });
+    });
+</script>

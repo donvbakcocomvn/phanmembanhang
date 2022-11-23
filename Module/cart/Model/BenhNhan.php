@@ -2,6 +2,9 @@
 
 namespace Module\cart\Model;
 
+use Model\DB;
+use Model_OptionsService;
+
 class BenhNhan extends \Model\Database
 {
     public $MaBN;
@@ -48,6 +51,24 @@ class BenhNhan extends \Model\Database
         $this->Soduthe = $bn["Soduthe"] ?? null;
     }
 
+    public function TitleData()
+    {
+        $a["MaBN"] = "Mã Bệnh Nhân";
+        $a["Sothe"] = "Số Thẻ";
+        $a["HotenBN"] = "Họ Tên BN";
+        $a["Ngaysinh"] = "Ngày Sinh";
+        $a["Gioitinh"] = "Giới Tính";
+        $a["Diachi"] = "Địa Chỉ";
+        $a["Sodienthoai"] = "SDT";
+        $a["SoCMT"] = "SoCMT";
+        $a["Ngaycap"] = "Ngày Cấp";
+        $a["Noicap"] = "Nơi Cấp";
+        $a["Email"] = "Email";
+        $a["Nhommau"] = "Nhóm Máu";
+        $a["Tiensubenh"] = "Khoa";
+        $a["Soduthe"] = "Số Dư Thẻ";
+        return $a;
+    }
     public function GetByMaBN($id)
     {
         $where  = " `MaBN` = '{$id}' ";
@@ -57,10 +78,22 @@ class BenhNhan extends \Model\Database
         return null;
     }
 
+    public function KhoaBenh()
+    {
+        $m =  new Model_OptionsService();
+        $a = $m->GetByKeyValue($this->Tiensubenh, "khoa");
+        return new Model_OptionsService($a);
+    }
+
     public function GetItems($params, $indexPage, $pageNumber, &$total)
     {
         $name = $params["name"] ?? "";
-        $where  = " 1 = 1 ";
+        $khoabenh = $params["khoabenh"] ?? "";
+        $khoabenhsql = "";
+        if ($khoabenh) {
+            $khoabenhsql = "and `Tiensubenh` = '{$khoabenh}'";
+        }
+        $where  = " 1=1  $khoabenhsql";
         return $this->SelectPT($where, $indexPage, $pageNumber, $total);
     }
     public function GetDSMaThe()
@@ -112,5 +145,27 @@ class BenhNhan extends \Model\Database
         $a["Tiensubenh"] = $this->Tiensubenh ?? null;
         $a["Soduthe"] = $this->Soduthe ?? null;
         return $a;
+    }
+
+    public function CreateViewKhoaBenh()
+    {
+        $sql = <<<SQL
+        DROP TABLE IF EXISTS `bakcodt_view_khoabenh`;
+        DROP VIEW IF EXISTS `bakcodt_view_khoabenh`;
+        CREATE VIEW `bakcodt_view_khoabenh`  AS SELECT DISTINCT  `Tiensubenh` AS `Name` FROM `bakcodt_benhnhan` ORDER BY `Tiensubenh` ASC ;
+        COMMIT;
+        DROP VIEW IF EXISTS `bakcodt_view_benhnhantheokhoa`;
+        CREATE VIEW `bakcodt_view_benhnhantheokhoa`  AS SELECT  `Tiensubenh` AS `Name`, count(0) AS `BenhNhan` FROM `bakcodt_benhnhan` GROUP BY  `Tiensubenh` ;
+        COMMIT;
+SQL;
+        $db = new DB();
+        $db->runsqlConTent($sql);
+    }
+
+    public function BenhNhanTheoKhoaBenh()
+    {
+        $sql = "SELECT * FROM `bakcodt_view_benhnhantheokhoa`";
+        $this->Query($sql);
+        return $this->fetchAssoc();
     }
 }

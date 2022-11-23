@@ -26,6 +26,9 @@ class Controller_backend extends Application
             "link" => "/backend/"
         ];
         Model_ViewTheme::set_viewthene("backend");
+
+        // $thongKe = new ThongKe();
+        // $thongKe->ClearOrderDetail();
     }
 
     function index()
@@ -220,7 +223,7 @@ class Controller_backend extends Application
                     $dong["DanhMuc"] = $p->Category()->Code;
                     $dong["DVT"] = $row["unitPrice"];
                     $dong["MaHang"] = $row["Code"];
-                    $dong["GiaBan"] = Common::NumberFomat($row["Price"]);
+                    $dong["GiaBan"] = $row["Price"];
                     $dong["SoLuong"] = $row["SoLuong"];
                     $thanhTien = $row["Price"] * $row["SoLuong"];
                     $dong["ThanhTien"] = $thanhTien;
@@ -340,7 +343,7 @@ class Controller_backend extends Application
                     $dong["DanhMuc"] = $p->Category()->Code;
                     $dong["DVT"] = $row["unitPrice"];
                     $dong["MaHang"] = $row["Code"];
-                    $dong["GiaBan"] = Common::NumberFomat($row["Price"]);
+                    $dong["GiaBan"] = $row["Price"];
                     $dong["SoLuong"] = $row["SoLuong"];
                     $thanhTien = $row["Price"] * $row["SoLuong"];
                     $dong["ThanhTien"] = $thanhTien;
@@ -507,7 +510,7 @@ class Controller_backend extends Application
                     $dong["DanhMuc"] = $p->Category()->Code;
                     $dong["DVT"] = $row["unitPrice"];
                     $dong["MaHang"] = $row["Code"];
-                    $dong["GiaBan"] = Common::NumberFomat($row["Price"]);
+                    $dong["GiaBan"] = $row["Price"];
                     $dong["SoLuong"] = $row["SoLuong"];
                     $thanhTien = $row["Price"] * $row["SoLuong"];
                     $dong["ThanhTien"] = $thanhTien;
@@ -789,10 +792,10 @@ class Controller_backend extends Application
                 $dong[] = $_orderdetail->Product()->nameProduct;
                 $dong[] = $_orderdetail->Product()->Category()->Code;
                 $dong[] = $_orderdetail->Product()->unitPrice;
-                $dong[] = $_orderdetail->Product()->Price();
+                $dong[] = $_orderdetail->Product()->Price;
                 $dong[] = $_orderdetail->Order()->BenhNhan()->Tiensubenh;
                 $dong[] = $_orderdetail->Number;
-                $dong[] = $_orderdetail->ThanhTien();
+                $dong[] = $_orderdetail->ThanhTienNoFomat();
                 $dong[] = $_orderdetail->Order()->Note ?? "";
                 $resultData[] =  $dong;
                 $indexBoder++;
@@ -884,7 +887,7 @@ class Controller_backend extends Application
             $result = $thongKe->ThongKeBanHangTheoBenhNhanPT($param, $pageIndex, $pageNumber, $total);
             $param["total"] = $total;
             $data = [
-                "STT", 
+                "STT",
                 "Tên Bệnh Nhân",
                 "Mã HH",
                 "Hàng Hóa",
@@ -905,7 +908,7 @@ class Controller_backend extends Application
                     foreach ($orderDetail as $key => $orderdetail) {
                         $_orderdetail = new OrderDetail($orderdetail);
                         $dong = [];
-                        $dong[] = $stt++; 
+                        $dong[] = $stt++;
                         $dong[] = $_orderdetail->Order()->BenhNhan()->HotenBN;
                         $dong[] = $_orderdetail->Product()->Code;
                         $dong[] = $_orderdetail->Product()->nameProduct;
@@ -971,10 +974,6 @@ class Controller_backend extends Application
                 $KhoaBenh = $_REQUEST["KhoaBenh"] ?? null;
                 $thongKe = new ThongKe();
 
-                // $TuNgay = date("Y-m-d 00:00:00", strtotime($fromDate));
-                // $DenNgay = date("Y-m-d 23:59:59", strtotime($toDate));
-                // var_dump($TuNgay);
-                // var_dump($DenNgay);
                 $result = $thongKe->ThongKeBanHangCangTin($fromDate, $toDate, $KhoaBenh);
 
                 $tuNgay = date("d-m-Y", strtotime($fromDate));

@@ -46,7 +46,7 @@ class Controller_options extends Controller_backend
     }
     public function put()
     {
- 
+
         $this->Bread[] = [
             "title" => "Sửa",
             "link" => "/options/khoa/put"
@@ -73,7 +73,7 @@ class Controller_options extends Controller_backend
         $params["GroupsId"] = "khoa";
         $indexPage = isset($_GET["indexPage"]) ? intval($_GET["indexPage"]) : 1;
         $indexPage = max(1, $indexPage);
-        $pageNumber = isset($_GET["pageNumber"]) ? intval($_GET["pageNumber"]) : 10;
+        $pageNumber = isset($_GET["pageNumber"]) ? intval($_GET["pageNumber"]) : 50;
         $pageNumber = max(1, $pageNumber);
         $total = 0;
         $items = $options->GetItems($params, $indexPage, $pageNumber, $total);

@@ -21,12 +21,12 @@
               <?php
                 }
                 ?>
-              <form action="" method="POST">
+              <form action="" id="FormThanhToan" method="POST">
                   <div class="form-group">
                       <label for="">Nhập thẻ</label>
-                      <input ng-model="maThe" required value="" type="password" style="font-size: 2em;padding: 30px;line-height: 30px;text-align: center;" id="MaThe" type="text" autofocus name="thanhToan[MaThe]" placeholder="Nhập mã thẻ ***" class="form-control">
+                      <input required type="password" style="font-size: 2em;padding: 30px;line-height: 30px;text-align: center;" id="MaThe" type="text" autofocus name="thanhToan[MaThe]" placeholder="Nhập mã thẻ ***" class="form-control">
                   </div>
-                  <button class="btn btn-success">Xác Nhận</button>
+                  <!-- <button class="btn btn-success">Xác Nhận</button> -->
               </form>
               <table style="margin-top: 20px;" class="table table-bordered table-responsive cart_summary">
                   <thead>
@@ -80,6 +80,20 @@
   </div>
   <script>
       $(function() {
+          var IsSubmit = true;
+          $("#FormThanhToan").submit(function() {
+              try {
+                  if (IsSubmit == false) {
+                      console.log("Đã thanh toán");
+                      return false;
+                  }
+                  IsSubmit = false;
+                  console.log("đang thanh toán");
+                  return true;
+              } catch (error) {
+                  return false;
+              }
+          });
           document.getElementById("MaThe").focus();
       })
   </script>
