@@ -53,23 +53,18 @@ if (\Module\duser\Model\Duser::KiemTraQuyen([
                         <label for="">SĐT</label>
                         <input type="text" value="<?php echo $User->Phone; ?>" class="form-control" name="user[Phone]" placeholder="SĐT">
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <?php
-                            FormUser::Groups($User->Groups)->renderHTML();
-                            ?>
-
-                        </div>
-                        <div class="col-md-6">
-                            <?php
-                            FormUser::KhoaBenh($User->KhoaBenh)->renderHTML();
-                            ?>
-                        </div>
+                    <?php
+                    FormUser::Groups($User->Groups)->renderHTML();
+                    ?>
+                    <div class="col-md-12">
+                        <?php
+                        FormUser::KhoaBenh($User->KhoaBenhVal())->renderHTML();
+                        ?>
                     </div>
                     <?php
                     FormUser::Address($User->Address)->renderHTML();
                     FormUser::Note($User->Note)->renderHTML();
-                    ?> 
+                    ?>
                     <div class="form-group">
                         <label for=""></label>
                         <?php

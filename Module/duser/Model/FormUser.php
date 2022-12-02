@@ -4,6 +4,7 @@ namespace Module\duser\Model;
 
 use Model\FormRender;
 use Model_OptionsService;
+use PFBC\Element\Checkbox;
 use PFBC\Element\Select;
 use PFBC\Element\Textbox;
 use PFBC\Element\Textarea;
@@ -24,12 +25,11 @@ class FormUser
     }
     public static function KhoaBenh($val = null)
     {
-        $prop = self::prop;
         $prop["value"] = $val;
-        $name = self::GetName(__FUNCTION__);
+        $prop["id"] = "Khoa Bệnh";
+        $name = self::GetName(__FUNCTION__)."[]";
         $options = Model_OptionsService::GetGroupsToSelect("khoa");
-        $options = ["" => "Chọn khoa"] + $options;
-        return new FormRender(new Select("Khoa", $name, $options, $prop));
+        return new FormRender(new Checkbox("Khoa", $name, $options, $prop));
     }
     public static function Address($val = null)
     {

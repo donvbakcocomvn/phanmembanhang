@@ -53,10 +53,24 @@ class Duser extends \Model\Admin
             $this->KhoaBenh = isset($NhanVien['KhoaBenh']) ? $NhanVien['KhoaBenh'] : "";
         }
     }
+    public function KhoaBenhVal()
+    {
+        $a = json_decode($this->KhoaBenh, JSON_UNESCAPED_UNICODE) ?? [];
+
+        return $a;
+    }
 
     function KhoaBenh()
     {
-        return  new Model_OptionsService(Model_OptionsService::GetByValueGroups($this->KhoaBenh, "khoa"));
+        // danh sách khoa bệnh
+        $danhSach = $this->KhoaBenhVal();
+        $a = [];
+        foreach ($danhSach as $key => $value) {
+            $a[] = new Model_OptionsService(
+                Model_OptionsService::GetByValueGroups($value, "khoa")
+            );
+        }
+        return $a;
     }
     function CheckLogin($Username, $Password, $isobj = true)
     {

@@ -22,8 +22,9 @@ $prop["value"] = $_GeTKhoaBenh;
 $Danhmuc = new FormRender(new Select("Khoa bệnh", "KhoaBenh", $options, $prop));
 
 if ($duser->Groups ==  Duser::NhanVien) {
-    $prop[FormRender::Disabled] = "true";
-    $prop["value"] = $duser->KhoaBenh;
+    // $prop[FormRender::Disabled] = "true";
+    $prop["value"] = $duser->KhoaBenh; 
+    $options = Model_OptionsService::GetGroupsToSelectAndListVal("khoa", $duser->KhoaBenhVal()); 
     $Danhmuc = new FormRender(new Select("Khoa bệnh", "KhoaBenh", $options, $prop));
 }
 

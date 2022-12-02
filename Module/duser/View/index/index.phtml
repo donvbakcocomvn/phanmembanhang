@@ -54,7 +54,14 @@ $DSOption = $Model_Duser->Admins(FALSE);
                                 <?php echo $User["Phone"] ?>
                             </a>
                         </td>
-                        <td><?php echo $_User->KhoaBenh()->Name; ?></td>
+                        <td>
+                            <?php
+                            foreach ($_User->KhoaBenh() as $key => $value) {
+                                echo "<label class='label label-primary' >{$value->Name}</label>";
+                            }
+                            ?>
+
+                        </td>
                         <td><?php echo $User["Note"] ?></td>
 
                     </tr>

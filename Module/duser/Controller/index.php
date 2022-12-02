@@ -96,7 +96,7 @@ class index extends \Controller_backend
             $_user["Phone"] = $userInfor["Phone"];
             $_user["Email"] = $userInfor["Email"];
             $_user["Groups"] = $userInfor["Groups"];
-            $_user["KhoaBenh"] = $userInfor["KhoaBenh"];
+            $_user["KhoaBenh"] = json_encode($userInfor["KhoaBenh"]??[]);
             $_user["Address"] = $userInfor["Address"];
             $_user["Note"] = $userInfor["Note"];
             $Duser->UpdateInfor($_user);

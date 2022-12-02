@@ -61,6 +61,15 @@ class Model_OptionsService extends DB
         $where = "`GroupsId` = '{$params["GroupsId"]}' and `Name` like '%{$params["keyword"]}%'";
         return $this->SelectPT($where, $indexPage, $pageNumber, $total);
     }
+    public function GetItemsInList($GroupsId, $listVal)
+    {
+        $listValstr = $listVal;
+        if (is_array($listVal)) {
+            $listValstr = implode("','", $listVal);
+        }
+        $where = "`GroupsId` = '{$GroupsId}' and `Val` in ('$listValstr')";
+        return $this->Select($where);
+    }
 
     public function Post($model)
     {
@@ -76,6 +85,16 @@ class Model_OptionsService extends DB
     {
         $op = new Model_OptionsService();
         return $op->SelectToOptions("`GroupsId`= '{$idGroups}' ", ["Val", "Name"]);
+    }
+    public static function GetGroupsToSelectAndListVal($idGroups, $listVal)
+    {
+        $op = new Model_OptionsService();
+        $listValstr = $listVal;
+        if (is_array($listVal)) {
+            $listValstr = implode("','", $listVal);
+        }
+        // DB::$Debug = true;
+        return $op->SelectToOptions("`GroupsId`= '{$idGroups}' and `Val` in ('$listValstr') ", ["Val", "Name"]);
     }
 
     public static function ToSelect()

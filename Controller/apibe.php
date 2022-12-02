@@ -59,7 +59,8 @@ class Controller_apibe extends Controller_backend
     }
 
     function timnhanvien()
-    {
+    { 
+        
         $admin = new \Model\AdminService();
         $total = 0;
         $indexPage = 1;
@@ -407,7 +408,8 @@ class Controller_apibe extends Controller_backend
     {
         $Model_OptionsService =  new Model_OptionsService();
         $total = 0;
-        $options = $Model_OptionsService->GetItems(["GroupsId" => "khoa"], 1, 100, $total);
+        $user =  Module\duser\Model\Duser::CurentUsernameAdmin(true);
+        $options = $Model_OptionsService->GetItemsInList("khoa", $user->KhoaBenhVal());
         // $benhNhan = new BenhNhanKhoaBenh();
         // $benhNhans = $benhNhan->GetItems([], 1, 100, $total);
         // $a = [];
