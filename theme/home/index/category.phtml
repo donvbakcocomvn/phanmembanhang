@@ -1,155 +1,134 @@
 <?php
-
-use Model\Products;
-
-$view_theme = new theme\home\functionLayout();
+$class = "";
 $Category = $data["Category"];
-$cat = new \Model\Category();
-$listCatID = [$Category->catID];
-$cat->AllCategoryByParentID([$Category->catID], $listCatID);
-$product = new \Model\Products();
-$Pages = intval($data["Pages"]);
-$Number = 18;
-$DSProduct = $product->ProductsByCatID($listCatID, $Pages, $Number, $sum);
-$view_theme->categorySlider();
 ?>
-<div class="col-md-9">
-    <div class="">
-        <h2 class="page-heading" style="margin-bottom: 10px;">
-            <span class="page-heading-title"><?php echo $Category->catName; ?></span>
-        </h2>
-        <div class="row product-list grid Product-mobie">
-            <?php
-            if ($DSProduct)
-                foreach ($DSProduct as $_Poroduct) {
-                    $_Poroduct = new Products($_Poroduct);
-            ?>
-                <div class="col-sx-12 col-sm-4 d-flex">
-                    <div class="right-block" style="width: 100%;">
-                        <div style="width: 100%;">
-                            <div class="d-flex">
-                                <div style="min-width: 90px;padding-right: 10px;margin-right: 5px;">
-                                    <img class="img" onerror="this.src='/public/no-image.jpg'" style="min-width:90px;height: 90px;" src="/public/no-image.jpg" ng-src="{{items.UrlHinh}}" alt="hình sản phẩm">
-                                </div>
-                                <div style="width: 100%;">
-                                    <h2 class="product-name">
-                                        <a style="white-space: nowrap;" href="#">
-                                            <?php echo $_Poroduct->nameProduct ?>
-                                        </a>
-                                    </h2>
-                                    <div class="content_price">
-                                        <span style="color: red;" class="price product-price"><?php echo $_Poroduct->Price(); ?></span>
+<section class="">
+    <div class="container-fulid">
+        <div class="col-md-9">
+            <div class=" ">
+                <h2 class="page-heading" style="margin-bottom: 10px;">
+                    <span class="page-heading-title"><?php echo $Category->catName; ?></span>
+                </h2>
+                <div class="Product-mobie row" id="body-content" style="min-height: 571px;">
+                    <div ng-repeat="items in _DanhSachSanPham.Product" class="col-lg-4 col-md-4 d-flex" style="min-height: 100px;">
+                        <div class="right-block" style="width: 100%;">
+                            <div style="width: 100%;">
+                                <div class="d-flex">
+                                    <div style="min-width: 90px;padding-right: 10px;margin-right: 5px;">
+                                        <img class="img" onerror="this.src='/public/no-image.jpg'" style="min-width:90px;height: 90px;" src="/public/no-image.jpg" ng-src="{{items.UrlHinh}}" alt="hình sản phẩm">
                                     </div>
-                                    <div class="">
-                                        <p style="white-space: nowrap;">Id: #<?php echo $_Poroduct->Code ?></p>
-                                    </div>
-                                    <div class="pull-right">
-                                        <a class="btn btn-success" ng-click="addProductCart(<?php echo $_Poroduct->ID; ?>)" class="<?php echo $class; ?>">
-                                            <i class="fa fa-plus"></i>
-                                        </a>
-                                        <a class="btn btn-danger" ng-click="removeProductCart(<?php echo $_Poroduct->ID; ?>)" class="<?php echo $class; ?>">
-                                            <i class="fa fa-minus"></i>
-                                        </a>
-                                    </div>
-                                    <div class="content_price">
-                                        <p><span class="price product-price" ng-bind-html="<?php echo $_Poroduct->Price(); ?>"></span></p>
-                                    </div>
+                                    <div style="width: 100%;">
+                                        <h2 class="product-name">
+                                            <a style="white-space: nowrap;" href="#">{{items.nameProduct}}</a>
+                                        </h2>
+                                        <div class="content_price">
+                                            <span style="color: red;" class="price product-price">{{items.Price}}</span>
+                                        </div>
+                                        <div class="">
+                                            <p style="white-space: nowrap;">Id: #{{items.Code}}</p>
+                                        </div>
+                                        <div class="">
+                                            <label class="label label-primary" style="white-space: nowrap;">{{items.DanhMuc}}</label>
+                                        </div>
+                                        <div class="pull-right">
+                                            <a class="btn btn-success" ng-click="addProductCart(items.ID)" class="<?php echo $class; ?>">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+                                            <a class="btn btn-danger" ng-click="removeProductCart(items.ID)" class="<?php echo $class; ?>">
+                                                <i class="fa fa-minus"></i>
+                                            </a>
+                                        </div>
+                                        <div class="content_price">
+                                            <p><span class="price product-price" ng-bind-html="items.priceVnd"></span></p>
+                                        </div>
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            <?php
-                }
-            ?>
-        </div>
-    </div>
-    <div class="sortPagiBar  pull-left">
-        <div class="">
-            <div class="PhanTrang-Customer">
-                <?php
-                $DuongDan = $Category->linkCurentCategory() . '/[i]';
-                echo lib\Common::PhanTrangTheoSL($sum, $Number, $Pages, $DuongDan);
-                ?>
+                <div class="clearfix"></div>
+                <div class="PhanTrang-Customer">
+                    <phan-trang1 on-click="DanhSachAllDonHang(seachKeyWord, pagesIndex, pagesNumber)" pages-index="_DanhSachSanPham.page" pages-number="_DanhSachSanPham.number" pages-total="_DanhSachSanPham.pagesTotal" pages-params='_DanhSachDonHang.Params'></phan-trang1>
+                </div>
+
+            </div>
+            <div class="col-md-3">
+                <table class="table table-bordered table-responsive cart_summary">
+                    <thead>
+                        <tr style="background-color: gold;">
+                            <th class="" style="padding: 0;padding-left:10px;padding-top: 5px;padding-right: 10px;padding-bottom: 5px;">
+                                <a class="pull-right" ng-click="XoaGioHang()" style="color: #000"><i class="fa fa-2x fa-trash-o"></i></a>
+                                <h3 style="line-height: 30px;font-weight: bold;">Sản phẩm đã chọn</h3>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="" style="background-color: #fff;padding: 0;padding-left:10px;padding-top: 5px;">
+                                <form ng-submit="SanPhamByCode(MaSanPham)">
+                                    <input autofocus type="text" ng-model="MaSanPham" style="background: #fff;" placeholder="Thêm theo mã sản phẩm" />
+                                </form>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="items in _Cart.Product">
+                            <td class="cart_description">
+                                <div class="d-flex giohang">
+                                    <div class="imagesSp">
+                                        <a href="#">
+                                            <img style="width: 70px;margin-right: 10px" src="/public/no-image.jpg" ng-src="{{items.UrlHinh}}" alt="{{items.nameProduct}}">
+                                        </a>
+                                    </div>
+                                    <div class="" style="width: 100%;padding-right: 10px;">
+                                        <a class="btn btn-danger btn-xs pull-right" ng-click="removeProductCart(items.ID)">Xóa</a>
+                                        <h2 style="font-size: 14px;font-weight: bold;" class="product-name">
+                                            {{items.nameProduct}}
+                                        </h2>
+                                        <small class="cart_ref">Id: #{{items.Code}}</small><br>
+                                        <p><span ng-bind-html="items.priceVnd"></span></p>
+                                        <div class="hidden-sm hidden-xs">
+                                            Thành tiền: <strong ng-bind-html="ToHtml(items.ThanhTienVND)"></strong>
+                                        </div>
+                                    </div>
+                                    <div class="qty" style="min-width: 76px;">
+                                        <input ng-change="updateNumberProduct(items.ID,items.Number)" class="inputcartnumber form-control input-sm" type="text" ng-model="items.Number">
+                                        <div class=" btn-group-xs">
+                                            <a ng-click="minuNumberProduct(items.ID)" class="btn-block btn-cart btn-primary">
+                                                <i class="fa fa-minus"></i>
+                                            </a>
+                                            <a ng-click="plusNumberProduct(items.ID)" class="btn-block btn-cart btn-primary">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="text-right">Tổng Tiền: <b ng-bind-html="_Cart.TotalPriceVND"></b></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="cart_navigation">
+                    <?php
+                    if (!isset($_SESSION[QuanTri])) {
+                    ?>
+                        <a class="btn next-btn btn-primary" href="/index/dathang">Đặt hàng</a>
+                    <?php
+                    } else {
+                    ?>
+                        <a class="btn next-btn btn-primary" href="/index/thanhtoan">Thanh toán</a>
+                    <?php
+                    }
+                    ?>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="col-md-3">
-    <table class="table table-bordered table-responsive cart_summary">
-        <thead>
-            <tr style="background-color: gold;">
-                <th class="" style="padding: 0;padding-left:10px;padding-top: 5px;padding-right: 10px;padding-bottom: 5px;">
-                    <a class="pull-right" ng-click="XoaGioHang()" style="color: #000"><i class="fa fa-2x fa-trash-o"></i></a>
-                    <h3 style="line-height: 30px;font-weight: bold;">Sản phẩm đã chọn</h3>
-                </th>
-            </tr>
-            <tr>
-                <th class="" style="background-color: #fff;padding: 0;padding-left:10px;padding-top: 5px;">
-                    <form ng-submit="SanPhamByCode(MaSanPham)">
-                        <input autofocus type="text" ng-model="MaSanPham" style="background: #fff;" placeholder="Thêm theo mã sản phẩm" />
-                    </form>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="items in _Cart.Product">
-                <td class="cart_description">
-                    <div class="d-flex giohang">
-                        <div class="imagesSp hidden">
-                            <a href="#">
-                                <img style="width: 70px;margin-right: 10px" src="{{items.UrlHinh}}" alt="{{items.nameProduct}}">
-                            </a>
-                        </div>
-                        <div class="" style="width: 100%;padding-right: 10px;">
-                            <a class="btn btn-danger btn-xs pull-right" ng-click="removeProductCart(items.ID)">Xóa</a>
-                            <h2 class="product-name">
-                                {{items.nameProduct}}
-                            </h2>
-                            <small class="cart_ref">Id: #{{items.Code}}</small><br>
-                            <p><span ng-bind-html="items.priceVnd"></span></p>
-                        </div>
-                        <div class="qty" style="min-width: 76px;">
-                            <input style="" class="inputcartnumber form-control input-sm" type="text" ng-value="items.Number">
-                            <div class=" btn-group-xs">
-                                <a ng-click="minuNumberProduct(items.ID)" class="btn-block btn-cart btn-primary">
-                                    <i class="fa fa-minus"></i>
-                                </a>
-                                <a ng-click="plusNumberProduct(items.ID)" class="btn-block btn-cart btn-primary">
-                                    <i class="fa fa-plus"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="hidden-sm hidden-xs" style="width: 120px;padding-left: 10px;">
-                            <strong ng-bind-html="ToHtml(items.ThanhTienVND)"></strong>
-                        </div>
-
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="text-right">Tổng Tiền: <b ng-bind-html="_Cart.TotalPriceVND"></b></p>
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
-    <div class="cart_navigation">
-        <?php
-        if (!isset($_SESSION[QuanTri])) {
-        ?>
-            <a class="btn next-btn btn-primary" href="/index/dathang">Đặt hàng</a>
-        <?php
-        } else {
-        ?>
-            <a class="btn next-btn btn-primary" href="/index/thanhtoan">Thanh toán</a>
-        <?php
-        }
-        ?>
-
-    </div>
-</div>
-<!-- ./view-product-list-->
-<div class="clearfix"></div>
+</section>

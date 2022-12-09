@@ -391,8 +391,8 @@ class Products extends \Model\Database
 
     public function ProductsNameAllPTNangCao($options = ["name" => "", "catID" => 0], $Page = 1, $Number = 20, &$Tong = 0)
     {
-        $name = !empty($options["name"]) ? $options["name"] : '';
-        $catID = !empty($options["catID"]) ? $options["catID"] : 0;
+        $name = $options["name"] ?? "";
+        $catID = $options["catID"] ?? 0;
         $Page = intval($Page);
         $Page = max($Page, 1);
         $start = ($Page - 1) * $Number;
@@ -400,12 +400,12 @@ class Products extends \Model\Database
         if ($catID == 0) {
             $catSQL = " ";
         }
-        $sql = "SELECT count(ID) as `Tong` FROM `" . table_prefix . "product` where `nameProduct` like '%{$name}%' or `Code` like '%{$name}%' {$catSQL} ";
+        $sql = "SELECT count(ID) as `Tong` FROM `" . table_prefix . "product` where (`nameProduct` like '%{$name}%' or `Code` like '%{$name}%') {$catSQL} ";
         $sql = trim($sql);
         $this->Query($sql);
         $a = $this->fetchRow();
         $Tong = $a["Tong"];
-        $sql = "SELECT * FROM `" . table_prefix . "product` where `nameProduct` like '%{$name}%' or `Code` like '%{$name}%' {$catSQL} order by `DateCreate` DESC limit {$start},{$Number} ";
+        $sql = "SELECT * FROM `" . table_prefix . "product` where (`nameProduct` like '%{$name}%' or `Code` like '%{$name}%') {$catSQL} order by `DateCreate` DESC limit {$start},{$Number} ";
         $this->Query($sql);
         $a = $this->fetchAll();
         return $a;

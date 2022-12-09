@@ -1,5 +1,6 @@
 <?php
-use Module\duser\Model\Duser; 
+
+use Module\duser\Model\Duser;
 ?>
 <!-- Small boxes (Stat box) -->
 <div class="row ">
@@ -7,7 +8,7 @@ use Module\duser\Model\Duser;
         <div class="box box-solid ">
             <div class="box-body">
                 <ul class="bs-glyphicons">
-                    <?php 
+                    <?php
                     if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien,  Duser::Superadmin])) {
                     ?>
                         <li>
@@ -34,6 +35,7 @@ use Module\duser\Model\Duser;
                                 <span class="glyphicon-class">Tra cứu đơn hàng</span>
                             </a>
                         </li>
+
                     <?php
                     }
                     ?>
@@ -83,3 +85,25 @@ use Module\duser\Model\Duser;
     </section> -->
 
 </div>
+
+<script>
+    $(document).ready(function() {
+        // $.ajax({
+        //     type: "get",
+        //     url: "/cart/vieworder/DongboAjax/",
+        //     dataType: "text",
+        //     success: function(response) {
+        //         console.log("Đã đồng bộ xong tài khoản bệnh nhân");
+        //     }
+        // });
+        $.ajax({
+            type: "get",
+            url: "/cart/vieworder/dongbodonhang/",
+            dataType: "text",
+            success: function(response) {
+                console.log("Đã đồng bộ xong đơn hàng");
+            }
+        });
+
+    })
+</script>

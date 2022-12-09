@@ -226,7 +226,7 @@ class Controller_index extends Application
     public function thanhtoan()
     {
         $thanhToan = new ThanhToan();
-      
+
         if (isset($_POST["thanhToan"])) {
             try {
                 $modelThanhToan = $_POST["thanhToan"];
@@ -282,7 +282,6 @@ class Controller_index extends Application
         }
         $this->ViewTheme([], Model_ViewTheme::get_viewthene());
     }
-
     function category($url)
     {
 
@@ -296,12 +295,14 @@ class Controller_index extends Application
         $bre->setBreadcrumb($abre);
         $Pages = isset($url[2]) ? $url[2][0] : 1;
         $data["Category"] = $catCurent;
+        $data["DanhMuc"] = $catCurent->catID;
         $data["Pages"] = $Pages;
 
         Model_Seo::$Title = $catCurent->catName;
         Model_Seo::$des = "{SEO_Des}";
         Model_Seo::$key = "{SEO_Keyword}";
         Model\Breadcrumb::$Title = $catCurent->catName;
+
         $this->ViewTheme($data, Model_ViewTheme::get_viewthene(), "danhmuc");
     }
 

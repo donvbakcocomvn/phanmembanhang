@@ -77,6 +77,11 @@ class Order extends \Model\Database
         $this->NgaySinh = $order["NgaySinh"] ?? null;
     }
 
+    public function GetOrderError()
+    {
+        return $this->select(table_prefix . "order", [], "`KhoaBenh` ='' and `Status` = '5' ");
+    }
+
     public function GetIdCard()
     {
         $sql = "SELECT `Name` FROM `" . table_prefix . "order` WHERE 1=1 GROUP BY `Name`";
@@ -124,7 +129,7 @@ class Order extends \Model\Database
 
     function createOrder($Order)
     {
-       return $this->insert(table_prefix . "order", $Order);
+        return $this->insert(table_prefix . "order", $Order);
     }
 
     public function GetKhaoBenh()
@@ -135,7 +140,7 @@ class Order extends \Model\Database
     function updateOrder($Order)
     {
         // var_dump($Order);
-        return $this->update(table_prefix . "order", $Order, "`CodeOrder` = '{$Order["CodeOrder"]}'");
+        $this->update(table_prefix . "order", $Order, "`CodeOrder` = '{$Order["CodeOrder"]}'");
     }
     function updateOrderStatus($CodeOrder, $status)
     {
@@ -433,13 +438,14 @@ class Order extends \Model\Database
     public function ThongKeSanPhamTheoBenhNhan($MaThe, $fromDate, $toDate)
     {
         try {
-            $sql = "SELECT *,SUM(`Number`) as `Total`, (SUM(`Number`)*`Price`) as `ThanhTien` 
+            echo   $sql = "SELECT *,SUM(`Number`) as `Total`, (SUM(`Number`)*`Price`) as `ThanhTien` 
             FROM `bakcodt_orderdetail` WHERE `CodeOrder` in (SELECT `CodeOrder` 
             FROM `bakcodt_order` 
             WHERE `Status` = '5' 
             and `NgayTao` > '{$fromDate} 00:00:00' 
             and `NgayTao` < '{$toDate} 23:59:59' 
             and `Name` = '{$MaThe}') GROUP BY `IdProduct`";
+            exit();
             $this->Query($sql);
             return $this->fetchAll();
         } catch (Exception $ex) {

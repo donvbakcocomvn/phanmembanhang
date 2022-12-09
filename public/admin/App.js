@@ -509,7 +509,7 @@ app.controller("phantrang1Controller", function ($scope) {
     var a = new Array();
     var min = pagesIndex - 5;
     var max = pagesIndex + 5;
-    
+
     min = Math.max(min, 1);
     max = Math.min(max, totalPages);
     console.log(max);

@@ -416,7 +416,7 @@ class Application
         if (!is_file($layout)) {
             //            throw new Exception("Không Có Theme");
         }
-        include_once $layout;
+        include $layout;
     }
 
     function ViewThemeModule($data = NULL, $theme = "", $themelayout = "")

@@ -44,6 +44,26 @@ class vieworder extends \Controller_backend
         $this->Breadcrumb->setBreadcrumb($this->Bread);
         $this->ViewThemeModule("", "", "");
     }
+
+    public function dongbodonhang()
+    {
+        //
+        $order = new Order();
+        // danh sách order chưa đủ thông tin
+        $orders =  $order->GetOrderError();
+        // var_dump($orders);
+        foreach ($orders as $item) {
+            $benhNhan = new BenhNhan();
+            $bn = $benhNhan->GetBySothe($item["Name"]);
+            $_order = new Order();
+            // var_dump($bn["Tiensubenh"]);
+            $item["KhoaBenh"] = $bn["Tiensubenh"] ?? "";
+            $item["MaBenhNhan"] = $bn["Nhommau"] ?? "";
+            // var_dump($item);
+            $_order->updateOrder($item);
+        }
+    }
+
     public function install()
     {
         $modelBenhNhan = new BenhNhan();

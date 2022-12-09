@@ -126,6 +126,9 @@ app.directive("phanTrang1", function () {
 app.controller(
   "menuController",
   function ($scope, $rootScope, $http, $routeParams, $sce) {
+
+
+
     $http.get("/api/getMenus/menu").then(function (res) {
       $scope._Menu = res.data;
     });
@@ -136,9 +139,11 @@ app.controller(
       return $sce.trustAsHtml(textHtml);
     };
     $scope.seachKeyWord = "";
+    $scope._danhMuc = "";
     $scope.DanhSachAllDonHang = async function (Params, pagesIndex, pagesNumber) {
       var params = {
         keyword: Params,
+        danhmuc: $scope._danhMuc ?? "",
         number: pagesNumber,
         page: pagesIndex,
       };
@@ -146,15 +151,20 @@ app.controller(
         $scope._DanhSachSanPham = res.data;
       });
     }
+    $scope.setDanhMuc = function (id) {
+      $scope._danhMuc = id ?? "";
+      $scope.TimKiemSanPham();
+    }
     $scope.TimKiemSanPham = async function () {
       var params = {
         keyword: $scope.seachKeyWord,
+        danhmuc: $scope._danhMuc ?? "",
       };
       await $http.get("/api/Product/", { params: params }).then(function (res) {
         $scope._DanhSachSanPham = res.data;
       });
     };
-    $scope.TimKiemSanPham();
+
     $scope.getcarts = async function () {
       await $http.get("/api/getcarts/").then(function (res) {
         $scope._Cart = res.data;

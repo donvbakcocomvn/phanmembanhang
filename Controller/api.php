@@ -209,16 +209,18 @@ class Controller_api extends Application
     function Product()
     {
         $keyword = $_GET["keyword"] ?? "";
+        $danhmuc = $_GET["danhmuc"] ?? "";
         $Page = $_GET["page"] ?? 1;
         $Number = $_GET["number"] ?? 18;
         $Tong = 0;
         $Product = new Model\Products();
-        $Ps = $Product->ProductsNameAllPTNangCao(["name" => $keyword], $Page, $Number,  $Tong);
+        $Ps = $Product->ProductsNameAllPTNangCao(["catID" => $danhmuc, "name" => $keyword], $Page, $Number,  $Tong);
         foreach ($Ps as $key => $_ps) {
             $_ps = new Model\Products($_ps);
             $Ps[$key]["UrlHinh"] = $_ps->UrlHinh();
             $Ps[$key]["Price"] = $_ps->Price();
             $Ps[$key]["Summary"] = "";
+            $Ps[$key]["DanhMuc"] = $_ps->Category()->catName;
             $Ps[$key]["Content"] = "";
             $Ps[$key]["Link"] = $_ps->linkProduct();
         }

@@ -12,7 +12,8 @@ $functionLayout = new theme\home\functionLayout();
 
 <body class="option5" ng-cloak="TRUE" ng-app="rootApp" ng-controller="menuController">
     <?php
-    $functionLayout->header();
+    // var_dump($DanhMuc);
+    $functionLayout->header($data);
     include $Content;
     ?>
     <a href="#" class="scroll_top" title="Scroll to Top" style="display: inline;">Scroll</a>

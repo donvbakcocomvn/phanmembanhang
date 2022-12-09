@@ -901,7 +901,7 @@ class Controller_backend extends Application
             ];
             $resultData[] = $data;
             if ($result) {
-                $orderDetail = $result;
+                $orderDetail = $result; 
                 if ($orderDetail) {
                     $dong = [];
                     $stt = 1;

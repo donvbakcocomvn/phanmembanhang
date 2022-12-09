@@ -161,7 +161,7 @@ class functionLayout
         <?php
     }
 
-    function header()
+    function header($data = null)
     {
         $Cat = new \Model\Category();
         $Cats = $Cat->Categorys();
@@ -172,7 +172,7 @@ class functionLayout
         } else {
         ?>
             <!-- HEADER -->
-            <div id="header" class=" header desktop-header"> </div>
+            <div id="header" ng-init="setDanhMuc(<?php echo $data["DanhMuc"] ?? ""; ?>)" class=" header desktop-header"> </div>
             <!-- end header -->
         <?php
         }
@@ -366,7 +366,7 @@ class functionLayout
                                         Copyright © 2022 __WebName___. All Rights Reserved. Designed by: __WebName___
                                     </div>
 
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
