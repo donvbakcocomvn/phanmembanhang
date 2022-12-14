@@ -89,13 +89,14 @@ class vieworder extends \Controller_backend
     public function dongbo()
     {
 
-
         $_benhNhan = new BenhNhan();
         $indexPage = $_GET["page"] ?? 1;
         $khoabenh = $_GET["khoabenh"] ?? "";
+        $mathe = $_GET["SoThe"] ?? "";
         $pageNumber = $_GET["number"] ?? 20;
         $params["page"] = $indexPage;
         $params["khoabenh"] = $khoabenh;
+        $params["name"] = $mathe;
         $params["number"] = $pageNumber;
 
         $items = $_benhNhan->GetItems($params, $indexPage, $pageNumber, $total);

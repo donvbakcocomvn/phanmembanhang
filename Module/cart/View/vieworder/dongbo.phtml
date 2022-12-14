@@ -38,7 +38,12 @@ $_benhNhan = new BenhNhan();
                                 <div class="row">
                                     <div class="col-md-3">
                                         <?php
-                                        BenhNhanFilter::khoabenh($params["khoabenh"])->renderHTML();
+                                        BenhNhanFilter::khoabenh($_GET["khoabenh"] ?? "")->renderHTML();
+                                        ?>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <?php
+                                        BenhNhanFilter::SoThe($_GET["SoThe"] ?? "")->renderHTML();
                                         ?>
                                     </div>
                                     <div class="col-md-3">
@@ -70,17 +75,17 @@ $_benhNhan = new BenhNhan();
                                             <?php
                                             foreach ($_items  as $key => $value) {
                                             ?>
-                                                <td><?php 
+                                                <td><?php
                                                     if (is_numeric($value)) {
                                                         echo number_format($value, 0, ".", " ");
                                                     } else {
                                                         echo $value;
-                                                    } 
-                                                    ?></td>
+                                                    }
+                                                    ?>
+                                                </td>
                                             <?php
                                             }
                                             ?>
-
                                         </tr>
                                     <?php
                                     }
@@ -110,15 +115,12 @@ $_benhNhan = new BenhNhan();
                             <?php
                             }
                             ?>
-
                         </div>
 
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
 </div>
 <script>

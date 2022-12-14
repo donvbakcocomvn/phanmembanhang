@@ -86,6 +86,11 @@ class Model_OptionsService extends DB
         $op = new Model_OptionsService();
         return $op->SelectToOptions("`GroupsId`= '{$idGroups}' ", ["Val", "Name"]);
     }
+    public static function GetItemByGroups($idGroups)
+    {
+        $op = new Model_OptionsService();
+        return $op->Select("`GroupsId`= '{$idGroups}' ");
+    }
     public static function GetGroupsToSelectAndListVal($idGroups, $listVal)
     {
         $op = new Model_OptionsService();

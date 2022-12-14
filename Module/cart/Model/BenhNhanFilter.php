@@ -18,6 +18,13 @@ class BenhNhanFilter extends \Model\Database
         $properties["value"] = $val;
         $name =  __FUNCTION__;
         $options = BenhNhanKhoaBenh::ToSelect();
-        return new \Model\FormRender(new Select("Mô Tả", $name, $options, $properties));
+        return new \Model\FormRender(new Select("Khoa Bệnh", $name, $options, $properties));
+    }
+    public static function SoThe($val = null)
+    {
+        $properties = self::$FormClass;
+        $properties["value"] = $val;
+        $name =  __FUNCTION__;
+        return new \Model\FormRender(new Textbox("Số Thẻ", $name, $properties));
     }
 }

@@ -90,10 +90,11 @@ class BenhNhan extends \Model\Database
         $name = $params["name"] ?? "";
         $khoabenh = $params["khoabenh"] ?? "";
         $khoabenhsql = "";
-        if ($khoabenh) {
-            $khoabenhsql = "and `Tiensubenh` = '{$khoabenh}'";
+        if ($khoabenh != "") {
+            $khoabenhsql = " and `Tiensubenh` = '{$khoabenh}'";
         }
-        $where  = " 1=1  $khoabenhsql";
+        $where  = " `Sothe` like '%{$name}%' {$khoabenhsql}";
+
         return $this->SelectPT($where, $indexPage, $pageNumber, $total);
     }
     public function GetDSMaThe()

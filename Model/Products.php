@@ -400,12 +400,12 @@ class Products extends \Model\Database
         if ($catID == 0) {
             $catSQL = " ";
         }
-        $sql = "SELECT count(ID) as `Tong` FROM `" . table_prefix . "product` where (`nameProduct` like '%{$name}%' or `Code` like '%{$name}%') {$catSQL} ";
+        $sql = "SELECT count(ID) as `Tong` FROM `" . table_prefix . "product` where (`nameProduct` like '%{$name}%' or `Code` like '%{$name}%') {$catSQL} and `Number` > 0 ";
         $sql = trim($sql);
         $this->Query($sql);
         $a = $this->fetchRow();
         $Tong = $a["Tong"];
-        $sql = "SELECT * FROM `" . table_prefix . "product` where (`nameProduct` like '%{$name}%' or `Code` like '%{$name}%') {$catSQL} order by `DateCreate` DESC limit {$start},{$Number} ";
+        $sql = "SELECT * FROM `" . table_prefix . "product` where (`nameProduct` like '%{$name}%' or `Code` like '%{$name}%') {$catSQL} and `Number` > 0 order by `DateCreate` DESC  limit {$start},{$Number} ";
         $this->Query($sql);
         $a = $this->fetchAll();
         return $a;
