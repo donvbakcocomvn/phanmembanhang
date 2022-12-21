@@ -13,16 +13,43 @@ namespace Model;
  *
  * @author MSI
  */
-class Response {
+class Response
+{
 
-    //put your code here
+    const OK = "OK";
+    public $rows;
+    public $items;
+    public $params;
+    public $mess;
+    public $status;
+    public $index;
+    public $number;
+    public $totalrows;
+    public $totalPage;
 
-    public function __construct($items) {
-        
+    public function __construct($items = null)
+    {
+        $this->rows = $items["rows"] ?? null;
+        $this->items = $items["items"] ?? null;
+        $this->mess = $items["mess"] ?? null;
+        $this->status = $items["status"] ?? null;
+        $this->params = $items["params"] ?? null;
+        $this->index = $items["index"] ?? null;
+        $this->number = $items["number"] ?? null;
+        $this->totalrows = $items["totalrows"] ?? null;
+        $this->totalPage = $items["totalPage"] ?? null;
     }
 
-    public static function ToJson($items) {
+    public function SendResponse()
+    {
+    }
+
+    public static function ToJson($items)
+    {
         return json_encode($items, JSON_UNESCAPED_UNICODE);
     }
-
+    public function ToAray()
+    {
+        return (array) $this;
+    }
 }

@@ -56,6 +56,7 @@ $_benhNhan = new BenhNhan();
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
+                                        <td>Thao Tác</td>
                                         <?php
                                         foreach ($_benhNhan->TitleData() as $key => $title) {
                                         ?>
@@ -67,11 +68,17 @@ $_benhNhan = new BenhNhan();
                                 </thead>
                                 <tbody>
                                     <?php
-                                    foreach ($Items as $key => $benhnhan) {
-                                        $_benhNhan = new BenhNhan($benhnhan);
-                                        $_items = (array) $_benhNhan;
+                                    if ($Items)
+                                        foreach ($Items as $key => $benhnhan) {
+                                            $_benhNhan = new BenhNhan($benhnhan);
+                                            $_items = (array) $_benhNhan;
                                     ?>
                                         <tr>
+                                            <td>
+                                                <a href="/cart/vieworder/benhnhan/<?php echo $_benhNhan->Sothe; ?>" class="btn btn-success">
+                                                    Xem
+                                                </a>
+                                            </td>
                                             <?php
                                             foreach ($_items  as $key => $value) {
                                             ?>
@@ -88,7 +95,7 @@ $_benhNhan = new BenhNhan();
                                             ?>
                                         </tr>
                                     <?php
-                                    }
+                                        }
                                     ?>
                                 </tbody>
                             </table>
@@ -116,7 +123,6 @@ $_benhNhan = new BenhNhan();
                             }
                             ?>
                         </div>
-
                     </div>
                 </div>
             </div>

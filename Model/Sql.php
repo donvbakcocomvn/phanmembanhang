@@ -25,6 +25,10 @@ class Sql
     {
         return " or {$where} ";
     }
+    public static function Limit($index, $number)
+    {
+        return " Limit {$index},{$number} ";
+    }
     static public function WhereInArray($columname, $listValue)
     {
         $strIn = implode("','", $listValue);
@@ -34,5 +38,12 @@ class Sql
     static public function WhereAnd($where)
     {
         return " and {$where} ";
+    }
+    static public function OrderBy($col, $asc = "ASC")
+    {
+        if (is_array($col)) {
+            $col =  implode("`,`", $col);
+        }
+        return " Order By `{$col}` {$asc} ";
     }
 }

@@ -151,6 +151,8 @@ app.controller("usersCotroller", function ($http, $scope) {
 
 });
 app.controller("giohangCotroller", function ($http, $scope, $filter) {
+
+  $scope._loading = false;
   $http.get("/apibe/DSKhoaBenh/").then(function (res) {
     $scope._KhoaBenhs = res.data;
   });
@@ -247,11 +249,17 @@ app.controller("giohangCotroller", function ($http, $scope, $filter) {
     $scope.ShowLyDo = false;
     $scope.ShowChuyenNhanVien = !$scope.ShowChuyenNhanVien;
   };
+
   $scope.HuyDonHang = function (lydo, id) {
+    if ($scope._loading == true) {
+      return;
+    }
+    $scope._loading = true;
     var data = { LyDo: lydo, Id: id };
     $http
       .post("/apibe/HuyDonHang/", $.param(data), headerFormData)
       .then(function (res) {
+        $scope._loading = false;
         window.alert(res.data.Mes);
         window.location.reload();
       });

@@ -20,7 +20,9 @@
                     </tr>
                     <tr>
                         <td>Người Đặt Hàng</td>
-                        <th>{{_OrderDetail.Name}}</th>
+                        <th>{{_OrderDetail.Name}}
+                            <a target="_blank" href="/cart/vieworder/benhnhan/{{_OrderDetail.MaThe}}">Xem</a>
+                        </th>
                     </tr>
                     <tr>
                         <td>SĐT</td>
@@ -59,8 +61,8 @@
                         <td>Email</td>
                         <th>{{_OrderDetail.SalerInfor.Email}}</th>
                     </tr>
-
                 </table>
+
             </div>
             <div class="col-md-12">
                 <h3 class="text-center" style="margin: 0px;color: #000;font-size: 14px;">
@@ -109,7 +111,7 @@
             <div class="col-md-12">
                 Theo dõi đơn hàng
                 <div style="height: 300px;overflow: auto;" class="">
-                    <div ng-bind-html="_OrderDetail.Note" ></div> 
+                    <div ng-bind-html="_OrderDetail.Note"></div>
                 </div>
             </div>
         </div>

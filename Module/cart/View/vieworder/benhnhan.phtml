@@ -1,0 +1,81 @@
+<?php
+
+use Common\Common;
+use Module\cart\Model\BenhNhan;
+use Module\cart\Model\Order;
+
+$benhnhan = new BenhNhan($items);
+
+?>
+<div>
+    <div class=" col-md-3 col-lg-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Thông tin bệnh nhân</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <?php
+                    foreach ((array) $benhnhan as $key => $value) {
+                    ?>
+                        <tr>
+                            <td><?php echo $benhnhan->TitleData()[$key]; ?></td>
+                            <td><?php echo $value; ?></td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
+                </table>
+            </div>
+            <div class="panel-footer">
+                <form action="" method="POST" role="form">
+                    <input type="hidden" name="KhoaBenh" value="<?php echo $benhnhan->Tiensubenh; ?>">
+                    <input type="hidden" name="Sothe" value="<?php echo $benhnhan->Sothe; ?>">
+                    <button name="UpdateKhoa" class="btn-sm btn btn-success"> Cập nhật </button>
+                    <p>Cập nhật đơn hàng theo khoa bệnh</p>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9 col-lg-9">
+        <h4>Danh sách đơn hàng</h4>
+        <div class="panel">
+            <table class="table table-bordered table-hover">
+                <tr class="bg-blue">
+                    <td style="width: 50px;">Stt</td>
+                    <td style="width: 150px;">Ngày Đặt</td>
+                    <td style="width: 50px;">Code</td>
+                    <td style="width: 150px;">Khách Hàng</td>
+                    <td style="width: 150px;">Khoa</td>
+                    <td>Nhân Viên</td>
+                    <td style="width: 150px;">Tình Trạng</td>
+                    <td style="width: 150px;">Tổng Tiền</td>
+                </tr>
+                <?php
+                if ($rows) {
+                    foreach ($rows as $key => $value) {
+                        $order = new Order($value);
+                ?>
+                        <tr>
+                            <td><?php echo $key + 1; ?></td>
+                            <td><?php echo $order->NgayTao; ?></td>
+                            <td><?php echo $order->Id; ?></td>
+                            <td><?php echo $order->BenhNhan()->HotenBN; ?></td>
+                            <td><?php echo $order->KhoaBenh; ?></td>
+                            <td><?php echo $order->Saler()->Name; ?></td>
+                            <td><?php echo $order->Status(); ?></td>
+                            <td><?php echo $order->TotalPrice; ?></td>
+                        </tr>
+                <?php
+                    }
+                }
+                ?>
+            </table>
+            <?php
+            $maThe = $benhnhan->Sothe;
+            $url = "/cart/vieworder/benhnhan/{$maThe}/?index=[i]&number={$number}";
+            echo Common::PhanTrang($totalPage, $index, $url);
+            ?>
+        </div>
+    </div>
+</div>

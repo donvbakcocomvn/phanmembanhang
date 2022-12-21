@@ -21,6 +21,7 @@ class BenhNhan extends \Model\Database
     public $Nhommau;
     public $Tiensubenh;
     public $Soduthe;
+    public $NumberCheck;
     public function __construct($bn = null)
     {
 
@@ -49,6 +50,7 @@ class BenhNhan extends \Model\Database
         $this->Nhommau = $bn["Nhommau"] ?? null;
         $this->Tiensubenh = $bn["Tiensubenh"] ?? null;
         $this->Soduthe = $bn["Soduthe"] ?? null;
+        $this->NumberCheck = $bn["NumberCheck"] ?? null;
     }
 
     public function TitleData()
@@ -67,8 +69,27 @@ class BenhNhan extends \Model\Database
         $a["Nhommau"] = "Nhóm Máu";
         $a["Tiensubenh"] = "Khoa";
         $a["Soduthe"] = "Số Dư Thẻ";
+        $a["NumberCheck"] = "Số Lần Cập Nhật";
         return $a;
     }
+
+    public function Order($index, $number, &$total)
+    {
+        $order = new Order();
+        return  $order->GetOrderByBenhNhanPT($this->Sothe, $index, $number, $total);
+    }
+
+
+    public function GetByNameQuery($nameQuery, $Param = null)
+    {
+        // "MaBN"
+        // $nameQuery
+        $nameQuery = explode("@", $nameQuery);
+        $funName = $nameQuery[0];
+    }
+
+
+
     public function GetByMaBN($id)
     {
         $where  = " `MaBN` = '{$id}' ";
@@ -93,8 +114,7 @@ class BenhNhan extends \Model\Database
         if ($khoabenh != "") {
             $khoabenhsql = " and `Tiensubenh` = '{$khoabenh}'";
         }
-        $where  = " `Sothe` like '%{$name}%' {$khoabenhsql}";
-
+        $where  = " (`Sothe` like '%{$name}%' or `HotenBN` like '%{$name}%' ) {$khoabenhsql} ";
         return $this->SelectPT($where, $indexPage, $pageNumber, $total);
     }
     public function GetDSMaThe()

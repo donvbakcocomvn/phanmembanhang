@@ -23,6 +23,7 @@ class Order extends \Model\Database
     public $Id;
     public $Name;
     public $MaBenhNhan;
+    public $MaThe;
     public $TotalPrice;
     public $CodeOrder;
     public $Email;
@@ -61,6 +62,7 @@ class Order extends \Model\Database
         }
         $this->Id = $order["Id"] ?? null;
         $this->Name = $order["Name"] ?? null;
+        $this->MaThe = $order["MaThe"] ?? null;
         $this->MaBenhNhan = $order["MaBenhNhan"] ?? null;
         $this->TotalPrice = $order["TotalPrice"] ?? null;
         $this->CodeOrder = $order["CodeOrder"] ?? null;
@@ -141,6 +143,12 @@ class Order extends \Model\Database
     {
         // var_dump($Order);
         $this->update(table_prefix . "order", $Order, "`CodeOrder` = '{$Order["CodeOrder"]}'");
+    }
+    function updateKhoaOrder($Sothe, $khoa)
+    {
+        // var_dump($Order);
+        $Order["KhoaBenh"] = $khoa;
+        $this->update(table_prefix . "order", $Order, "`MaThe` = '{$Sothe}'");
     }
     function updateOrderStatus($CodeOrder, $status)
     {
@@ -298,6 +306,8 @@ class Order extends \Model\Database
 
     function ToArray()
     {
+        $order = (array) $this;
+
         if ($this->Status == self::DaThuTien) {
             $tt =  new ThanhToan();
             $benhNhan =  new BenhNhan($this->Name);
@@ -327,10 +337,7 @@ class Order extends \Model\Database
         $order["statusName"] = $this->Status();
         $order["Note"] = $this->Note;
         $order["Address"] = strip_tags($this->DiaChi());
-        $order["Tinh"] = $this->Tinh;
-        $order["Huyen"] = $this->Huyen;
         $order["NgayTao"] = \lib\Common::DateFomat($this->NgayTao);
-        $order["Saler"] = $this->Saler;
         $order["SalerInfor"] = $this->Saler();
         return $order;
     }
@@ -431,6 +438,24 @@ class Order extends \Model\Database
             $where .= Sql::WhereAnd(Sql::WhereLess("NgayTao", $toDate));
             $where .= Sql::WhereAnd(Sql::WhereEq("Name", $MaThe));
             return $this->select(table_prefix . "order", ["CodeOrder"], $where);
+        } catch (Exception $ex) {
+            return [];
+        }
+    }
+    public function GetOrderByBenhNhanPT($MaThe, $indexPage, $number, &$total)
+    {
+        try {
+            if ($MaThe == "") {
+                throw new Exception("không có mã thẻ");
+            }
+            $where = Sql::WhereEq("Status", 5);
+            $where .= Sql::WhereAnd(Sql::WhereEq("Name", $MaThe));
+            $where .= Sql::OrderBy(["NgayTao"], "DESC");
+            $indexPage = ($indexPage - 1) * $number;
+            $indexPage = max($indexPage, 0);
+            $total = $this->SelectCount("where" . $where); 
+            $where .= Sql::Limit($indexPage, $number); 
+            return $this->select(table_prefix . "order", [], $where);
         } catch (Exception $ex) {
             return [];
         }

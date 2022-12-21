@@ -4,6 +4,7 @@ namespace Module\cart\Controller;
 
 use Common\Common;
 use Model\Breadcrumb;
+use Model\Response;
 use Model\ThanhToan;
 use Module\cart\Model\BenhNhan;
 use Module\cart\Model\Cart;
@@ -78,17 +79,18 @@ class vieworder extends \Controller_backend
             $thanhToan = new ThanhToan();
             $benhNhan = $thanhToan->GetTTBenhnhan($value["Name"]);
             $_benhNhan = new BenhNhan();
-            $_benhNhanDetail = $_benhNhan->GetByMaBN($benhNhan["MaBN"]);
+            $_benhNhanDetail = $_benhNhan->GetBySothe($benhNhan["SoThe"]);
             if ($_benhNhanDetail == null) {
                 $_benhNhan->Post($benhNhan);
             } else {
+                $benhNhan["NumberCheck"] += 1;
                 $_benhNhan->Put($benhNhan);
             }
         }
     }
+
     public function dongbo()
     {
-
         $_benhNhan = new BenhNhan();
         $indexPage = $_GET["page"] ?? 1;
         $khoabenh = $_GET["khoabenh"] ?? "";
@@ -231,5 +233,43 @@ class vieworder extends \Controller_backend
         }
 
         $this->ViewThemeModule("", "", "");
+    }
+
+    public function DongBoKhoaBenh()
+    {
+        $id =  $this->getParam()[0];
+        $benhnhan = new BenhNhan($id);
+        if ($benhnhan->Sothe) {
+            // cập nhật khoa bệnh
+        }
+    }
+
+    public function benhnhan()
+    {
+
+        if (isset($_POST["UpdateKhoa"])) {
+            $Sothe = $_POST["Sothe"] ?? "";
+            $KhoaBenh = $_POST["KhoaBenh"] ?? "";
+            $order = new Order();
+            $order->UpdateKhoaOrder($Sothe, $KhoaBenh);
+        }
+
+        $id =  $this->getParam()[0];
+        $index = $_REQUEST["index"] ?? 1;
+        $index = max($index, 1);
+        $number = $_REQUEST["number"] ?? 10;
+        $number = max(0, $number);
+        $benhnhan = new BenhNhan($id);
+        $repon = new Response();
+        $total = 0;
+        $repon->rows = $benhnhan->Order($index, $number, $total);
+        $repon->items = (array) $benhnhan;
+        $repon->index = $index;
+        $repon->number = $number;
+
+        $repon->totalPage = ceil($total / $number);
+        $repon->totalrows = $total;
+        $repon->status = Response::OK;
+        $this->ViewThemeModule($repon->ToAray(), "", "");
     }
 }

@@ -25,5 +25,3 @@ class Model_Subdomail extends Model_Adapter {
     }
 
 }
-
-?>
