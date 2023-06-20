@@ -770,6 +770,8 @@ class Controller_backend extends Application
         ];
         $data = [
             "STT",
+            "Mã Bệnh Nhân",
+            "Số Thẻ",
             "Tên Bệnh Nhân",
             "Hàng Hóa",
             "Mã Danh Mục",
@@ -786,18 +788,22 @@ class Controller_backend extends Application
             $stt = 1;
             foreach ($reult as $key => $orderdetail) {
                 $_orderdetail = new OrderDetail($orderdetail);
+                $benhNhan = $_orderdetail->Order()->BenhNhanMaThe();
+                $product = $_orderdetail->Product();
                 $dong = [];
                 $dong[] = $stt++;
-                $dong[] = $_orderdetail->Order()->BenhNhan()->HotenBN ?? "n/a";
-                $dong[] = $_orderdetail->Product()->nameProduct;
-                $dong[] = $_orderdetail->Product()->Category()->Code;
-                $dong[] = $_orderdetail->Product()->unitPrice;
-                $dong[] = $_orderdetail->Product()->Price;
-                $dong[] = $_orderdetail->Order()->BenhNhan()->Tiensubenh;
+                $dong[] = $benhNhan->MaBN;
+                $dong[] = $benhNhan->Sothe;
+                $dong[] = $benhNhan->HotenBN;
+                $dong[] = $product->nameProduct;
+                $dong[] = $product->Category()->Code;
+                $dong[] = $product->unitPrice;
+                $dong[] = $product->Price;
+                $dong[] = $benhNhan->Tiensubenh;
                 $dong[] = $_orderdetail->Number;
                 $dong[] = $_orderdetail->ThanhTienNoFomat();
                 $dong[] = $_orderdetail->Order()->Note ?? "";
-                $resultData[] =  $dong;
+                $resultData[] = $dong;
                 $indexBoder++;
             }
         }
@@ -847,6 +853,8 @@ class Controller_backend extends Application
 
     public function thongkekhoabenhnhan()
     {
+        set_time_limit(0);
+
         $this->Bread[] = [
             "title" => "Danh sách thống kê",
             "link" => "/backend/thongke/"
@@ -879,7 +887,6 @@ class Controller_backend extends Application
             $param["fromDate"] = $fromDate;
             $param["toDate"] = $toDate;
             $param["Status"] = Order::DaThuTien;
-
             $pageIndex = $_GET["page"] ?? 1;
             $pageNumber = $_GET["number"] ?? 10;
             $param["page"] = $pageIndex;
@@ -888,6 +895,7 @@ class Controller_backend extends Application
             $param["total"] = $total;
             $data = [
                 "STT",
+                "Mã Thẻ",
                 "Tên Bệnh Nhân",
                 "Mã HH",
                 "Hàng Hóa",
@@ -901,25 +909,28 @@ class Controller_backend extends Application
             ];
             $resultData[] = $data;
             if ($result) {
-                $orderDetail = $result; 
+                $orderDetail = $result;
                 if ($orderDetail) {
                     $dong = [];
                     $stt = 1;
                     foreach ($orderDetail as $key => $orderdetail) {
                         $_orderdetail = new OrderDetail($orderdetail);
+                        $benhNhan = $_orderdetail->Order()->BenhNhanMaThe();
+                        $product = $_orderdetail->Product();
                         $dong = [];
                         $dong[] = $stt++;
-                        $dong[] = $_orderdetail->Order()->BenhNhan()->HotenBN;
-                        $dong[] = $_orderdetail->Product()->Code;
-                        $dong[] = $_orderdetail->Product()->nameProduct;
-                        $dong[] = $_orderdetail->Product()->Category()->Code;
-                        $dong[] = $_orderdetail->Product()->unitPrice;
-                        $dong[] = $_orderdetail->Product()->Price();
-                        $dong[] = $_orderdetail->Order()->BenhNhan()->Tiensubenh;
+                        $dong[] = $benhNhan->Sothe;
+                        $dong[] = $benhNhan->HotenBN;
+                        $dong[] = $product->Code;
+                        $dong[] = $product->nameProduct;
+                        $dong[] = $product->Category()->Code;
+                        $dong[] = $product->unitPrice;
+                        $dong[] = number_format($product->Price, 0, ".", ",");
+                        $dong[] = $benhNhan->Tiensubenh;
                         $dong[] = $_orderdetail->Number;
-                        $dong[] = $_orderdetail->ThanhTien();
+                        $dong[] = $_orderdetail->ThanhTienNoFomat();
                         $dong[] = $_orderdetail->Order()->Note ?? "";
-                        $resultData[] =  $dong;
+                        $resultData[] = $dong;
                     }
                 }
             }
@@ -957,10 +968,10 @@ class Controller_backend extends Application
                         $dong["DanhMuc"] = $p->Category()->Code;
                         $dong["DVT"] = $row["unitPrice"];
                         $dong["MaHang"] = $row["Code"];
-                        $dong["GiaBan"] = Common::MoneyFomat($row["Price"]);
+                        $dong["GiaBan"] = $row["Price"];
                         $dong["KhoaBenh"] = $row["KhoaBenh"];
                         $dong["SoLuong"] = $row["SoLuong"];
-                        $dong["ThanhTien"] = Common::MoneyFomat($row["Price"] * $row["SoLuong"]);
+                        $dong["ThanhTien"] = $row["Price"] * $row["SoLuong"];
                         $dong["GhiChu"] = "";
                         $resultData[] = $dong;
                     }
@@ -1013,7 +1024,7 @@ class Controller_backend extends Application
                     $dong["KhoaBenh"] = $row["KhoaBenh"];
                     $dong["DVT"] = $row["unitPrice"];
                     $dong["MaHang"] = $row["Code"];
-                    $dong["GiaBan"] = Common::NumberFomat($row["Price"]);
+                    $dong["GiaBan"] = $row["Price"];
                     $dong["SoLuong"] = $row["SoLuong"];
                     $thanhTien = $row["Price"] * $row["SoLuong"];
                     $dong["ThanhTien"] = $thanhTien;

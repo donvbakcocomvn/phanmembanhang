@@ -25,7 +25,7 @@ class Controller_apibe extends Controller_backend
     {
         $id = $this->getParam()[0];
         $orderDetail = new OrderDetail();
-        return  $orderDetail->deleteOrderDetail($id);
+        return $orderDetail->deleteOrderDetail($id);
     }
 
 
@@ -35,12 +35,14 @@ class Controller_apibe extends Controller_backend
             $id = \Model\CheckInput::Input($_POST["orderCode"]);
             $userName = \Model\CheckInput::Input($_POST["Username"]);
             $modelOrder = new Order($id);
-            if ($modelOrder->ChekStauts([
-                Order::DaNopTienVeCty,
-                Order::DaThuTien,
-                Order::DangXuLy,
-                Order::ThanhCong
-            ]) == true) {
+            if (
+                $modelOrder->ChekStauts([
+                    Order::DaNopTienVeCty,
+                    Order::DaThuTien,
+                    Order::DangXuLy,
+                    Order::ThanhCong
+                ]) == true
+            ) {
                 throw new Exception("Đơn Hàng Đã Xử lÝ/ Thu Tiền Không thể Chuyển");
             }
             $DUser = new Duser($userName);
@@ -126,7 +128,7 @@ class Controller_apibe extends Controller_backend
             $oder["Price"] = $sanPham->Price;
             $oder["Number"] = 1;
             $orderDetail->AddOrderDetail($oder);
-            $oderModel  = new Order();
+            $oderModel = new Order();
             return $oderModel->UpdateTongTien($oder["CodeOrder"]);
         }
     }
@@ -139,7 +141,7 @@ class Controller_apibe extends Controller_backend
         $orderD = $orderDetail->GetByOrderDetailById($id);
         $orderD["Number"] = $sl;
         $orderDetail->UpdateOrderDetail($orderD);
-        $oder  = new Order();
+        $oder = new Order();
         return $oder->UpdateTongTien($orderD["CodeOrder"]);
     }
 
@@ -167,7 +169,7 @@ class Controller_apibe extends Controller_backend
     {
         $admin = new AdminService();
         $options = $admin->GetAllPT("1 =1 ", ["Username", "Name"]);
-        echo  APIs::Json_Encode($options);
+        echo APIs::Json_Encode($options);
     }
 
     function DaNopTienVeCty()
@@ -249,6 +251,7 @@ class Controller_apibe extends Controller_backend
         $orderDetail = $orderDetail[0];
 
         $_order = new \Module\cart\Model\Order($orderDetail);
+
         $orderDetail = $_order->ToArray();
         $orderDetail["StatusName"] = $_order->Status();
         $dsSanPham = $_order->ProductsByDonHang();
@@ -263,6 +266,15 @@ class Controller_apibe extends Controller_backend
                 $dsSanPham[$k] = $value;
             }
         }
+        $bn = $_order->BenhNhan();
+        // thong tin ben nhân
+        $bn->MaBN = $bn->MaBN ?? $orderDetail["MaBenhNhan"];
+        $bn->HotenBN = $bn->HotenBN ?? $orderDetail["Name"];
+        $bn->Sodienthoai = $bn->Sodienthoai ?? $orderDetail["Phone"];
+        $bn->Email = $bn->Email ?? $orderDetail["Email"];
+        $bn->Diachi = $bn->Diachi ?? $orderDetail["Address"];
+        $bn->Tiensubenh = $bn->KhoaBenh()->Name == "" ?  $orderDetail["KhoaBenh"] : "";
+        $orderDetail["BenhNhan"] = $bn;
         $orderDetail["TotalPriceVND"] = \lib\Common::MoneyFomat($orderDetail["TotalPrice"]);
         $orderDetail["Products"] = $dsSanPham;
         $orderDetail["SalerInfor"] = $_order->Saler()->ToArray();
@@ -406,9 +418,9 @@ class Controller_apibe extends Controller_backend
 
     public function DSKhoaBenh()
     {
-        $Model_OptionsService =  new Model_OptionsService();
+        $Model_OptionsService = new Model_OptionsService();
         $total = 0;
-        $user =  Module\duser\Model\Duser::CurentUsernameAdmin(true);
+        $user = Module\duser\Model\Duser::CurentUsernameAdmin(true);
         $options = $Model_OptionsService->GetItemsInList("khoa", $user->KhoaBenhVal());
         if (Duser::KiemTraQuyen([Duser::admin])) {
             $options = Model_OptionsService::GetItemByGroups("khoa");
@@ -474,7 +486,7 @@ class Controller_apibe extends Controller_backend
         $DenNgay = null;
         $TuNgay = null;
         if (isset($_POST["DenNgay"])) {
-            $DenNgay =  date("Y-m-d", strtotime($_POST["DenNgay"]));
+            $DenNgay = date("Y-m-d", strtotime($_POST["DenNgay"]));
         }
         if (isset($_POST["TuNgay"])) {
             $TuNgay = date("Y-m-d", strtotime($_POST["TuNgay"]));

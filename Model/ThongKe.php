@@ -31,7 +31,6 @@ class ThongKe extends Database
         $BenhNhan = new BenhNhan();
         $DSBenhNhan =  $BenhNhan->GetDSMaThe();
         // lấy danh sách thẻ
-        // var_dump( $DSBenhNhan );
         $data = [];
         if ($DSBenhNhan) {
             foreach ($DSBenhNhan as $key => $val) {

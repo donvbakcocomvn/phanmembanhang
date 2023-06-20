@@ -111,13 +111,16 @@ $id = $_Param[0];
 $order = new Order($id);
 // $order = new Order($order->orderbycode($id)[0]);
 $thanhToan = new ThanhToan();
+// $khoaBenh = new 
 $orderDetail = $order->orderDetailbyid($id);
 // $thongTinKhachHang = $order->BenhNhan();
 // var_dump($order->BenhNhan()->KhoaBenh()->Name);
 // echo $order->Name;
 $thongTinKhachHang = $thanhToan->GetTTBenhnhan($order->Name);
 $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
+$khoaBenh = Order::KhoaBenhByKey($thongTinKhachHang["Tiensubenh"]);
 
+// var_dump($thongTinKhachHang);
 ?>
 
 <div class="main ">
@@ -154,7 +157,7 @@ $soTienBangChu = Common::Number2words($order->TotalPrice) . " đồng";
                 </tr>
                 <tr>
                     <td class="temporary-title">Khoa:</td>
-                    <td class="temporary-title"><?php echo $order->BenhNhan()->KhoaBenh()->Name ?? $order->BenhNhan()->KhoaBenh ?? "N/A" ?></td>
+                    <td class="temporary-title"><?php echo $khoaBenh->Name ?? $thongTinKhachHang["Tiensubenh"] ?></td>
                 </tr>
                 <tr>
                     <td class="temporary-title">Mã bệnh nhân:</td>

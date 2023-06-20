@@ -42,7 +42,7 @@ class Sql
     static public function OrderBy($col, $asc = "ASC")
     {
         if (is_array($col)) {
-            $col =  implode("`,`", $col);
+            $col = implode("`,`", $col);
         }
         return " Order By `{$col}` {$asc} ";
     }

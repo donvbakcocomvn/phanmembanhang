@@ -20,17 +20,17 @@
                     </tr>
                     <tr>
                         <td>Người Đặt Hàng</td>
-                        <th>{{_OrderDetail.Name}}
+                        <th>{{_OrderDetail.BenhNhan.HotenBN}}
                             <a target="_blank" href="/cart/vieworder/benhnhan/{{_OrderDetail.MaThe}}">Xem</a>
                         </th>
                     </tr>
                     <tr>
                         <td>SĐT</td>
-                        <th>{{_OrderDetail.Phone}}</th>
+                        <th>{{_OrderDetail.BenhNhan.Sodienthoai}}</th>
                     </tr>
                     <tr>
                         <td>Email</td>
-                        <th>{{_OrderDetail.Email}}</th>
+                        <th>{{_OrderDetail.BenhNhan.Email}}</th>
                     </tr>
                     <tr>
                         <td>Tình Trạng</td>
@@ -42,7 +42,7 @@
                     </tr>
                     <tr>
                         <td>Địa Chỉ</td>
-                        <th>{{_OrderDetail.Address}}</th>
+                        <th>{{_OrderDetail.BenhNhan.Diachi}}</th>
                     </tr>
                 </table>
             </div>
@@ -70,7 +70,8 @@
                 </h3>
                 <div class="d-flex" ng-show="_OrderDetail.Status==4">
                     <input ng-model="CodeSanPham" placeholder="Mã Sản Phẩm">
-                    <button ng-click="ThemSanPhamDonHang(CodeSanPham,_OrderDetail.CodeOrder)" type="button" class="btn btn-success">Thêm</button>
+                    <button ng-click="ThemSanPhamDonHang(CodeSanPham,_OrderDetail.CodeOrder)" type="button"
+                        class="btn btn-success">Thêm</button>
                 </div>
 
                 <table class="table table-bordered">
@@ -88,9 +89,11 @@
                         <td>{{item.ProductDetail.nameProduct}}</td>
                         <td>
                             <div class="d-flex" ng-show="_OrderDetail.Status==4">
-                                <button type="button" ng-click="SuaSanPhamDonHang(item,_OrderDetail.CodeOrder,-1)">-</button>
+                                <button type="button"
+                                    ng-click="SuaSanPhamDonHang(item,_OrderDetail.CodeOrder,-1)">-</button>
                                 <input style="width: 40px;text-align: center;" type="number" ng-model="item.Number">
-                                <button type="button" ng-click="SuaSanPhamDonHang(item,_OrderDetail.CodeOrder,1)">+</button>
+                                <button type="button"
+                                    ng-click="SuaSanPhamDonHang(item,_OrderDetail.CodeOrder,1)">+</button>
                             </div>
                             <span ng-show="_OrderDetail.Status!=4">{{item.Number}}</span>
                         </td>
@@ -98,7 +101,8 @@
                         <td><b ng-bind-html="item.PriceVND"></b></td>
                         <td><b ng-bind-html="item.ThanhTienVND"></b></td>
                         <td>
-                            <button ng-click="XoaSanPhamDonHang(item,_OrderDetail.CodeOrder)" class="btn btn-danger" type="button" ng-show="_OrderDetail.Status==4"> Xoá </button>
+                            <button ng-click="XoaSanPhamDonHang(item,_OrderDetail.CodeOrder)" class="btn btn-danger"
+                                type="button" ng-show="_OrderDetail.Status==4"> Xoá </button>
                         </td>
                     </tr>
                     <tr class="bg-blue">

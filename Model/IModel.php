@@ -2,7 +2,8 @@
 
 namespace Model;
 
-interface IModel {
+interface IModel
+{
 
     public function Post($model);
 

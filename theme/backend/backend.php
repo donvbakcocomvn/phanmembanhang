@@ -9,7 +9,7 @@ class backend extends \Model\Database
 
     function head()
     {
-?>
+        ?>
         <link rel="shortcut icon" href="/public/no-image.jpg" />
         <!-- Bootstrap 3.3.5 -->
         <link rel="stylesheet" href="/public/admin/bootstrap/css/bootstrap.min.css">
@@ -35,19 +35,21 @@ class backend extends \Model\Database
         <!-- bootstrap wysihtml5 - text editor -->
         <link rel="stylesheet" href="/public/admin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
         <link href="/public/admin/plugins/select2/select2.min.css" rel="stylesheet" type="text/css" />
-        <link href="/public/admin/CustomCss.css?v=<?php echo filemtime("public/admin/CustomCss.css"); ?>" rel="stylesheet" type="text/css" />
+        <link href="/public/admin/CustomCss.css?v=<?php echo filemtime("public/admin/CustomCss.css"); ?>" rel="stylesheet"
+            type="text/css" />
+        <!-- <link href="/public/App.css?v=<?php echo filemtime("public/App.css"); ?>" rel="stylesheet" type="text/css" /> -->
         <script src="/public/ckfinder/ckfinder.js" type="text/javascript"></script>
         <!-- jQuery 2.1.4 -->
         <script src="/public/admin/plugins/jQuery/jQuery-2.1.4.min.js"></script>
 
 
-    <?php
+        <?php
     }
 
     function Menu()
     {
         $user = Duser::CurentUsernameAdmin(true);
-    ?>
+        ?>
         <header class="main-header ">
             <!-- Logo -->
             <a href="/backend/" class="logo">
@@ -99,7 +101,8 @@ class backend extends \Model\Database
                                         <li>
                                             <a href="#">
                                                 <div class="pull-left">
-                                                    <img src="/public/admin/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
+                                                    <img src="/public/admin/dist/img/user4-128x128.jpg" class="img-circle"
+                                                        alt="User Image">
                                                 </div>
                                                 <h4>
                                                     Developers
@@ -111,7 +114,8 @@ class backend extends \Model\Database
                                         <li>
                                             <a href="#">
                                                 <div class="pull-left">
-                                                    <img src="/public/admin/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
+                                                    <img src="/public/admin/dist/img/user3-128x128.jpg" class="img-circle"
+                                                        alt="User Image">
                                                 </div>
                                                 <h4>
                                                     Sales Department
@@ -123,7 +127,8 @@ class backend extends \Model\Database
                                         <li>
                                             <a href="#">
                                                 <div class="pull-left">
-                                                    <img src="/public/admin/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
+                                                    <img src="/public/admin/dist/img/user4-128x128.jpg" class="img-circle"
+                                                        alt="User Image">
                                                 </div>
                                                 <h4>
                                                     Reviewers
@@ -155,7 +160,8 @@ class backend extends \Model\Database
                                         </li>
                                         <li>
                                             <a href="#">
-                                                <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the page and may cause design problems
+                                                <i class="fa fa-warning text-yellow"></i> Very long description here that may
+                                                not fit into the page and may cause design problems
                                             </a>
                                         </li>
                                         <li>
@@ -197,7 +203,9 @@ class backend extends \Model\Database
                                                     <small class="pull-right">20%</small>
                                                 </h3>
                                                 <div class="progress xs">
-                                                    <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar progress-bar-aqua" style="width: 20%"
+                                                        role="progressbar" aria-valuenow="20" aria-valuemin="0"
+                                                        aria-valuemax="100">
                                                         <span class="sr-only">20% Complete</span>
                                                     </div>
                                                 </div>
@@ -211,7 +219,9 @@ class backend extends \Model\Database
                                                     <small class="pull-right">40%</small>
                                                 </h3>
                                                 <div class="progress xs">
-                                                    <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar progress-bar-green" style="width: 40%"
+                                                        role="progressbar" aria-valuenow="20" aria-valuemin="0"
+                                                        aria-valuemax="100">
                                                         <span class="sr-only">40% Complete</span>
                                                     </div>
                                                 </div>
@@ -225,7 +235,9 @@ class backend extends \Model\Database
                                                     <small class="pull-right">60%</small>
                                                 </h3>
                                                 <div class="progress xs">
-                                                    <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar progress-bar-red" style="width: 60%"
+                                                        role="progressbar" aria-valuenow="20" aria-valuemin="0"
+                                                        aria-valuemax="100">
                                                         <span class="sr-only">60% Complete</span>
                                                     </div>
                                                 </div>
@@ -239,7 +251,9 @@ class backend extends \Model\Database
                                                     <small class="pull-right">80%</small>
                                                 </h3>
                                                 <div class="progress xs">
-                                                    <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar progress-bar-yellow" style="width: 80%"
+                                                        role="progressbar" aria-valuenow="20" aria-valuemin="0"
+                                                        aria-valuemax="100">
                                                         <span class="sr-only">80% Complete</span>
                                                     </div>
                                                 </div>
@@ -256,7 +270,9 @@ class backend extends \Model\Database
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="/public/user_no_photo.png" class="user-image" alt="User Image">
-                                <span class="hidden-xs"><?php echo $user->Name ?></span>
+                                <span class="hidden-xs">
+                                    <?php echo $user->Name ?>
+                                </span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
@@ -264,7 +280,9 @@ class backend extends \Model\Database
                                     <img src="/public/user_no_photo.png" class="img-circle" alt="User Image">
                                     <p>
                                         <?php echo $user->Name ?>
-                                        <small><?php echo $user->Username ?></small>
+                                        <small>
+                                            <?php echo $user->Username ?>
+                                        </small>
                                     </p>
                                 </li>
                                 <!-- Menu Footer-->
@@ -284,7 +302,8 @@ class backend extends \Model\Database
             </nav>
         </header>
         <!-- Left side column. contains the logo and sidebar -->
-        <aside class="main-sidebar" ng-controller="bklayoutController" ng-init='bklayoutInit(<?php echo $this->_encode($_SESSION[QuanTri]); ?>)'>
+        <aside class="main-sidebar" ng-controller="bklayoutController"
+            ng-init='bklayoutInit(<?php echo $this->_encode($_SESSION[QuanTri]); ?>)'>
             <!-- sidebar: style can be found in sidebar.less -->
             <section class="sidebar ">
                 <!-- Sidebar user panel -->
@@ -298,31 +317,31 @@ class backend extends \Model\Database
                     </div>
                 </div>
                 <ul class="sidebar-menu ">
-                    <li class="header text-center text-uppercase " style="color: #ddd;"><b>Danh Mục Chức Năng</b></li>
+                    <li class="header hidden text-center text-uppercase " style="color: #ddd;"><b>Danh Mục Chức Năng</b></li>
                     <li class="treeview hidden">
                         <a href="/cart/mcart/donhangcuatoi">
                             <i class="fa fa-list"></i> <span>Đơn Hàng Của Tôi</span>
                         </a>
                     </li>
                     <?php
-                    if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien,  Duser::Superadmin])) {
-                    ?>
+                    if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien, Duser::Superadmin])) {
+                        ?>
                         <!-- <li class="treeview">
                             <a href="/cart/xacnhandonhang/index/">
                                 <i class="fa fa-dollar"></i> <span>XN Nhận Tiền</span>
                             </a>
                         </li> -->
-                    <?php
+                        <?php
                     }
 
                     if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien, Duser::QuanLy, Duser::Superadmin])) {
-                    ?>
+                        ?>
                         <li><a href="/cart/vieworder"><i class="fa fa-shopping-cart"></i> <span>Quản Lý Đơn Hàng</span></a></li>
 
-                    <?php
+                        <?php
                     }
                     if (Duser::KiemTraQuyen([Duser::admin, Duser::QuanLy, Duser::Superadmin])) {
-                    ?>
+                        ?>
                         <li class="treeview <?php echo \Model\menuactive::SetActive('mproduct'); ?>">
                             <a href="/mproduct/index">
                                 <i class="fa fa-list-alt"></i> <span>Quản Lý Sản Phẩm</span>
@@ -342,21 +361,21 @@ class backend extends \Model\Database
                                 <!-- <li><a href="/mproduct/sanphamhtheohinh"><i class="fa fa-circle-o"></i> Thêm Nhanh</a></li> -->
                             </ul>
                         </li>
-                    <?php
+                        <?php
                     }
                     if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien, Duser::QuanLy, Duser::Superadmin])) {
-                    ?>
+                        ?>
 
-                    <?php
+                        <?php
                     }
 
                     if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien, Duser::QuanLy, Duser::Superadmin])) {
-                    ?>
+                        ?>
 
-                    <?php
+                        <?php
                     }
                     if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin])) {
-                    ?>
+                        ?>
                         <li class="treeview">
                             <a href="/setting/index/">
                                 <i class="fa fa-gear"></i> <span>Cài Đặt</span>
@@ -371,7 +390,7 @@ class backend extends \Model\Database
 
                                 <?php
                                 if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin])) {
-                                ?>
+                                    ?>
                                     <li class="treeview">
                                         <a href="/backend/hinhanh">
                                             <i class="fa fa-image"></i> <span>Thư Viện Hình</span>
@@ -383,16 +402,16 @@ class backend extends \Model\Database
                                         </a>
                                     </li> -->
 
-                                <?php
+                                    <?php
                                 }
                                 if (Duser::KiemTraQuyen([Duser::admin, Duser::Superadmin])) {
-                                ?>
+                                    ?>
                                     <li class="treeview">
                                         <a href="/duser/index/index">
                                             <i class="fa fa-list-alt"></i> <span>Quản Lý User</span>
                                         </a>
                                     </li>
-                                <?php
+                                    <?php
                                 }
                                 ?>
                                 <li class="treeview hidden <?php echo \Model\menuactive::SetActive('mnews'); ?> ">
@@ -445,7 +464,7 @@ class backend extends \Model\Database
                                 </li>
                             </ul>
                         </li>
-                    <?php
+                        <?php
                     }
                     ?>
                 </ul>
@@ -453,12 +472,12 @@ class backend extends \Model\Database
             </section>
             <!-- /.sidebar -->
         </aside>
-    <?php
+        <?php
     }
 
     function js()
     {
-    ?>
+        ?>
 
         <!-- jQuery UI 1.11.4 -->
         <script src="/public/admin/plugins/jQueryUI/jquery-ui.min.js" type="text/javascript"></script>
@@ -496,10 +515,11 @@ class backend extends \Model\Database
         <script src="/public/admin/dist/js/pages/dashboard.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="/public/admin/dist/js/demo.js"></script>
-        <script type="text/javascript" src="/public/admin/AppTheme.js?v=<?php echo filemtime('public/admin/AppTheme.js'); ?>"></script>
+        <script type="text/javascript"
+            src="/public/admin/AppTheme.js?v=<?php echo filemtime('public/admin/AppTheme.js'); ?>"></script>
         <script src="/public/moment.js" type="text/javascript"></script>
         <script src="/public/admin/App.js?v=<?php echo filemtime('public/admin/App.js'); ?>" type="text/javascript"></script>
-<?php
+        <?php
     }
 
     function Breadcrumb()

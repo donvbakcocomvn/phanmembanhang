@@ -760,6 +760,9 @@ class Database extends \Model\iDatabase
             $fields[] = sprintf('`%s` = "%s" ', $key, $this->BoHieuUngSQL($value));
         }
         $sql = sprintf("INSERT INTO `%s` SET %s ", $tableName, implode(', ', $fields));
+        if(self::$Debug){
+            echo $sql;
+        }
         $this->Query($sql);
         return $this->SaveInsert();
     }

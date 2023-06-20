@@ -8,8 +8,10 @@
                  <div class="col-md-6">
                      <?php
 
+                        use Model\Database;
                         use Model\ThanhToan;
                         use Model\ThanhToan\BenhNhan;
+                        use Module\cart\Model\BenhNhan as ModelBenhNhan;
 
                         $maThe = $_POST["mathe"] ?? "";
                         $thanhToan = new ThanhToan();
@@ -21,11 +23,26 @@
                             $LichSuGiaoDich =  $thanhToan->GetLichsuGD($maThe);
                             if ($thongTin) {
                                 $benhNhan = new BenhNhan($thongTin);
+                                // $_benhNham
+                                $_benhNhan = new ModelBenhNhan();
+                                $_benhNhanDetail = $_benhNhan->GetBySothe($benhNhan->Sothe);
+                                if ($_benhNhanDetail == null) {
+
+                                    $_benhNhan = new ModelBenhNhan();
+                                    // var_dump((array)$benhNhan);
+                                    Database::$Debug = true;
+                                    $_benhNhan->Post((array)$benhNhan);
+                                } else {
+                                    $_benhNhanDetail["NumberCheck"] += 1;
+                                    $_benhNhan = new ModelBenhNhan();
+                                    $_benhNhan->Put($_benhNhanDetail);
+                                }
                             }
                         }
 
+
                         ?>
-                     <h3>Thông tin thẻ</h3>
+                     <h3>Thông tin thẻ </h3>
                      <form action="" method="POST">
                          <div class="d-flex">
                              <input type="password" name="mathe" class="form-control" placeholder="Nhập mã thẻ" value="<?php echo $_REQUEST["mathe"] ?? "" ?>" required="required">

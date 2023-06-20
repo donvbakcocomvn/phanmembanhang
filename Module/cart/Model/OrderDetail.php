@@ -38,6 +38,7 @@ class OrderDetail extends \Model\Database
     {
         return Common::MoneyFomat($this->Price * $this->Number);
     }
+     
     public function Order()
     {
         return new Order($this->CodeOrder);

@@ -25,9 +25,8 @@ class BenhNhan extends \Model\Database
     public function __construct($bn = null)
     {
 
-        parent::$Tablename  = table_prefix . "benhnhan";
-        parent::__construct();
-
+        parent::$Tablename = table_prefix . "benhnhan";
+        parent::__construct();  
         if (!is_array($bn)) {
             $id = $bn;
             $bn = $this->GetByMaBN($id);
@@ -35,7 +34,6 @@ class BenhNhan extends \Model\Database
                 $bn = $this->GetBySothe($id);
             }
         }
-
         $this->MaBN = $bn["MaBN"] ?? null;
         $this->Sothe = $bn["Sothe"] ?? null;
         $this->HotenBN = $bn["HotenBN"] ?? null;
@@ -55,7 +53,7 @@ class BenhNhan extends \Model\Database
 
     public function TitleData()
     {
-        $a["MaBN"] = "Mã Bệnh Nhân";
+        $a["MaBN"] = "Id";
         $a["Sothe"] = "Số Thẻ";
         $a["HotenBN"] = "Họ Tên BN";
         $a["Ngaysinh"] = "Ngày Sinh";
@@ -66,7 +64,7 @@ class BenhNhan extends \Model\Database
         $a["Ngaycap"] = "Ngày Cấp";
         $a["Noicap"] = "Nơi Cấp";
         $a["Email"] = "Email";
-        $a["Nhommau"] = "Nhóm Máu";
+        $a["Nhommau"] = "Mã bệnh nhân";
         $a["Tiensubenh"] = "Khoa";
         $a["Soduthe"] = "Số Dư Thẻ";
         $a["NumberCheck"] = "Số Lần Cập Nhật";
@@ -76,7 +74,7 @@ class BenhNhan extends \Model\Database
     public function Order($index, $number, &$total)
     {
         $order = new Order();
-        return  $order->GetOrderByBenhNhanPT($this->Sothe, $index, $number, $total);
+        return $order->GetOrderByBenhNhanPT($this->Sothe, $index, $number, $total);
     }
 
 
@@ -92,7 +90,7 @@ class BenhNhan extends \Model\Database
 
     public function GetByMaBN($id)
     {
-        $where  = " `MaBN` = '{$id}' ";
+        $where = " `MaBN` = '{$id}' ";
         if ($this->select(self::$Tablename, [], $where)) {
             return $this->select(self::$Tablename, [], $where)[0];
         }
@@ -101,7 +99,7 @@ class BenhNhan extends \Model\Database
 
     public function KhoaBenh()
     {
-        $m =  new Model_OptionsService();
+        $m = new Model_OptionsService();
         $a = $m->GetByKeyValue($this->Tiensubenh, "khoa");
         return new Model_OptionsService($a);
     }
@@ -114,13 +112,13 @@ class BenhNhan extends \Model\Database
         if ($khoabenh != "") {
             $khoabenhsql = " and `Tiensubenh` = '{$khoabenh}'";
         }
-        $where  = " (`Sothe` like '%{$name}%' or `HotenBN` like '%{$name}%' ) {$khoabenhsql} ";
+        $where = " (`Nhommau` like '%{$name}%' or `MaBN` like '%{$name}%' or `Sothe` like '%{$name}%' or `HotenBN` like '%{$name}%' ) {$khoabenhsql} order by `NhomMau` ";
         return $this->SelectPT($where, $indexPage, $pageNumber, $total);
     }
     public function GetDSMaThe()
     {
         // self::$Debug = true;
-        $where  = " 1 = 1 ";
+        $where = " 1 = 1 ";
         self::SetTableName(self::$Tablename);
         return $this->select(self::$Tablename, ["Sothe"], $where);
     }
@@ -137,9 +135,23 @@ class BenhNhan extends \Model\Database
         $maBN = $item["MaBN"];
         return $this->update(self::$Tablename, $item, "`MaBN` ='{$maBN}' ");
     }
-    public function GetBySothe($id)
+    public function DeleteBN($sothe, $idBenhNhan)
     {
-        $where  = " `Sothe` = '{$id}' ";
+        return $this->delete(self::$Tablename, "`Sothe` ='{$sothe}'  and `MaBN` = '{$idBenhNhan}' ");
+    }
+
+    public function GetBySotheMaBN($soThe, $MaBN)
+    {
+        $where = " `Sothe` = '{$soThe}' and `MaBN` ='{$MaBN}'";
+        if ($this->select(self::$Tablename, [], $where)) {
+            return $this->select(self::$Tablename, [], $where)[0];
+        }
+        return null;
+    }
+
+    public function GetBySothe($soThe)
+    {
+        $where = " `Sothe` = '{$soThe}'";
         if ($this->select(self::$Tablename, [], $where)) {
             return $this->select(self::$Tablename, [], $where)[0];
         }

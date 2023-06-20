@@ -51,7 +51,7 @@ class vieworder extends \Controller_backend
         //
         $order = new Order();
         // danh sách order chưa đủ thông tin
-        $orders =  $order->GetOrderError();
+        $orders = $order->GetOrderError();
         // var_dump($orders);
         foreach ($orders as $item) {
             $benhNhan = new BenhNhan();
@@ -76,16 +76,20 @@ class vieworder extends \Controller_backend
         $_order = new Order();
         $cardIds = $_order->GetDanhSachMaThe();
         foreach ($cardIds as $key => $value) {
+            // var_dump($value);
             $thanhToan = new ThanhToan();
             $benhNhan = $thanhToan->GetTTBenhnhan($value["Name"]);
+            // var_dump($benhNhan);
             $_benhNhan = new BenhNhan();
-            $_benhNhanDetail = $_benhNhan->GetBySothe($benhNhan["SoThe"]);
+            $_benhNhanDetail = $_benhNhan->GetBySotheMaBN($benhNhan["Sothe"], $benhNhan["MaBN"]);
             if ($_benhNhanDetail == null) {
                 $_benhNhan->Post($benhNhan);
             } else {
                 $benhNhan["NumberCheck"] += 1;
                 $_benhNhan->Put($benhNhan);
             }
+            echo $benhNhan["MaBN"];
+            flush();
         }
     }
 
@@ -237,11 +241,19 @@ class vieworder extends \Controller_backend
 
     public function DongBoKhoaBenh()
     {
-        $id =  $this->getParam()[0];
+        $id = $this->getParam()[0];
         $benhnhan = new BenhNhan($id);
         if ($benhnhan->Sothe) {
             // cập nhật khoa bệnh
         }
+    }
+    public function xoabenhnhan()
+    {
+        $soThe = $this->getParam()[0];
+        $maBN = $this->getParam()[1];
+        $benhnhan = new BenhNhan();
+        $benhnhan->DeleteBN($soThe, $maBN);
+        Common::toUrl($_SERVER["HTTP_REFERER"]);
     }
 
     public function benhnhan()
@@ -254,7 +266,7 @@ class vieworder extends \Controller_backend
             $order->UpdateKhoaOrder($Sothe, $KhoaBenh);
         }
 
-        $id =  $this->getParam()[0];
+        $id = $this->getParam()[0];
         $index = $_REQUEST["index"] ?? 1;
         $index = max($index, 1);
         $number = $_REQUEST["number"] ?? 10;

@@ -60,7 +60,7 @@ $_benhNhan = new BenhNhan();
                                         <?php
                                         foreach ($_benhNhan->TitleData() as $key => $title) {
                                         ?>
-                                            <td><?php echo $title; ?></td>
+                                        <td><?php echo $title; ?></td>
                                         <?php
                                         }
                                         ?>
@@ -73,27 +73,33 @@ $_benhNhan = new BenhNhan();
                                             $_benhNhan = new BenhNhan($benhnhan);
                                             $_items = (array) $_benhNhan;
                                     ?>
-                                        <tr>
-                                            <td>
-                                                <a href="/cart/vieworder/benhnhan/<?php echo $_benhNhan->Sothe; ?>" class="btn btn-success">
-                                                    Xem
-                                                </a>
-                                            </td>
-                                            <?php
-                                            foreach ($_items  as $key => $value) {
-                                            ?>
-                                                <td><?php
-                                                    if (is_numeric($value)) {
-                                                        echo number_format($value, 0, ".", " ");
-                                                    } else {
-                                                        echo $value;
-                                                    }
-                                                    ?>
-                                                </td>
-                                            <?php
+                                    <tr>
+                                        <td>
+                                            <a href="/cart/vieworder/benhnhan/<?php echo $_benhNhan->Sothe; ?>"
+                                                class="btn btn-success">
+                                                Xem
+                                            </a>
+                                            <a onclick="return confirm('Bạn muốn xóa bệnh nhân này?')"
+                                                href="/cart/vieworder/xoabenhnhan/<?php echo $_benhNhan->Sothe; ?>/<?php echo $_benhNhan->MaBN; ?>/"
+                                                class="btn btn-danger">
+                                                Xóa
+                                            </a>
+                                        </td>
+                                        <?php
+                                            foreach ($_items as $key => $value) {
+                                        ?>
+                                        <td><?php
+                                                if (is_numeric($value)) {
+                                                    echo number_format($value, 0, ".", " ");
+                                                } else {
+                                                    echo $value;
+                                                }
+                                        ?>
+                                        </td>
+                                        <?php
                                             }
-                                            ?>
-                                        </tr>
+                                        ?>
+                                    </tr>
                                     <?php
                                         }
                                     ?>
@@ -102,7 +108,7 @@ $_benhNhan = new BenhNhan();
                         </div>
                         <?php
                         $link = Common::LinkPhanTrang("/cart/vieworder/dongbo/", $params);
-                        echo Common::PhanTrang($totalPage,  $params["page"], $link);
+                        echo Common::PhanTrang($totalPage, $params["page"], $link);
                         ?>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="ThongKeKhoa">
@@ -110,15 +116,16 @@ $_benhNhan = new BenhNhan();
                             <?php
                             foreach ($_benhNhan->BenhNhanTheoKhoaBenh() as $key => $value) {
                             ?>
-                                <div class="col-md-3">
-                                    <div class="info-box">
-                                        <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">Khoa: <?php echo $value["Name"]; ?></span>
-                                            <span class="info-box-number">Số bệnh nhân: <?php echo $value["BenhNhan"]; ?></span>
-                                        </div>
+                            <div class="col-md-3">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-yellow"><i
+                                            class="ion ion-ios-people-outline"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Khoa: <?php echo $value["Name"]; ?></span>
+                                        <span class="info-box-number">Số bệnh nhân: <?php echo $value["BenhNhan"]; ?></span>
                                     </div>
                                 </div>
+                            </div>
                             <?php
                             }
                             ?>
@@ -130,15 +137,15 @@ $_benhNhan = new BenhNhan();
     </div>
 </div>
 <script>
-    $(function() {
-        $("#btnSysn").click(function() {
+    $(function () {
+        $("#btnSysn").click(function () {
             $("#btnSysn").attr("disabled", true);
             $("#btnSysn").html("đang đồng bộ");
             $.ajax({
                 type: "get",
                 url: "/cart/vieworder/DongboAjax/",
                 dataType: "text",
-                success: function(response) {
+                success: function (response) {
                     $("#btnSysn").removeAttr("disabled");
                     $("#btnSysn").html("đồng bộ");
                 }

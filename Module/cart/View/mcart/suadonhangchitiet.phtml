@@ -1,13 +1,13 @@
-<div class="" ng-show="_OrderDetail" >
+<div class="" ng-show="_OrderDetail">
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Thông Tin Đơn Hàng</h3>
-            <div class="box-tools"> 
+            <div class="box-tools">
             </div>
         </div>
         <div class="box-body">
             <div class="col-md-6">
-                <table class="table table-bordered" >
+                <table class="table table-bordered">
                     <caption><b>Khách hàng</b></caption>
                     <tr>
                         <td>Mã Đơn Hàng</td>
@@ -15,15 +15,21 @@
                     </tr>
                     <tr>
                         <td>Người Đặt Hàng</td>
-                        <th>{{_OrderDetail.Name}}</th>
+                        <th>{{_OrderDetail.BenhNhan.HotenBN}}
+                            <a target="_blank" href="/cart/vieworder/benhnhan/{{_OrderDetail.MaThe}}">Xem</a>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>Khoa</td>
+                        <th>{{_OrderDetail.BenhNhan.Tiensubenh}}</th>
                     </tr>
                     <tr>
                         <td>SĐT</td>
-                        <th>{{_OrderDetail.Phone}}</th>
+                        <th>{{_OrderDetail.BenhNhan.Sodienthoai}}</th>
                     </tr>
                     <tr>
                         <td>Email</td>
-                        <th>{{_OrderDetail.Email}}</th>
+                        <th>{{_OrderDetail.BenhNhan.Email}}</th>
                     </tr>
                     <tr>
                         <td>Tình Trạng</td>
@@ -35,12 +41,12 @@
                     </tr>
                     <tr>
                         <td>Địa Chỉ</td>
-                        <th>{{_OrderDetail.Address}}</th>
+                        <th>{{_OrderDetail.BenhNhan.Diachi}}</th>
                     </tr>
                 </table>
             </div>
             <div class="col-md-6">
-                <table class="table table-bordered" >
+                <table class="table table-bordered">
                     <caption><b>Nhân Viên Bán Hàng</b></caption>
                     <tr>
                         <td>UserName</td>
@@ -58,11 +64,11 @@
                 </table>
             </div>
             <div class="col-md-12">
-                <h3 class="text-left" style="margin-bottom: 0px;color: #000;font-size: 16px;" >
+                <h3 class="text-left" style="margin-bottom: 0px;color: #000;font-size: 16px;">
                     <b>Danh Sách Sản Phẩm </b>
                 </h3>
-                <table class="table table-bordered" >
-                    <tr class="bg-blue" >
+                <table class="table table-bordered">
+                    <tr class="bg-blue">
                         <th>Mã Sản Phẩm</th>
                         <th>Tên Sản Phẩm</th>
                         <th>Số Lượng</th>
@@ -70,21 +76,21 @@
                         <th>Thành Tiền</th>
                         <th>Action</th>
                     </tr>
-                    <tr ng-repeat="item in _OrderDetail.Products" >
+                    <tr ng-repeat="item in _OrderDetail.Products">
                         <td>{{item.ProductDetail.Code}}</td>
                         <td>{{item.ProductDetail.nameProduct}}</td>
                         <td>{{item.Number}}</td>
-                        <td><b ng-bind-html="item.PriceVND" ></b></td>
-                        <td><b ng-bind-html="item.ThanhTienVND" ></b></td>
+                        <td><b ng-bind-html="item.PriceVND"></b></td>
+                        <td><b ng-bind-html="item.ThanhTienVND"></b></td>
                         <td>
-                            <div ng-show="_OrderDetail.Status!='5'" >
-                                <button class="btn btn-sm btn-danger" >Xoá</button>
+                            <div ng-show="_OrderDetail.Status!='5'">
+                                <button class="btn btn-sm btn-danger">Xoá</button>
                             </div>
                         </td>
                     </tr>
-                    <tr class="bg-blue" >
-                        <th colspan="4" class="text-right" >Tổng Tiền</th>
-                        <th colspan="2" >{{_OrderDetail.TotalPriceVND}}</th>
+                    <tr class="bg-blue">
+                        <th colspan="4" class="text-right">Tổng Tiền</th>
+                        <th colspan="2">{{_OrderDetail.TotalPriceVND}}</th>
 
                     </tr>
                 </table>

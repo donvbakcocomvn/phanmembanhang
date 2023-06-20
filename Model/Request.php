@@ -13,27 +13,29 @@ namespace Model;
  *
  * @author MSI
  */
-class Request {
+class Request
+{
 
     //put your code here
 
-    public function __construct() {
-        
+    public function __construct()
+    {
     }
 
-    public static function Post($name, $value) {
-        
+    public static function Post($name, $value)
+    {
+
         if (isset($_POST[$name])) {
             return $_POST[$name];
         }
         return $value;
     }
 
-    public static function Get($name, $value) {
-          if (isset($_GET[$name])) {
+    public static function Get($name, $value)
+    {
+        if (isset($_GET[$name])) {
             return $_GET[$name];
         }
         return $value;
     }
-
 }

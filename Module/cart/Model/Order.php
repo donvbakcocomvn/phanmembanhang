@@ -49,7 +49,7 @@ class Order extends \Model\Database
 
     function __construct($order = null)
     {
-        parent::$Tablename  = table_prefix . "order";
+        parent::$Tablename = table_prefix . "order";
         parent::__construct();
         if ($order) {
             if (!is_array($order)) {
@@ -94,15 +94,23 @@ class Order extends \Model\Database
     static public function CreateCode()
     {
         $date = date("Y-m-d");
-        $Order  = new Order();
+        $Order = new Order();
         $count = $Order->SelectCount("where `NgayTao` LIKE '{$date}%'");
         return date("ymd", time()) . Common::NumberToStringFomatZero($count + 1, 4);
     }
     public function KhoaBenh()
     {
-        $modelOption = new  Model_OptionsService();
-        return new  Model_OptionsService($modelOption->GetByKeyValue($this->KhoaBenh, "khoa"));
+        $modelOption = new Model_OptionsService();
+        $khoa = $modelOption->GetByKeyValue($this->KhoaBenh, "khoa");
+        return new Model_OptionsService($khoa);
     }
+    public static function KhoaBenhByKey($key)
+    {
+        $modelOption = new Model_OptionsService();
+        return new Model_OptionsService($modelOption->GetByKeyValue($key, "khoa"));
+    }
+
+
     function NgayDat()
     {
         return date("d-m-Y H:i", strtotime($this->NgayTao));
@@ -112,7 +120,7 @@ class Order extends \Model\Database
     {
         $orderDetail = $this->orderDetailbyid($orderCode);
         $tongTien = 0;
-        foreach ($orderDetail as   $value) {
+        foreach ($orderDetail as $value) {
             $thanhTien = $value["Price"] * $value["Number"];
             $tongTien += $thanhTien;
         }
@@ -158,7 +166,7 @@ class Order extends \Model\Database
     function updateKhachHang($CodeOrder, $MaThe)
     {
         $thanhToan = new ThanhToan();
-        $ThongTinBenhNhan =  $thanhToan->GetTTBenhnhan($MaThe);
+        $ThongTinBenhNhan = $thanhToan->GetTTBenhnhan($MaThe);
         $Order = ["Name" => $MaThe];
         $Order["MaBenhNhan"] = $ThongTinBenhNhan["Nhommau"];
         $Order["KhoaBenh"] = $ThongTinBenhNhan["Tiensubenh"];
@@ -309,15 +317,15 @@ class Order extends \Model\Database
         $order = (array) $this;
 
         if ($this->Status == self::DaThuTien) {
-            $tt =  new ThanhToan();
-            $benhNhan =  new BenhNhan($this->Name);
+            $tt = new ThanhToan();
+            $benhNhan = new BenhNhan($this->MaBenhNhan);
             // them the moi
             if ($benhNhan->MaBN == null) {
-                $tt =  new ThanhToan();
-                $ttbn = $tt->GetTTBenhnhan($this->Name);
+                $tt = new ThanhToan();
+                $ttbn = $tt->GetTTBenhnhan($this->MaThe);
                 if ($ttbn) {
                     $name = $ttbn;
-                    $benhNhan =  new BenhNhan();
+                    $benhNhan = new BenhNhan();
                     $benhNhan->Post($ttbn);
                 }
             } else {
@@ -453,8 +461,8 @@ class Order extends \Model\Database
             $where .= Sql::OrderBy(["NgayTao"], "DESC");
             $indexPage = ($indexPage - 1) * $number;
             $indexPage = max($indexPage, 0);
-            $total = $this->SelectCount("where" . $where); 
-            $where .= Sql::Limit($indexPage, $number); 
+            $total = $this->SelectCount("where" . $where);
+            $where .= Sql::Limit($indexPage, $number);
             return $this->select(table_prefix . "order", [], $where);
         } catch (Exception $ex) {
             return [];
@@ -463,14 +471,13 @@ class Order extends \Model\Database
     public function ThongKeSanPhamTheoBenhNhan($MaThe, $fromDate, $toDate)
     {
         try {
-            echo   $sql = "SELECT *,SUM(`Number`) as `Total`, (SUM(`Number`)*`Price`) as `ThanhTien` 
+            $sql = "SELECT *,SUM(`Number`) as `Total`, (SUM(`Number`)*`Price`) as `ThanhTien` 
             FROM `bakcodt_orderdetail` WHERE `CodeOrder` in (SELECT `CodeOrder` 
             FROM `bakcodt_order` 
             WHERE `Status` = '5' 
             and `NgayTao` > '{$fromDate} 00:00:00' 
             and `NgayTao` < '{$toDate} 23:59:59' 
             and `Name` = '{$MaThe}') GROUP BY `IdProduct`";
-            exit();
             $this->Query($sql);
             return $this->fetchAll();
         } catch (Exception $ex) {
@@ -480,6 +487,24 @@ class Order extends \Model\Database
 
     public function BenhNhan()
     {
-        return new BenhNhan($this->Name);
+        return new BenhNhan($this->MaBenhNhan);
+    }
+    public function BenhNhanMaThe()
+    {
+        return new BenhNhan($this->MaThe);
+    }
+    public function BenhNhanTheAndMa()
+    {
+        $bn = new BenhNhan();
+        $ttbenhNhan = $bn->GetBySotheMaBN($this->MaThe, $this->MaBenhNhan);
+        if ($ttbenhNhan) {
+            return new BenhNhan($ttbenhNhan[0]);
+        }
+        return new BenhNhan();
+    }
+    public function BenhNhanTheoThe()
+    {
+        $thanhToan = new ThanhToan();
+        return new BenhNhan($thanhToan->GetTTBenhnhan($this->MaThe));
     }
 }
