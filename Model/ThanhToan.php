@@ -135,7 +135,7 @@ class ThanhToan
                 ->GetHotenFromSotheResult;
             return $response;
         } catch (Exception $th) {
-            var_dump($th);
+           return null;
         }
     }
 
@@ -150,7 +150,7 @@ class ThanhToan
                 ->GetTTBenhnhanResult;
             return json_decode($response, JSON_OBJECT_AS_ARRAY);
         } catch (Exception $th) {
-            var_dump($th);
+             return null;
         }
         return null;
     }
