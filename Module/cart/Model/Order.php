@@ -334,7 +334,8 @@ class Order extends \Model\Database
         }
         $order["Id"] = $this->Id;
         $order["Name"] = $name["HotenBN"] ?? $this->Name;
-        $order["KhoaBenh"] = $this->KhoaBenh()->Name;
+        // $order["KhoaBenh"] = $this->KhoaBenh()->Name;
+        $order["KhoaBenh"] = "";
         $order["MaBenhNhan"] = $this->MaBenhNhan;
         $order["TotalPrice"] = intval($this->TotalPrice);
         $order["TotalPriceVND"] = \lib\Common::MoneyFomat($this->TotalPrice);

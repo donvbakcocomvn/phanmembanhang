@@ -41,7 +41,8 @@ class backend extends \Model\Database
         <script src="/public/ckfinder/ckfinder.js" type="text/javascript"></script>
         <!-- jQuery 2.1.4 -->
         <script src="/public/admin/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-
+        <link href="/public/css/App.css?v=<?php echo filemtime("public/css/App.css"); ?>" rel="stylesheet"
+            type="text/css" />
 
         <?php
     }
@@ -519,6 +520,7 @@ class backend extends \Model\Database
             src="/public/admin/AppTheme.js?v=<?php echo filemtime('public/admin/AppTheme.js'); ?>"></script>
         <script src="/public/moment.js" type="text/javascript"></script>
         <script src="/public/admin/App.js?v=<?php echo filemtime('public/admin/App.js'); ?>" type="text/javascript"></script>
+        <script src="/public/App.js?v=<?php echo filemtime('public/App.js'); ?>" type="text/javascript"></script>
         <?php
     }
 

@@ -1,27 +1,42 @@
 <?php
 
-class Controller_mcategory extends Controller_backend {
+use Model\Breadcrumb;
 
+class Controller_mcategory extends Controller_backend
+{
     public $Category;
 
-    function __construct() {
+    function __construct()
+    {
         $this->Category = new Model\Category();
         parent::__construct();
+        $this->Bread[] = [
+            "title" => "Danh mục sản phẩm",
+            "link" => "/mcategory/index"
+        ];
     }
 
-    function index() {
+    function index()
+    {
 
-//        $this->Category->DeleteCategory(1);
+        //        $this->Category->DeleteCategory(1);
+        $this->Bread[] = [
+            "title" => "Danh sách danh mục",
+            "link" => ""
+        ];
+        (new Breadcrumb())->setBreadcrumb($this->Bread);
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "");
     }
 
-    function detail() {
-
-
+    function detail()
+    { 
+   
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "");
     }
 
-    function edit() {
+    function edit()
+    {
+
         if (isset($_POST["SuaDanhMuc"])) {
             $Cat = $this->Category->Category4Id($_POST["catID"], FALSE);
             $_cat = new \Model\Category($Cat);
@@ -42,10 +57,18 @@ class Controller_mcategory extends Controller_backend {
                 $M_error->setError($this->Category->getError($kt), 'danger');
             }
         }
+
+        $this->Bread[] = [
+            "title" => "Sửa danh mục hàng hóa",
+            "link" => ""
+        ];
+        (new Breadcrumb())->setBreadcrumb($this->Bread);
+
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "");
     }
 
-    function add() {
+    function add()
+    {
 
         if (isset($_POST["ThemDanhMuc"])) {
             $Cat["catName"] = $this->Category->Bokytusql($_POST["catName"]);
@@ -66,25 +89,28 @@ class Controller_mcategory extends Controller_backend {
                 $this->Category->_header("/mcategory/detail/" . $Cat["catID"]);
             } else {
                 $M_error = new \Model\Error();
-                $M_error->setError($this->Category->getError($kt), 'danger');
+                $M_error->setError("Lỗi", 'danger');
             }
         }
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "");
     }
 
-    function delete() {
+    function delete()
+    {
         if (isset($_POST["xoadanhmuc"])) {
             $this->Category->DeleteCategory($_POST["catID"]);
             $this->Category->_header("/mcategory/index");
         }
     }
 
-    function categorys() {
+    function categorys()
+    {
 
         $this->ViewTheme("", Model_ViewTheme::get_viewthene(), "");
     }
 
-    function getCategoryByID() {
+    function getCategoryByID()
+    {
         $a = $this->Category->Category4Id($this->param[0], FALSE);
         echo $this->Category->_encode($a);
     }

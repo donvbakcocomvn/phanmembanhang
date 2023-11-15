@@ -2,15 +2,18 @@
 
 namespace Model;
 
-class Breadcrumb {
+class Breadcrumb
+{
 
     public static $List;
     public static $Title;
-    function setBreadcrumb($array) {
+    function setBreadcrumb($array)
+    {
         self::$List = $array;
     }
 
-    function showBreadcrumb() {
+    function showBreadcrumb()
+    {
         $ds = self::$List;
         $a = [];
         ?>
@@ -31,7 +34,9 @@ class Breadcrumb {
             if ($a) {
                 ?>
                 <span class="navigation-pipe">&nbsp;</span>
-                <span class="navigation_page"><?php echo $a["title"] ?></span>
+                <span class="navigation_page">
+                    <?php echo $a["title"] ?>
+                </span>
                 <?php
             }
             ?>
@@ -40,7 +45,8 @@ class Breadcrumb {
         <?php
     }
 
-    function backendBreadcrumb() {
+    function backendBreadcrumb()
+    {
         $ds = self::$List;
         $a = [];
         ?>
@@ -61,7 +67,9 @@ class Breadcrumb {
             if ($a) {
                 ?>
                 <span class="navigation-pipe">&nbsp;</span>
-                <span class="navigation_page"><?php echo $a["title"] ?></span>
+                <span class="navigation_page">
+                    <?php echo $a["title"] ?>
+                </span>
                 <?php
             }
             ?>
@@ -70,37 +78,49 @@ class Breadcrumb {
         <?php
     }
 
-    function backend() {
+    function backend()
+    {
         $ds = self::$List;
         $a = [];
+        if ($ds) {
+            $a = end($ds);
+        }
         ?>
-
-        <ol class="breadcrumb">
-            <?php
-            if ($ds) {
-                $a = end($ds);
-                unset($ds[count($ds) - 1]);
-                if ($ds)
-                    foreach ($ds as $v) {
-                        ?>
-                        <li class="active">
-                            <a href="<?php echo $v["link"] ?>"><?php echo $v["title"] ?></a>
-                        </li>
-                        <?php
-                    }
-            }
-            if ($a) {
-                ?>
-                <li class="active"><?php echo $a["title"] ?></li>
+        <section class="content-header">
+            <h1>
+                <?php echo $a["title"] ?? "" ?>
+            </h1>
+            <ol class="breadcrumb">
+                <?php
+                if ($ds) {
+                    $a = end($ds);
+                    unset($ds[count($ds) - 1]);
+                    if ($ds)
+                        foreach ($ds as $v) {
+                            ?>
+                            <li class="active">
+                                <a href="<?php echo $v["link"] ?>"><?php echo $v["title"] ?></a>
+                            </li>
+                            <?php
+                        }
+                }
+                if ($a) {
+                    ?>
+                    <li class="active">
+                        <?php echo $a["title"] ?>
+                    </li>
                     <?php
                 }
                 ?>
-        </ol>
+            </ol>
+        </section>
+
 
         <?php
     }
 
-    function GetList() {
+    function GetList()
+    {
         return self::$List;
     }
 

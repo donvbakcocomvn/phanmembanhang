@@ -135,6 +135,7 @@ class Category extends \Model\Database
 
     function UpdateCategory()
     {
+        $cat = new Category();
         $ala = $cat->AllCategorys();
         if ($ala)
             foreach ($ala as $_cat) {

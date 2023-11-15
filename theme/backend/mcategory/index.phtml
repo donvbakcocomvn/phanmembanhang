@@ -3,13 +3,12 @@
         <div class="box box-solid ">
             <div class="box-header ">
                 <i class="fa fa-book"></i>
-                <h3 class="box-title">Danh Mục Sản Phẩm ({{ListCategory.length}})</h3>
-                <!-- tools box -->
-                <div class=" box-tools">
+                <h3 class="box-title">Danh Mục Sản Phẩm ({{ListCategory.length}})</h3> 
+                <div class="box-tools">
                     <button class="btn btn-primary" ng-click="formcategoryInit(0, false)" data-toggle="modal" data-target='#modalThem'>Thêm</button>
                 </div>
             </div>
-            <div class="box-body no-padding ">
+            <div class="box-body  ">
                 <div class=""  >
                     <div class="col-md-12 " >
                         <div class="modal fade" id="modalThem">
@@ -68,22 +67,13 @@
 
                                         <td>{{item.Serial}}</td>
                                         <td>{{item.Public==1?"Hiện":"Ẩn"}}</td>
-                                        <td>
+                                        <td> 
+                                            <a class="btn btn-primary" href="/mcategory/edit/{{item.catID}}" >Sửa</a>
+
                                             <button class="btn btn-primary btn-xs" data-toggle="modal" data-target='#modalThem' type="button" ng-click="selectCategory(item.catID)" >Chọn</button>
                                         </td>
                                     </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr class="bg-blue" >
-                                        <th>Stt</th>
-                                        <th>Mã Danh Mục</th>
-                                        <th>Tên Danh Mục</th>
-                                        <th>Tên Danh Mục Cha</th>
-                                        <th>Số Thứ Tự</th>
-                                        <th>Ẩn Hiển</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </tfoot>
+                                </tbody> 
 
                             </table>
                         </div>

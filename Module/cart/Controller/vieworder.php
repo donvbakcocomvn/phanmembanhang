@@ -42,6 +42,10 @@ class vieworder extends \Controller_backend
 
     function index()
     {
+        $this->Bread[] = [
+            "title" => "Danh sách đơn hàng",
+            "link" => ""
+        ];
         $this->Breadcrumb->setBreadcrumb($this->Bread);
         $this->ViewThemeModule("", "", "");
     }

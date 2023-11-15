@@ -233,7 +233,7 @@ class Products extends \Model\Database
 
     function AllProductsByCatID($CatId)
     {
-        parent::AllProductsByCatID($CatId);
+       return parent::AllProductsByCatID($CatId);
     }
 
     function imagesDirectory()
