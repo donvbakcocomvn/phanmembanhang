@@ -208,6 +208,15 @@ class Order extends \Model\Database
         // $where .= " ORDER BY `NgayTao` DESC";
         return $this->select(table_prefix . "order", [], $where);
     }
+    public function DanhThu($start, $end, $Status)
+    {
+        $where = Sql::WhereEq("Status", $Status);
+        $where .= Sql::WhereAnd(Sql::WhereBigger("NgayTao", $start . " 00:00:00"));
+        $where .= Sql::WhereAnd(Sql::WhereLess("NgayTao", $end . " 23:59:59"));
+        $sql = "{$where}";
+        $DB = new DB(table_prefix . "order");
+        return $DB->SelectRow($sql, "sum(`TotalPrice`) as `TongTien`");
+    }
 
     function ordersPt($page = 1, $number = 20, &$sun)
     {

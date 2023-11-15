@@ -26,7 +26,7 @@ class BenhNhan extends \Model\Database
     {
 
         parent::$Tablename = table_prefix . "benhnhan";
-        parent::__construct();  
+        parent::__construct();
         if (!is_array($bn)) {
             $id = $bn;
             $bn = $this->GetByMaBN($id);
@@ -120,7 +120,7 @@ class BenhNhan extends \Model\Database
         // self::$Debug = true;
         $where = " 1 = 1 ";
         self::SetTableName(self::$Tablename);
-        return $this->select(self::$Tablename, ["Sothe"], $where);
+        return $this->select(self::$Tablename, "DISTINCT Sothe", $where);
     }
 
     public function ThanhToan()
@@ -178,6 +178,20 @@ class BenhNhan extends \Model\Database
         $a["Tiensubenh"] = $this->Tiensubenh ?? null;
         $a["Soduthe"] = $this->Soduthe ?? null;
         return $a;
+    }
+
+
+    function RemoveSoThe()
+    {
+        $sql = "SELECT COUNT(*) as `dong`,`SoThe`,`MaBN` FROM `bakcodt_benhnhan` GROUP BY Sothe HAVING dong > 1 ORDER BY dong DESC;";
+        $db = new DB();
+        $rows = $db->SelectRowsFromSql($sql);
+        foreach ($rows as $row) {
+            $maBN = $row["MaBN"];
+            $soThe = $row["SoThe"];
+            $sqlDelete = "DELETE FROM `bakcodt_benhnhan` WHERE `MaBN` != '{$maBN}' and `SoThe` = '{$soThe}'";
+            $db->runsqlConTent($sqlDelete);
+        }
     }
 
     public function CreateViewKhoaBenh()

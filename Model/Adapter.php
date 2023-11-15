@@ -225,7 +225,7 @@ class Model_Adapter
     {
         if (self::$_conn) { // nếu đã kết nối csdl
             self::$_result = mysqli_query(self::$_conn, self::$_Query); /* Gán kết quả trả về của câu truy
-              vấn cho biến $_result */
+vấn cho biến $_result */
         }
         if (self::$_result) {
             return TRUE;

@@ -63,6 +63,11 @@ class DB
         }
     }
 
+    function SelectRowsFromSql($sql)
+    {
+        return $this->GetRows($sql);
+    }
+
     protected function GetRows($sql)
     {
         if (self::$Debug)
@@ -116,9 +121,11 @@ class DB
     {
         $TableName = self::$TableName;
         $sql = "SELECT * FROM `{$TableName}` WHERE {$where}";
-        if ($col) {
+        if (is_array($col)) {
             $strCol = implode("`,`", $col);
             $sql = "SELECT `{$strCol}` FROM `{$TableName}` WHERE {$where}";
+        } else {
+            $sql = "SELECT {$col} FROM `{$TableName}` WHERE {$where}";
         }
         return $this->GetRow($sql);
     }

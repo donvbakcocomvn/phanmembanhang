@@ -914,12 +914,16 @@ class Controller_backend extends Application
                     $dong = [];
                     $stt = 1;
                     foreach ($orderDetail as $key => $orderdetail) {
+                        // var_dump($orderdetail);
+                        // die();
                         $_orderdetail = new OrderDetail($orderdetail);
                         $benhNhan = $_orderdetail->Order()->BenhNhanMaThe();
+                        // var_dump($benhNhan);
+                        // die();
                         $product = $_orderdetail->Product();
                         $dong = [];
                         $dong[] = $stt++;
-                        $dong[] = $benhNhan->Sothe;
+                        $dong[] = $benhNhan->Sothe ?? $_orderdetail->CodeOrder;
                         $dong[] = $benhNhan->HotenBN;
                         $dong[] = $product->Code;
                         $dong[] = $product->nameProduct;

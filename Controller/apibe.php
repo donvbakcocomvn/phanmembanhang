@@ -1,10 +1,13 @@
 <?php
 
+use Common\Common;
 use lib\APIs;
 use Model\AdminService;
 use Model\Database;
 use Model\Products;
 use Model\ThanhToan;
+use Model\ThongKe;
+use Module\cart\Model\BenhNhan;
 use Module\cart\Model\BenhNhanKhoaBenh;
 use Module\duser\Model\Duser;
 use Module\cart\Model\OrderService;
@@ -28,6 +31,23 @@ class Controller_apibe extends Controller_backend
         return $orderDetail->deleteOrderDetail($id);
     }
 
+    function thongke()
+    {
+        $start = $_GET["start"];
+        $end = $_GET["end"];
+        $tongDonHang = ThongKe::TongDonHang($start, $end);
+        $tongDanhThu = ThongKe::TongDoanhThu($start, $end);
+        echo json_encode([
+            "TongDonHang" => Common::NumberFomat($tongDonHang),
+            "TongDoanhThu" => Common::NumberFomat($tongDanhThu),
+        ]);
+    }
+
+    function RemoveSoThe()
+    {
+        $benhNhan = new BenhNhan();
+        $benhNhan->RemoveSoThe();
+    }
 
     function chuyenDonHang()
     {
@@ -273,7 +293,7 @@ class Controller_apibe extends Controller_backend
         $bn->Sodienthoai = $bn->Sodienthoai ?? $orderDetail["Phone"];
         $bn->Email = $bn->Email ?? $orderDetail["Email"];
         $bn->Diachi = $bn->Diachi ?? $orderDetail["Address"];
-        $bn->Tiensubenh = $bn->KhoaBenh()->Name == "" ?  $orderDetail["KhoaBenh"] : "";
+        $bn->Tiensubenh = $bn->KhoaBenh()->Name == "" ? $orderDetail["KhoaBenh"] : "";
         $orderDetail["BenhNhan"] = $bn;
         $orderDetail["TotalPriceVND"] = \lib\Common::MoneyFomat($orderDetail["TotalPrice"]);
         $orderDetail["Products"] = $dsSanPham;
@@ -425,7 +445,6 @@ class Controller_apibe extends Controller_backend
         if (Duser::KiemTraQuyen([Duser::admin])) {
             $options = Model_OptionsService::GetItemByGroups("khoa");
         }
-
 
         // $benhNhan = new BenhNhanKhoaBenh();
         // $benhNhans = $benhNhan->GetItems([], 1, 100, $total);

@@ -111,12 +111,16 @@ class vieworder extends \Controller_backend
 
         $items = $_benhNhan->GetItems($params, $indexPage, $pageNumber, $total);
         $totalPage = ceil($total / $pageNumber);
-        $this->ViewThemeModule([
-            "totalPage" => $totalPage,
-            "Items" => $items,
-            "total" => $total,
-            "params" => $params
-        ], "", "");
+        $this->ViewThemeModule(
+            [
+                "totalPage" => $totalPage,
+                "Items" => $items,
+                "total" => $total,
+                "params" => $params
+            ],
+            "",
+            ""
+        );
     }
 
     function googleform()

@@ -92,7 +92,11 @@ class Database extends \Model\iDatabase
     static function listerror()
     {
         return [
-            -101 => "Mã danh mục và mã danh mục cha trùng nhau", -102 => "Mã danh mục không thể là con của danh mục con", -201 => "Bạn không có quền xóa danh mục này", -202 => "Bạn không thể xóa danh mục có danh mục con", -203 => "Danh mục đang có sản phẩm không thể xóa"
+            -101 => "Mã danh mục và mã danh mục cha trùng nhau",
+            -102 => "Mã danh mục không thể là con của danh mục con",
+            -201 => "Bạn không có quền xóa danh mục này",
+            -202 => "Bạn không thể xóa danh mục có danh mục con",
+            -203 => "Danh mục đang có sản phẩm không thể xóa"
         ];
     }
 
@@ -752,7 +756,6 @@ class Database extends \Model\iDatabase
         $this->Query($sql);
         return $this->Luu();
     }
-
     function insert($tableName, $data)
     {
         $fields = [];
@@ -760,7 +763,7 @@ class Database extends \Model\iDatabase
             $fields[] = sprintf('`%s` = "%s" ', $key, $this->BoHieuUngSQL($value));
         }
         $sql = sprintf("INSERT INTO `%s` SET %s ", $tableName, implode(', ', $fields));
-        if(self::$Debug){
+        if (self::$Debug) {
             echo $sql;
         }
         $this->Query($sql);
@@ -770,12 +773,17 @@ class Database extends \Model\iDatabase
     function select($tableName, $listColum = [], $pk = "1", $className = "")
     {
         $select = " * ";
+
         if ($listColum) {
-            $fields = [];
-            foreach ($listColum as $value) {
-                $fields[] = sprintf("`%s`", $value);
+            if (is_array($listColum)) {
+                $fields = [];
+                foreach ($listColum as $value) {
+                    $fields[] = sprintf("`%s`", $value);
+                }
+                $select = implode(",", $fields);
+            } else {
+                $select = $listColum;
             }
-            $select = implode(",", $fields);
         }
 
         $sql = sprintf("SELECT %s FROM `%s` WHERE %s ", $select, $tableName, $pk);

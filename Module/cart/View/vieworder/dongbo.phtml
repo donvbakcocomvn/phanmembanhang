@@ -11,7 +11,9 @@ $_benhNhan = new BenhNhan();
         <button id="btnSysn" type="button" class="pull-right btn btn-success">
             Đồng bộ
         </button>
-        <h3 class="panel-title">Danh sách bệnh nhân (<?php echo $total; ?>) </h3>
+        <h3 class="panel-title">Danh sách bệnh nhân (
+            <?php echo $total; ?>)
+        </h3>
 
     </div>
     <div class="panel-body">
@@ -59,9 +61,11 @@ $_benhNhan = new BenhNhan();
                                         <td>Thao Tác</td>
                                         <?php
                                         foreach ($_benhNhan->TitleData() as $key => $title) {
-                                        ?>
-                                        <td><?php echo $title; ?></td>
-                                        <?php
+                                            ?>
+                                            <td>
+                                                <?php echo $title; ?>
+                                            </td>
+                                            <?php
                                         }
                                         ?>
                                     </tr>
@@ -72,35 +76,36 @@ $_benhNhan = new BenhNhan();
                                         foreach ($Items as $key => $benhnhan) {
                                             $_benhNhan = new BenhNhan($benhnhan);
                                             $_items = (array) $_benhNhan;
-                                    ?>
-                                    <tr>
-                                        <td>
-                                            <a href="/cart/vieworder/benhnhan/<?php echo $_benhNhan->Sothe; ?>"
-                                                class="btn btn-success">
-                                                Xem
-                                            </a>
-                                            <a onclick="return confirm('Bạn muốn xóa bệnh nhân này?')"
-                                                href="/cart/vieworder/xoabenhnhan/<?php echo $_benhNhan->Sothe; ?>/<?php echo $_benhNhan->MaBN; ?>/"
-                                                class="btn btn-danger">
-                                                Xóa
-                                            </a>
-                                        </td>
-                                        <?php
-                                            foreach ($_items as $key => $value) {
-                                        ?>
-                                        <td><?php
-                                                if (is_numeric($value)) {
-                                                    echo number_format($value, 0, ".", " ");
-                                                } else {
-                                                    echo $value;
+                                            ?>
+                                            <tr>
+                                                <td>
+                                                    <a href="/cart/vieworder/benhnhan/<?php echo $_benhNhan->Sothe; ?>"
+                                                        class="btn btn-success">
+                                                        Xem
+                                                    </a>
+                                                    <a onclick="return confirm('Bạn muốn xóa bệnh nhân này?')"
+                                                        href="/cart/vieworder/xoabenhnhan/<?php echo $_benhNhan->Sothe; ?>/<?php echo $_benhNhan->MaBN; ?>/"
+                                                        class="btn btn-danger">
+                                                        Xóa
+                                                    </a>
+                                                </td>
+                                                <?php
+                                                foreach ($_items as $key => $value) {
+                                                    ?>
+                                                    <td>
+                                                        <?php
+                                                        if (is_numeric($value)) {
+                                                            echo number_format($value, 0, ".", " ");
+                                                        } else {
+                                                            echo $value;
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <?php
                                                 }
-                                        ?>
-                                        </td>
-                                        <?php
-                                            }
-                                        ?>
-                                    </tr>
-                                    <?php
+                                                ?>
+                                            </tr>
+                                            <?php
                                         }
                                     ?>
                                 </tbody>
@@ -115,18 +120,22 @@ $_benhNhan = new BenhNhan();
                         <div class="row">
                             <?php
                             foreach ($_benhNhan->BenhNhanTheoKhoaBenh() as $key => $value) {
-                            ?>
-                            <div class="col-md-3">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-yellow"><i
-                                            class="ion ion-ios-people-outline"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Khoa: <?php echo $value["Name"]; ?></span>
-                                        <span class="info-box-number">Số bệnh nhân: <?php echo $value["BenhNhan"]; ?></span>
+                                ?>
+                                <div class="col-md-3">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-yellow"><i
+                                                class="ion ion-ios-people-outline"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Khoa:
+                                                <?php echo $value["Name"]; ?>
+                                            </span>
+                                            <span class="info-box-number">Số bệnh nhân:
+                                                <?php echo $value["BenhNhan"]; ?>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <?php
+                                <?php
                             }
                             ?>
                         </div>

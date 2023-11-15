@@ -10,6 +10,28 @@ class ThongKe extends Database
 {
 
 
+    public static function TongDonHang($start, $end)
+    {
+        $orderDetail = new ModelOrder();
+        $where = "WHERE `NgayTao` > '{$start} 00:00:00' and `NgayTao` < '{$end} 23:59:59' and  `status` = 5";
+        $tongDonHang = $orderDetail->SelectCount($where);
+        return $tongDonHang;
+    }
+
+    public static function ChiTietDonHang($start, $end)
+    {
+        $sql = "SELECT SUM(a.Price * a.Number) as `ThanhTien` ,SUM(a.Number) as `SoLuong` , a.* FROM `bakcodt_orderdetail` as a, `bakcodt_order` as b WHERE a.CodeOrder = b.CodeOrder and b.STATUS = 5 and b.`NgayTao` > '{$start} 00:00:00' and b.`NgayTao` < '{$end} 23:59:59' GROUP BY `IdProduct` Order by `SoLuong`";
+        $DB = new DB();
+        return $DB->SelectRowsFromSql($sql);
+    }
+
+    public static function TongDoanhThu($start, $end)
+    {
+        $orderDetail = new ModelOrder();
+        $tongDonHang = $orderDetail->DanhThu($start, $end, 5);
+        return $tongDonHang["TongTien"] ?? 0;
+    }
+
     public function ThongKeBanHangTheoBenhNhan($TuNgay, $DenNgay)
     {
         if ($TuNgay == "" || $DenNgay == "") {
@@ -29,21 +51,27 @@ class ThongKe extends Database
         $param["Status"] = $param["Status"] ?? null;
         $order = new ModelOrder();
         $BenhNhan = new BenhNhan();
-        $DSBenhNhan =  $BenhNhan->GetDSMaThe();
+        $DSBenhNhan = $BenhNhan->GetDSMaThe();
+        $total = count($DSBenhNhan);
         // lấy danh sách thẻ
         $data = [];
         if ($DSBenhNhan) {
             foreach ($DSBenhNhan as $key => $val) {
+
                 $DSOrderCoder = $order->ThongKeSanPhamTheoBenhNhan($val["Sothe"], $param["fromDate"], $param["toDate"]);
                 if ($DSOrderCoder) {
-                    foreach ($DSOrderCoder as  $k => $v) {
+                    foreach ($DSOrderCoder as $k => $v) {
                         $data[] = $v;
                     }
                 }
+
             }
         }
         return $data;
     }
+
+
+
 
     public function ClearOrderDetail()
     {

@@ -1,7 +1,53 @@
 <?php
 
 use Module\duser\Model\Duser;
+
 ?>
+<div class="container-fluid">
+    <div class="col-md-3 pull-right">
+        <div class="form-group">
+            <div class="input-group text-right">
+                <button class="btn btn-default pull-right" id="daterange-btn">
+                    <i class="fa fa-calendar"></i>
+                    <span id="ChonNgay">Chọn ngày</span>
+                    <i class="fa fa-caret-down"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="">
+    <div class="box box-solid ">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3 id="Order">0</h3>
+                            <p>Đơn Hàng</p>
+                        </div>
+                        <div class="icon">
+                            <i style="color:#fff" class="ion ion-bag"></i>
+                        </div>
+                    </div>
+                </div><!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 id="TongDoanhThu">0</h3>
+                            <p>Doanh Thu</p>
+                        </div>
+                        <div class="icon">
+                            <i style="color:#fff" class="ion ion-stats-bars"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Small boxes (Stat box) -->
 <div class="row ">
     <section class="col-md-12 ">
@@ -9,8 +55,8 @@ use Module\duser\Model\Duser;
             <div class="box-body">
                 <ul class="bs-glyphicons">
                     <?php
-                    if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien,  Duser::Superadmin])) {
-                    ?>
+                    if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien, Duser::Superadmin])) {
+                        ?>
                         <li>
                             <a href="/">
                                 <span class="glyphicon glyphicon-shopping-cart"></span>
@@ -36,7 +82,7 @@ use Module\duser\Model\Duser;
                             </a>
                         </li>
 
-                    <?php
+                        <?php
                     }
                     ?>
 
@@ -45,65 +91,91 @@ use Module\duser\Model\Duser;
             </div>
         </div>
     </section>
-    <!-- <section class="col-md-6 connectedSortable">
-        <div class="box box-solid ">
-            <div class="box-header bg-green-gradient">
-                <i class="fa fa-calendar"></i>
-                <h3 class="box-title">Thống kế</h3>
-                <div class="pull-right box-tools">
-                </div>
-            </div>
-            <div class="box-body">
-                <div>
-                    Số đơn hàng:
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="col-md-6 connectedSortable">
-        <div class="box box-solid ">
-            <div class="box-header bg-green-gradient">
-                <i class="fa fa-calendar"></i>
-                <h3 class="box-title">Calendar</h3>
-                <div class="pull-right box-tools">
-                    <div class="btn-group">
-                        <button class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i></button>
-                        <ul class="dropdown-menu pull-right" role="menu">
-                            <li><a href="#">Add new event</a></li>
-                            <li><a href="#">Clear events</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">View calendar</a></li>
-                        </ul>
-                    </div>
-                    <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
-                </div>
-            </div>
-            <div class="box-body ">
-                Noi dung
-            </div>
-    </section> -->
+
+
 
 </div>
 
 <script>
-    $(document).ready(function() {
-        // $.ajax({
-        //     type: "get",
-        //     url: "/cart/vieworder/DongboAjax/",
-        //     dataType: "text",
-        //     success: function(response) {
-        //         console.log("Đã đồng bộ xong tài khoản bệnh nhân");
-        //     }
-        // });
+    $(document).ready(function () {
+
         $.ajax({
             type: "get",
             url: "/cart/vieworder/dongbodonhang/",
             dataType: "text",
-            success: function(response) {
+            success: function (response) {
                 console.log("Đã đồng bộ xong đơn hàng");
+            }
+        });
+        $.ajax({
+            type: "get",
+            url: "/apibe/RemoveSoThe",
+            dataType: "text",
+            success: function (response) {
+                console.log("Đã đồng bộ xong thẻ thanh toán");
             }
         });
 
     })
+</script>
+
+<script>
+    $(function () {
+        $('#reservation').daterangepicker();
+        // $('#reservation').change(function () {
+        //     alert($('#reservation').val());
+        // });
+
+        function ViewReport(response) {
+            response = JSON.parse(response);
+
+            $("#Order").html(response.TongDonHang ?? 0);
+            $("#TongDoanhThu").html(response.TongDoanhThu ?? 0);
+        }
+
+
+        $.ajax({
+            type: "get",
+            url: "/apibe/thongke/",
+            data: $.param({
+                "start": moment().format('YYYY-MM-DD'),
+                "end": moment().format('YYYY-MM-DD')
+            }),
+            success: function (response) {
+                ViewReport(response)
+            }
+        });
+        $('#reportrange span').html(moment().format('YYYY-MM-DD') + ' - ' + moment().format('YYYY-MM-DD'));
+        $("#ChonNgay").html(moment().format('YYYY-MM-DD') + ' - ' + moment().format('YYYY-MM-DD'));
+        $('#daterange-btn').daterangepicker(
+            {
+                ranges: {
+                    'Hôm nay': [moment(), moment()],
+                    'Hôm qua': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    '7 ngày qua': [moment().subtract(6, 'days'), moment()],
+                    '30 ngày trước': [moment().subtract(29, 'days'), moment()],
+                    'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+                    'Tháng trước': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                startDate: moment(),
+                endDate: moment()
+            },
+            function (start, end) {
+                $('#reportrange span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+                $("#ChonNgay").html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+                $.ajax({
+                    type: "get",
+                    url: "/apibe/thongke/",
+                    data: $.param({
+                        "start": start.format('YYYY-MM-DD'),
+                        "end": end.format('YYYY-MM-DD')
+                    }),
+                    success: function (response) {
+
+                        ViewReport(response);
+                    }
+                });
+            }
+        );
+    });
 </script>

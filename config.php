@@ -14,11 +14,11 @@ define("Password", "@NguyenVanDo1");
 define("QuanTri", "QuanTri_PGV");
 define("table_prefix", "bakcodt_");
 $_SESSION['TenHienThi'] = 0;
-global $INI; 
+global $INI;
 $INI['host'] = "localhost";
 $INI['username'] = "root";
 $INI['password'] = "";
-$INI['DBname'] = "oetkpjhosting_bachhoagiadinh1";
+$INI['DBname'] = "oetkpjhosting_bachhoagiadinh_2";
 
 spl_autoload_register(function ($class) {
     $class = str_replace("\\", "_", $class);
