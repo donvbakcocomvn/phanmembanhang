@@ -60,7 +60,7 @@ $_benhNhan = new BenhNhan();
                                     <tr>
                                         <td>Thao Tác</td>
                                         <?php
-                                        foreach ($_benhNhan->TitleData() as $key => $title) {
+                                        foreach($_benhNhan->TitleData() as $key => $title) {
                                             ?>
                                             <td>
                                                 <?php echo $title; ?>
@@ -72,10 +72,10 @@ $_benhNhan = new BenhNhan();
                                 </thead>
                                 <tbody>
                                     <?php
-                                    if ($Items)
-                                        foreach ($Items as $key => $benhnhan) {
+                                    if($Items)
+                                        foreach($Items as $key => $benhnhan) {
                                             $_benhNhan = new BenhNhan($benhnhan);
-                                            $_items = (array) $_benhNhan;
+                                            $_items = (array)$_benhNhan;
                                             ?>
                                             <tr>
                                                 <td>
@@ -90,11 +90,11 @@ $_benhNhan = new BenhNhan();
                                                     </a>
                                                 </td>
                                                 <?php
-                                                foreach ($_items as $key => $value) {
+                                                foreach($_items as $key => $value) {
                                                     ?>
                                                     <td>
                                                         <?php
-                                                        if (is_numeric($value)) {
+                                                        if(is_numeric($value)) {
                                                             echo number_format($value, 0, ".", " ");
                                                         } else {
                                                             echo $value;
@@ -119,7 +119,7 @@ $_benhNhan = new BenhNhan();
                     <div role="tabpanel" class="tab-pane" id="ThongKeKhoa">
                         <div class="row">
                             <?php
-                            foreach ($_benhNhan->BenhNhanTheoKhoaBenh() as $key => $value) {
+                            foreach($_benhNhan->BenhNhanTheoKhoaBenh() as $key => $value) {
                                 ?>
                                 <div class="col-md-3">
                                     <div class="info-box">
@@ -147,16 +147,43 @@ $_benhNhan = new BenhNhan();
 </div>
 <script>
     $(function () {
+        var index = 0;
+
+        function DongBo(danhSach) {
+            // console.log('index', index);
+            const danhSachLenh = danhSach.length;
+            if (danhSach[index]) {
+                const item = danhSach[index];
+                $.ajax({
+                    type: "get",
+                    url: `/cart/vieworder/DongboAjaxById/?id=${item.Name}`,
+                    dataType: "json",
+                    success: function (response) {
+                        index++;
+                        console.log('index', index);
+                        $("#btnSysn").html(`Đang đồng bộ ${index + 1} / ${danhSachLenh}`);
+                        DongBo(danhSach);
+                    }
+                })
+                // DongBo(danhSach);
+            } else {
+                alert("data đồng bộ xong");
+                $("#btnSysn").attr("disabled", false);
+                $("#btnSysn").html("Đồng bộ");
+            }
+        }
+
         $("#btnSysn").click(function () {
             $("#btnSysn").attr("disabled", true);
-            $("#btnSysn").html("đang đồng bộ");
+            $("#btnSysn").html("Đang đồng bộ");
+
             $.ajax({
                 type: "get",
-                url: "/cart/vieworder/DongboAjax/",
-                dataType: "text",
+                url: "/cart/vieworder/GetDongboAjax/",
+                dataType: "json",
                 success: function (response) {
-                    $("#btnSysn").removeAttr("disabled");
-                    $("#btnSysn").html("đồng bộ");
+                    // console.log('response', response);
+                    DongBo(response);
                 }
             });
         });

@@ -84,6 +84,14 @@ class Order extends \Model\Database
         return $this->select(table_prefix . "order", [], "`KhoaBenh` ='' and `Status` = '5' ");
     }
 
+
+    function GetMaTheTuNgayDenNgay($from, $to)
+    {
+        $sql = "SELECT DISTINCT `MaThe` FROM `bakcodt_order` WHERE `NgayTao` > '{$from} 00:00:00' and `NgayTao` < '{$to} 23:59:59' and `Status` = 5";
+        $this->Query($sql);
+        return $this->fetchAssoc();
+    }
+
     public function GetIdCard()
     {
         $sql = "SELECT `Name` FROM `" . table_prefix . "order` WHERE 1=1 GROUP BY `Name`";
@@ -481,13 +489,54 @@ class Order extends \Model\Database
     public function ThongKeSanPhamTheoBenhNhan($MaThe, $fromDate, $toDate)
     {
         try {
+            $sql = "SELECT b.MaThe,b.CodeOrder, a.IdProduct,a.Price, sum(a.Number) as `Number`, a.Price * a.Number as `ThanhTien` 
+            FROM `bakcodt_orderdetail` as a, `bakcodt_order` as b 
+            WHERE a.CodeOrder = b.CodeOrder 
+            and b.`NgayTao` >= '{$fromDate} 00:00:00' 
+            and b.`NgayTao` <= '{$toDate} 23:59:59' 
+            AND b.`MaThe` ='{$MaThe}' 
+            AND b.`Status` =5 
+            GROUP BY a.IdProduct;";
+            $this->Query($sql);
+            return $this->fetchAll();
+        } catch (Exception $ex) {
+            return [];
+        }
+    }
+    // public function ThongKeSanPhamTheoBenhNhan($MaThe, $fromDate, $toDate)
+    // {
+    //     try {
+    //         $sql = "SELECT *,SUM(`Number`) as `Total`, (SUM(`Number`)*`Price`) as `ThanhTien` 
+    //         FROM `bakcodt_orderdetail` WHERE `CodeOrder` in 
+    //         (
+    //         SELECT `CodeOrder` 
+    //         FROM `bakcodt_order` 
+    //         WHERE `Status` = '5' 
+    //         and `NgayTao` >= '{$fromDate} 00:00:00' 
+    //         and `NgayTao` <= '{$toDate} 23:59:59' 
+    //         and `MaThe` = '{$MaThe}'
+    //         ) GROUP BY `IdProduct`";
+
+    //         $this->Query($sql);
+
+    //         return $this->fetchAll();
+    //     } catch (Exception $ex) {
+    //         return [];
+    //     }
+    // }
+
+    public function ThongKeSanPhamDonHangChiTiet($fromDate, $toDate)
+    {
+        try {
             $sql = "SELECT *,SUM(`Number`) as `Total`, (SUM(`Number`)*`Price`) as `ThanhTien` 
-            FROM `bakcodt_orderdetail` WHERE `CodeOrder` in (SELECT `CodeOrder` 
+            FROM `bakcodt_orderdetail` WHERE `CodeOrder` in 
+            (
+            SELECT `CodeOrder` 
             FROM `bakcodt_order` 
             WHERE `Status` = '5' 
-            and `NgayTao` > '{$fromDate} 00:00:00' 
-            and `NgayTao` < '{$toDate} 23:59:59' 
-            and `Name` = '{$MaThe}') GROUP BY `IdProduct`";
+            and `NgayTao` >= '{$fromDate} 00:00:00' 
+            and `NgayTao` <= '{$toDate} 23:59:59' 
+            )";
             $this->Query($sql);
             return $this->fetchAll();
         } catch (Exception $ex) {

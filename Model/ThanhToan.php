@@ -9,28 +9,25 @@ use SimpleXMLElement;
 use SoapClient;
 use SoapHeader;
 
-class ThanhToan
-{
+class ThanhToan {
     const userName = "vankkhang";
     const password = "vankhang123456";
     private $parameters = array();
     const SERVICE_WSDL = 'https://paynhanai.vkhealth.vn:8001/service.asmx?WSDL';
-    public function Header()
-    {
+    public function Header() {
         $headerbody = [
             'Username' => self::userName,
             'Password' => self::password
         ];
-        return  new SoapHeader("http://tempuri.org/", 'AuthHeader', $headerbody, false);
+        return new SoapHeader("http://tempuri.org/", 'AuthHeader', $headerbody, false);
     }
 
-    public function SoapClient()
-    {
+    public function SoapClient() {
         ini_set("soap.wsdl_cache_enabled", 0);
         ini_set('soap.wsdl_cache', 0);
         $options = array(
-            'version' =>  SOAP_1_2,
-            'cache_wsdl' =>  WSDL_CACHE_NONE,
+            'version' => SOAP_1_2,
+            'cache_wsdl' => WSDL_CACHE_NONE,
 
         );
         $client = new SoapClient(self::SERVICE_WSDL, $options);
@@ -38,8 +35,7 @@ class ThanhToan
 
         return $client;
     }
-    public function SoapClient1()
-    {
+    public function SoapClient1() {
 
         $options = array(
             'cache_wsdl' => 0,
@@ -83,10 +79,10 @@ class ThanhToan
         $client->setHeaders($this->Header());
         $params = [
             "Sothe" => $sothe,
-            "Sotien" =>  $sotien,
+            "Sotien" => $sotien,
             "LoaiGD" => 1,
             "NoidungGD" => $noidungGD,
-            "taikhoan" =>  "vankkhang",
+            "taikhoan" => "vankkhang",
         ];
         $response = $client->call("InsertLSGiaodich", $params);
         return $response;
@@ -135,12 +131,11 @@ class ThanhToan
                 ->GetHotenFromSotheResult;
             return $response;
         } catch (Exception $th) {
-           return null;
+            return null;
         }
     }
 
-    public function GetTTBenhnhan($soThe)
-    {
+    public function GetTTBenhnhan($soThe) {
         try {
             $client = $this->SoapClient();
             $params = [
@@ -150,7 +145,7 @@ class ThanhToan
                 ->GetTTBenhnhanResult;
             return json_decode($response, JSON_OBJECT_AS_ARRAY);
         } catch (Exception $th) {
-             return null;
+            return null;
         }
         return null;
     }
@@ -163,10 +158,10 @@ class ThanhToan
             $client = $this->SoapClient();
             $params = [
                 "Sothe" => $sothe,
-                "Sotien" =>  $sotien,
+                "Sotien" => $sotien,
                 "LoaiGD" => 2,
-                "NoidungGD" =>  "HT: {$noidungGD}",
-                "taikhoan" =>  "vankkhang",
+                "NoidungGD" => "HT: {$noidungGD}",
+                "taikhoan" => "vankkhang",
             ];
             // $response = $client->__soapCall("InsertLSGiaodich", $params, null, $this->Header());
             $response = $client->InsertLSGiaodich($params);
@@ -186,10 +181,10 @@ class ThanhToan
             $client = $this->SoapClient();
             $params = [
                 "Sothe" => $sothe,
-                "Sotien" =>  $sotien,
+                "Sotien" => $sotien,
                 "LoaiGD" => 1,
-                "NoidungGD" =>  "TTDH: {$noidungGD}",
-                "taikhoan" =>  "vankkhang",
+                "NoidungGD" => "TTDH: {$noidungGD}",
+                "taikhoan" => "vankkhang",
             ];
             // $response = $client->__soapCall("InsertLSGiaodich", $params, null, $this->Header());
             $response = $client->InsertLSGiaodich($params);

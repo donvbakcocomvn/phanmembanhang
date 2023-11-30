@@ -127,6 +127,7 @@ class DB
         } else {
             $sql = "SELECT {$col} FROM `{$TableName}` WHERE {$where}";
         }
+        // echo $sql;
         return $this->GetRow($sql);
     }
 

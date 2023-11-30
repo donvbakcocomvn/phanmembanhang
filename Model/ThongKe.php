@@ -4,6 +4,7 @@ namespace Model;
 
 use Module\cart\Model\BenhNhan;
 use Module\cart\Model\Order as ModelOrder;
+use Module\cart\Model\OrderDetail;
 
 
 class ThongKe extends Database
@@ -50,21 +51,17 @@ class ThongKe extends Database
         $param["toDate"] = $param["toDate"] ?? null;
         $param["Status"] = $param["Status"] ?? null;
         $order = new ModelOrder();
-        $BenhNhan = new BenhNhan();
-        $DSBenhNhan = $BenhNhan->GetDSMaThe();
-        $total = count($DSBenhNhan);
-        // lấy danh sách thẻ
+        $DSBenhNhan = $order->GetMaTheTuNgayDenNgay($param["fromDate"], $param["toDate"]);
         $data = [];
         if ($DSBenhNhan) {
             foreach ($DSBenhNhan as $key => $val) {
-
-                $DSOrderCoder = $order->ThongKeSanPhamTheoBenhNhan($val["Sothe"], $param["fromDate"], $param["toDate"]);
+                $DSOrderCoder = $order->ThongKeSanPhamTheoBenhNhan($val["MaThe"], $param["fromDate"], $param["toDate"]);
                 if ($DSOrderCoder) {
                     foreach ($DSOrderCoder as $k => $v) {
                         $data[] = $v;
+
                     }
                 }
-
             }
         }
         return $data;

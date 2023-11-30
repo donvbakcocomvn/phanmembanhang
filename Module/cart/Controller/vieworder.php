@@ -11,8 +11,7 @@ use Module\cart\Model\Cart;
 use Module\cart\Model\Order;
 use Module\duser\Model\Duser;
 
-class vieworder extends \Controller_backend
-{
+class vieworder extends \Controller_backend {
 
     public $Product;
     public $Cart;
@@ -20,10 +19,9 @@ class vieworder extends \Controller_backend
     public $Order;
     public $Breadcrumb;
 
-    function __construct()
-    {
+    function __construct() {
 
-        if (Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien, Duser::Superadmin, Duser::QuanLy]) == FALSE) {
+        if(Duser::KiemTraQuyen([Duser::admin, Duser::NhanVien, Duser::Superadmin, Duser::QuanLy]) == FALSE) {
             exit("Bạn không có quyền");
             // return;
         }
@@ -40,8 +38,7 @@ class vieworder extends \Controller_backend
         $this->Cart = new \Module\cart\Model\Cart();
     }
 
-    function index()
-    {
+    function index() {
         $this->Bread[] = [
             "title" => "Danh sách đơn hàng",
             "link" => ""
@@ -50,14 +47,13 @@ class vieworder extends \Controller_backend
         $this->ViewThemeModule("", "", "");
     }
 
-    public function dongbodonhang()
-    {
+    public function dongbodonhang() {
         //
         $order = new Order();
         // danh sách order chưa đủ thông tin
         $orders = $order->GetOrderError();
         // var_dump($orders);
-        foreach ($orders as $item) {
+        foreach($orders as $item) {
             $benhNhan = new BenhNhan();
             $bn = $benhNhan->GetBySothe($item["Name"]);
             $_order = new Order();
@@ -69,24 +65,22 @@ class vieworder extends \Controller_backend
         }
     }
 
-    public function install()
-    {
+    public function install() {
         $modelBenhNhan = new BenhNhan();
         $modelBenhNhan->CreateViewKhoaBenh();
     }
-    public function DongboAjax()
-    {
+    public function DongboAjax() {
 
         $_order = new Order();
         $cardIds = $_order->GetDanhSachMaThe();
-        foreach ($cardIds as $key => $value) {
+        foreach($cardIds as $key => $value) {
             // var_dump($value);
             $thanhToan = new ThanhToan();
             $benhNhan = $thanhToan->GetTTBenhnhan($value["Name"]);
             // var_dump($benhNhan);
             $_benhNhan = new BenhNhan();
             $_benhNhanDetail = $_benhNhan->GetBySotheMaBN($benhNhan["Sothe"], $benhNhan["MaBN"]);
-            if ($_benhNhanDetail == null) {
+            if($_benhNhanDetail == null) {
                 $_benhNhan->Post($benhNhan);
             } else {
                 $benhNhan["NumberCheck"] += 1;
@@ -96,9 +90,35 @@ class vieworder extends \Controller_backend
             flush();
         }
     }
+    public function DongboAjaxById() {
 
-    public function dongbo()
-    {
+        // var_dump($value);
+        $maThe = Common::CheckInput($_GET["Id"]);
+        $thanhToan = new ThanhToan();
+        $benhNhan = $thanhToan->GetTTBenhnhan($maThe);
+        $_benhNhan = new BenhNhan();
+        $_benhNhanDetail = $_benhNhan->GetBySotheMaBN($benhNhan["Sothe"], $benhNhan["MaBN"]);
+        if($_benhNhanDetail == null) {
+            $_benhNhan->Post($benhNhan);
+        } else {
+            $benhNhan["NumberCheck"] += 1;
+            $_benhNhan->Put($benhNhan);
+        }
+        echo json_encode($benhNhan);
+        flush();
+        // echo $benhNhan["MaBN"];
+    }
+
+    public function GetDongboAjax() {
+        header('Access-Control-Allow-Origin: *');
+        header('Content-Type: application/json; charset=utf-8');
+        $_order = new Order();
+        $cardIds = $_order->GetDanhSachMaThe();
+        header("");
+        echo json_encode($cardIds);
+    }
+
+    public function dongbo() {
         $_benhNhan = new BenhNhan();
         $indexPage = $_GET["page"] ?? 1;
         $khoabenh = $_GET["khoabenh"] ?? "";
@@ -123,28 +143,25 @@ class vieworder extends \Controller_backend
         );
     }
 
-    function googleform()
-    {
+    function googleform() {
         $this->Breadcrumb->setBreadcrumb($this->Bread);
         $this->ViewThemeModule("", "", "");
     }
 
-    function dsorderstatus()
-    {
+    function dsorderstatus() {
         $this->param[0] = intval($this->param[0]);
         $this->param[0] = max(1, $this->param[0]);
         $this->param[1] = intval($this->param[1]);
         $this->param[1] = max(0, $this->param[1]);
         $a = $this->Order->ordersStatusPt($this->param[0], 15, $this->param[1], $sum);
-        if ($a) {
+        if($a) {
             echo $this->Order->_encode($a);
             return;
         }
         echo "[]";
     }
 
-    function dsorder()
-    {
+    function dsorder() {
         $sum = 0;
         $this->param[0] = intval($this->param[0]);
         $this->param[0] = max(1, $this->param[0]);
@@ -152,31 +169,29 @@ class vieworder extends \Controller_backend
         echo $this->Order->_encode($a);
     }
 
-    function dsorderifame()
-    {
+    function dsorderifame() {
         $this->ViewThemeModule("", "", "ifame");
     }
 
-    function orderdetail()
-    {
-        if (isset($_POST["delete"])) {
-            if ($_POST["huy"] == "HUY") {
+    function orderdetail() {
+        if(isset($_POST["delete"])) {
+            if($_POST["huy"] == "HUY") {
                 $_Order = $this->Order->orderbyid($_POST["CodeOrder"]);
                 $_Order = $_Order[0];
                 $_Order["Status"] = $_POST["Status"];
-                $_Order["Note"] = "[" . $_SESSION[QuanTri]["Username"] . "] Hủy đơn hàng :" . date("Y-m-d H:i:s") . " <br>" . $_POST["note"] . "<br>_______<br>" . $_Order["Note"];
+                $_Order["Note"] = "[".$_SESSION[QuanTri]["Username"]."] Hủy đơn hàng :".date("Y-m-d H:i:s")." <br>".$_POST["note"]."<br>_______<br>".$_Order["Note"];
                 $this->Order->updateOrder($_Order);
                 $this->Order->_header("/cart/vieworder/dsorderifame");
             }
             $error = new \Model\Error();
             $error->setError("Bạn hãy nhập 'HUY' để hủy đơn hàng.", "danger");
         }
-        if (isset($_POST["save"])) {
+        if(isset($_POST["save"])) {
             $_Order = $this->Order->orderbyid($_POST["CodeOrder"]);
             $_Order = $_Order[0];
             $_Order["Status"] = $_POST["Status"];
             $stus = $this->Order->getStatus($_Order["Status"]);
-            $_Order["Note"] = "[" . $_SESSION[QuanTri]["Username"] . "] $stus :" . date("Y-m-d H:i:s") . " <br>" . $_POST["note"] . "<br>_______<hr><br>" . $_Order["Note"];
+            $_Order["Note"] = "[".$_SESSION[QuanTri]["Username"]."] $stus :".date("Y-m-d H:i:s")." <br>".$_POST["note"]."<br>_______<hr><br>".$_Order["Note"];
             $this->Order->updateOrder($_Order);
             $this->Order->_header("/cart/vieworder/dsorderifame");
             $error = new \Model\Error();
@@ -185,24 +200,21 @@ class vieworder extends \Controller_backend
         $this->ViewThemeModule("", "", "ifame");
     }
 
-    function viewordersearch($param)
-    {
+    function viewordersearch($param) {
         $a = $this->Order->ordersByKey($this->param[0]);
         echo $this->Order->_encode($a);
     }
 
-    function orderbystatus()
-    {
+    function orderbystatus() {
         $this->ViewThemeModule("", "", "ifame");
     }
 
-    function resetSLSPdonhang()
-    {
+    function resetSLSPdonhang() {
         $idorder = $this->getParam()[0];
         $order = new Order($idorder);
         $_Product = new \Model\Products();
         $producs = $order->ProductsByDonHang();
-        foreach ($producs as $orderdetail) {
+        foreach($producs as $orderdetail) {
             $modelProduct = $_Product->ProductsByID($orderdetail["IdProduct"], FALSE);
             $modelProduct["Number"] += $orderdetail["Number"];
             $_Product->EditProducts($modelProduct);
@@ -211,26 +223,25 @@ class vieworder extends \Controller_backend
     }
 
 
-    public function thanhtoan()
-    {
+    public function thanhtoan() {
 
-        if (isset($_POST["thanhToan"])) {
+        if(isset($_POST["thanhToan"])) {
             $thanhToan = $_POST["thanhToan"];
             $_order = new Order($thanhToan["MaDonHang"]);
             $MaDonHang = $thanhToan["MaDonHang"];
             $modelThanhToan = new ThanhToan();
             $id = $_order->Id;
             $result = $modelThanhToan->InsertLSGiaodich($thanhToan["MaThe"], $_order->TotalPrice, "{$id}");
-            if ($result) {
+            if($result) {
                 // var_dump($resul);
                 $result->InsertLSGiaodichResult;
-                if ($result->InsertLSGiaodichResult == 1) {
+                if($result->InsertLSGiaodichResult == 1) {
 
                     $order = new Order();
                     $order->updateOrderStatus($MaDonHang, Order::DaThuTien);
                     $order->updateKhachHang($MaDonHang, $thanhToan["MaThe"]);
                     sleep(1);
-                    Common::ToUrl("/cart/thanhcong/index/" . $MaDonHang . "/");
+                    Common::ToUrl("/cart/thanhcong/index/".$MaDonHang."/");
                     exit();
                 } else {
                     // Số dư không đủ để thanh toán
@@ -247,16 +258,14 @@ class vieworder extends \Controller_backend
         $this->ViewThemeModule("", "", "");
     }
 
-    public function DongBoKhoaBenh()
-    {
+    public function DongBoKhoaBenh() {
         $id = $this->getParam()[0];
         $benhnhan = new BenhNhan($id);
-        if ($benhnhan->Sothe) {
+        if($benhnhan->Sothe) {
             // cập nhật khoa bệnh
         }
     }
-    public function xoabenhnhan()
-    {
+    public function xoabenhnhan() {
         $soThe = $this->getParam()[0];
         $maBN = $this->getParam()[1];
         $benhnhan = new BenhNhan();
@@ -264,10 +273,9 @@ class vieworder extends \Controller_backend
         Common::toUrl($_SERVER["HTTP_REFERER"]);
     }
 
-    public function benhnhan()
-    {
+    public function benhnhan() {
 
-        if (isset($_POST["UpdateKhoa"])) {
+        if(isset($_POST["UpdateKhoa"])) {
             $Sothe = $_POST["Sothe"] ?? "";
             $KhoaBenh = $_POST["KhoaBenh"] ?? "";
             $order = new Order();
@@ -283,7 +291,7 @@ class vieworder extends \Controller_backend
         $repon = new Response();
         $total = 0;
         $repon->rows = $benhnhan->Order($index, $number, $total);
-        $repon->items = (array) $benhnhan;
+        $repon->items = (array)$benhnhan;
         $repon->index = $index;
         $repon->number = $number;
 

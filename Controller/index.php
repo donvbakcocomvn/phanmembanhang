@@ -49,7 +49,8 @@ class Controller_index extends Application
         Model_Seo::$key = "{SEO_Keyword}";
         $bre = new Model\Breadcrumb();
         $abre[] = [
-            "link" => "#", "title" => "Sản Phẩm"
+            "link" => "#",
+            "title" => "Sản Phẩm"
         ];
 
         $bre->setBreadcrumb($abre);
@@ -112,7 +113,7 @@ class Controller_index extends Application
             $Order["NgayTao"] = date("Y-m-d H:i:s", time());
             $Order["Address"] = "";
             $modelOrder->createOrder($Order);
-            $_order =  $modelOrder->orderbycode($Order["CodeOrder"]);
+            $_order = $modelOrder->orderbycode($Order["CodeOrder"]);
             if ($_order == null) {
                 throw new Exception("không tao được đơn hàng");
             }

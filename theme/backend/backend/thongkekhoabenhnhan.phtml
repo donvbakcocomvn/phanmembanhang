@@ -18,7 +18,7 @@ $duser = Duser::CurentUsernameAdmin(true);
 $prop["value"] = $duser->Groups;
 $Danhmuc = new FormRender(new Select("Khoa bệnh", "KhoaBenh", $options, $prop));
 
-if ($duser->Groups ==  Duser::NhanVien) {
+if ($duser->Groups == Duser::NhanVien) {
     $prop[FormRender::Disabled] = "true";
     $prop["value"] = $duser->KhoaBenh;
     $Danhmuc = new FormRender(new Select("Khoa bệnh", "KhoaBenh", $options, $prop));
@@ -38,11 +38,13 @@ if ($duser->Groups ==  Duser::NhanVien) {
                     <div class="row">
                         <div class="col-md-3">
                             <label>Từ ngày</label>
-                            <input value="<?php echo $_GET["fromDate"] ?? ""; ?>" required class="form-control" type="date" name="fromDate" id="fromDate">
+                            <input value="<?php echo $_GET["fromDate"] ?? ""; ?>" required class="form-control"
+                                type="date" name="fromDate" id="fromDate">
                         </div>
                         <div class="col-md-3">
                             <label>Đến ngày</label>
-                            <input value="<?php echo $_GET["toDate"] ?? ""; ?>" required class="form-control" type="date" name="toDate" id="toDate">
+                            <input value="<?php echo $_GET["toDate"] ?? ""; ?>" required class="form-control"
+                                type="date" name="toDate" id="toDate">
                         </div>
                         <div class="col-md-3">
                             <button name="btnLoc" style=" margin-top: 24px;" class="btn btn-success">
@@ -56,37 +58,43 @@ if ($duser->Groups ==  Duser::NhanVien) {
                 </form>
                 <table style="margin-top: 10px;" class="table table-border">
                     <?php
+                    $TongTien = 0;
                     if ($data) {
 
                         foreach ($data as $index => $row) {
-                    ?>
+                            $TongTien += floatval($row[10]);
+                            ?>
                             <tr>
                                 <?php
                                 foreach ($row as $k => $v) {
-                                ?>
-                                    <td><?php echo $v; ?></td>
-                                <?php
+                                    ?>
+                                    <td>
+                                        <?php
+                                        if ($k == 10) {
+                                            echo Common::NumberFomat($v);
+                                        } else {
+                                            echo $v;
+                                        }
+
+                                        ?>
+                                    </td>
+                                    <?php
                                 }
                                 ?>
                             </tr>
-                    <?php
+                            <?php
                         }
                     }
                     ?>
-
+                    <tr>
+                        <td colspan="10" class="text-right">Tổng tiền</td>
+                        <td>
+                            <?php
+                            echo Common::NumberFomat($TongTien);
+                            ?>
+                        </td>
+                    </tr>
                 </table>
-                <div>
-                    <?php
-                    $fromDate = $_GET["fromDate"] ?? null;
-                    $toDate = $_GET["toDate"] ?? null;
-                    $param["number"] = $param["number"] ?? 1;
-                    $totalPage  = ceil($param["total"] ?? 0 / $param["number"]);
-                    $param["number"] = $param["number"] ?? 10;
-                    $param["page"] = $param["page"] ?? 1;
-                    $link = "/backend/thongkekhoabenhnhan/?page=[i]&number={$param["number"]}&fromDate={$fromDate}&toDate={$toDate}&btnLoc=";
-                    echo Common::PhanTrang($totalPage, $param["page"], $link);
-                    ?>
-                </div>
 
             </div>
         </div>

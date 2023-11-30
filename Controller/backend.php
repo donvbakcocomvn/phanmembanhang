@@ -892,7 +892,7 @@ class Controller_backend extends Application
             $param["page"] = $pageIndex;
             $param["number"] = $pageNumber;
             $result = $thongKe->ThongKeBanHangTheoBenhNhanPT($param, $pageIndex, $pageNumber, $total);
-            $param["total"] = $total;
+
             $data = [
                 "STT",
                 "Mã Thẻ",
@@ -923,8 +923,8 @@ class Controller_backend extends Application
                         $product = $_orderdetail->Product();
                         $dong = [];
                         $dong[] = $stt++;
-                        $dong[] = $benhNhan->Sothe ?? $_orderdetail->CodeOrder;
-                        $dong[] = $benhNhan->HotenBN;
+                        $dong[] = $benhNhan->Sothe ?? "";
+                        $dong[] = $benhNhan->HotenBN ?? "";
                         $dong[] = $product->Code;
                         $dong[] = $product->nameProduct;
                         $dong[] = $product->Category()->Code;
